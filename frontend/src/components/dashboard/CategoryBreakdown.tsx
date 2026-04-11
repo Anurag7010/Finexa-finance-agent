@@ -1,5 +1,9 @@
 import type { Insight, User } from "../../lib/api";
-import { formatCurrency, getCategoryIcon, getBudgetBarColor } from "../../lib/utils";
+import {
+  formatCurrency,
+  getCategoryIcon,
+  getBudgetBarColor,
+} from "../../lib/utils";
 
 interface Props {
   insight: Insight;
@@ -13,7 +17,7 @@ export default function CategoryBreakdown({ insight, user }: Props) {
   const categories = Object.entries(insight.category_summary)
     .map(([name, spent]) => {
       const budget = categoryBudgets[name] ?? 1;
-      const pct = Math.round((spent / budget) * 100);
+      const pct = (spent / budget) * 100;
       return { name, spent, budget, pct };
     })
     .sort((a, b) => b.spent - a.spent)
@@ -53,24 +57,30 @@ export default function CategoryBreakdown({ insight, user }: Props) {
             <div key={name}>
               <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-base leading-none">{getCategoryIcon(name)}</span>
-                  <span className="text-sm font-medium text-slate-700">{name}</span>
+                  <span className="text-base leading-none">
+                    {getCategoryIcon(name)}
+                  </span>
+                  <span className="text-sm font-medium text-slate-700">
+                    {name}
+                  </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-xs text-slate-500">
                     {formatCurrency(spent)}{" "}
-                    <span className="text-slate-300">/ {formatCurrency(budget)}</span>
+                    <span className="text-slate-300">
+                      / {formatCurrency(budget)}
+                    </span>
                   </span>
                   <span
                     className={`text-xs font-bold w-10 text-right ${
                       pct >= 90
                         ? "text-red-600"
                         : pct >= 70
-                        ? "text-amber-600"
-                        : "text-emerald-600"
+                          ? "text-amber-600"
+                          : "text-emerald-600"
                     }`}
                   >
-                    {pct}%
+                    {pct.toFixed(1)}%
                   </span>
                 </div>
               </div>

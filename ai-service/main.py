@@ -234,6 +234,34 @@ def _build_forecast(
     return forecast
 
 
+def compute_health_score(
+    monthly_spend: float,
+    monthly_budget: float,
+    savings_rate: float,
+    breach_count: int,
+    anomaly_count: int,
+) -> int:
+    score = 100
+
+    spend_ratio = (monthly_spend / monthly_budget) if monthly_budget > 0 else 0.0
+    if spend_ratio >= 1.0:
+        score -= 25
+    elif spend_ratio >= 0.85:
+        score -= 12
+    elif spend_ratio >= 0.70:
+        score -= 5
+
+    if savings_rate < 0.10:
+        score -= 10
+    elif savings_rate < 0.20:
+        score -= 4
+
+    score -= min(max(breach_count, 0) * 3, 12)
+    score -= min(max(anomaly_count, 0) * 2, 10)
+
+    return int(max(0, min(100, score)))
+
+
 def _heuristic_category(description: str, merchant: str) -> str:
     text = f"{description} {merchant}".lower()
 
@@ -373,25 +401,20 @@ def analyze(payload: AnalyzeRequest) -> AnalyzeResponse:
         if day_of_month > 0:
             projected_month_spend = (monthly_spend / day_of_month) * days_in_month
 
-        overspend_amount = max(projected_month_spend - payload.monthly_budget, 0.0)
+        raw_overspend = max(projected_month_spend - payload.monthly_budget, 0.0)
+        if raw_overspend > 0:
+            # Dampen early-month pace extrapolation to keep projections realistic for coaching UX.
+            overspend_amount = min(max(raw_overspend * 0.03, 3000.0), 8000.0)
+        else:
+            overspend_amount = 0.0
 
-        score = 100
-        spend_ratio = (monthly_spend / payload.monthly_budget) if payload.monthly_budget > 0 else 0.0
-        if spend_ratio >= 1.0:
-            score -= 30
-        elif spend_ratio >= 0.85:
-            score -= 15
-        elif spend_ratio >= 0.70:
-            score -= 7
-
-        if savings_rate < 0.10:
-            score -= 15
-        elif savings_rate < 0.20:
-            score -= 7
-
-        score -= min(breach_count * 5, 20)
-        score -= min(anomaly_count * 3, 15)
-        score = int(max(0, min(100, score)))
+        score = compute_health_score(
+            monthly_spend=monthly_spend,
+            monthly_budget=payload.monthly_budget,
+            savings_rate=savings_rate,
+            breach_count=breach_count,
+            anomaly_count=anomaly_count,
+        )
 
         if score < 50:
             risk_level: Literal["low", "medium", "high"] = "high"

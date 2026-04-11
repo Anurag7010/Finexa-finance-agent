@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
+import { Toaster, toast } from "sonner";
 import { useStore } from "./store/useStore";
 import { getAlerts, getMe, USE_MOCK } from "./lib/api";
 import { getSocket, registerSocket } from "./lib/socket";
@@ -65,6 +66,9 @@ export default function App() {
         useStore.getState();
       setAlerts([alert, ...alerts]);
       setUnreadCount(unreadCount + 1);
+      toast(alert.title, {
+        description: (alert.message ?? "").slice(0, 80),
+      });
     });
 
     socket.on("insight_update", (insight) => {
@@ -78,64 +82,67 @@ export default function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
 
-        <Route
-          path="/"
-          element={
-            token ? (
-              <Navigate to="/dashboard" replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
+          <Route
+            path="/"
+            element={
+              token ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <AppShell>
-                <DashboardPage />
-              </AppShell>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/transactions"
-          element={
-            <ProtectedRoute>
-              <AppShell>
-                <TransactionsPage />
-              </AppShell>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/alerts"
-          element={
-            <ProtectedRoute>
-              <AppShell>
-                <AlertsPage />
-              </AppShell>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/chat"
-          element={
-            <ProtectedRoute>
-              <AppShell>
-                <ChatPage />
-              </AppShell>
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <AppShell>
+                  <DashboardPage />
+                </AppShell>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <ProtectedRoute>
+                <AppShell>
+                  <TransactionsPage />
+                </AppShell>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/alerts"
+            element={
+              <ProtectedRoute>
+                <AppShell>
+                  <AlertsPage />
+                </AppShell>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute>
+                <AppShell>
+                  <ChatPage />
+                </AppShell>
+              </ProtectedRoute>
+            }
+          />
 
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+      <Toaster position="top-right" duration={4000} richColors />
+    </>
   );
 }

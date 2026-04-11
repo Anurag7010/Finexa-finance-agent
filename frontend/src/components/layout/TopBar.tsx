@@ -1,15 +1,16 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useStore } from "../../store/useStore";
 import { refreshInsights } from "../../lib/api";
-import { Bell, RefreshCw } from "lucide-react";
+import { Bell, Loader2, RefreshCw } from "lucide-react";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+import { toast } from "sonner";
 
 const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
   "/transactions": "Transactions",
   "/alerts": "Alerts",
-  "/chat": "AI Chat",
+  "/chat": "AI Assistant",
 };
 
 export default function TopBar() {
@@ -24,8 +25,11 @@ export default function TopBar() {
     try {
       const data = await refreshInsights();
       setInsight(data.insight);
-    } catch (e) {
-      console.error("Refresh failed", e);
+      toast.success(
+        `Health score updated: ${Math.round(data.insight.health_score)}/100`,
+      );
+    } catch {
+      toast.error("Analysis failed. Please try again.");
     } finally {
       setIsRefreshing(false);
     }
@@ -45,13 +49,17 @@ export default function TopBar() {
           disabled={isRefreshing}
           className="gap-2 text-xs"
         >
-          <RefreshCw size={13} className={isRefreshing ? "animate-spin" : ""} />
+          {isRefreshing ? (
+            <Loader2 size={13} className="animate-spin" />
+          ) : (
+            <RefreshCw size={13} />
+          )}
           {isRefreshing ? "Refreshing…" : "Refresh Analysis"}
         </Button>
 
         {/* Alert Bell */}
-        <a
-          href="/alerts"
+        <Link
+          to="/alerts"
           className="relative p-2 rounded-lg hover:bg-slate-100 transition-colors"
           title="Alerts"
         >
@@ -61,7 +69,7 @@ export default function TopBar() {
               {unreadCount > 9 ? "9+" : unreadCount}
             </Badge>
           )}
-        </a>
+        </Link>
       </div>
     </header>
   );

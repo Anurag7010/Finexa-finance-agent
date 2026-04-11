@@ -155,7 +155,7 @@
   from { stroke-dashoffset: 565; }
 }
 .arc-animate {
-  animation: arcDraw 1s ease-out forwards;
+  animation: arcDraw 0.7s ease-out forwards;
 }
 
 /* ─── Scrollbar styling ────────────────────────────────── */
