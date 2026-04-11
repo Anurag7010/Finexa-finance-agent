@@ -5,6 +5,7 @@ const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 const Insight = require('../models/Insight');
 const ChatMessage = require('../models/ChatMessage');
+const aiService = require('../services/aiService');
 const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
@@ -91,6 +92,32 @@ const tools = [
         },
         required: ['category', 'adjustment_pct'],
         additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_monthly_comparison',
+      description: "Compare this month's spending vs last month by category. Use when user asks about trends, changes, or 'compared to last month'.",
+      parameters: {
+        type: 'object',
+        properties: {},
+        required: [],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_top_merchants',
+      description: 'Get the top merchants by spend this month. Use when user asks where their money is going at a merchant level.',
+      parameters: {
+        type: 'object',
+        properties: {
+          limit: { type: 'number', description: 'Number of merchants to return (default 8)' },
+        },
+        required: [],
       },
     },
   },
@@ -188,11 +215,12 @@ function clamp(value, min, max) {
 }
 
 async function executeTool(toolName, args, userId) {
+  const userObjectId = mongoose.Types.ObjectId.createFromHexString(String(userId));
+
   switch (toolName) {
     case 'get_spending_summary': {
       const period = args.period || 'this_month';
       const { start, end } = getDateRange(period);
-      const userObjectId = mongoose.Types.ObjectId.createFromHexString(String(userId));
       const dateMatch = end ? { $gte: start, $lt: end } : { $gte: start };
 
       const summary = await Transaction.aggregate([
@@ -320,6 +348,72 @@ async function executeTool(toolName, args, userId) {
       };
     }
 
+    case 'get_monthly_comparison': {
+      const now = new Date();
+      const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+
+      const [thisMonth, lastMonth] = await Promise.all([
+        Transaction.aggregate([
+          { $match: { user_id: userObjectId, date: { $gte: thisMonthStart } } },
+          { $group: { _id: '$category', total: { $sum: '$amount' } } },
+        ]),
+        Transaction.aggregate([
+          { $match: { user_id: userObjectId, date: { $gte: lastMonthStart, $lte: lastMonthEnd } } },
+          { $group: { _id: '$category', total: { $sum: '$amount' } } },
+        ]),
+      ]);
+
+      const thisMap = Object.fromEntries(thisMonth.map((x) => [x._id, Math.round(x.total)]));
+      const lastMap = Object.fromEntries(lastMonth.map((x) => [x._id, Math.round(x.total)]));
+      const allCats = [...new Set([...Object.keys(thisMap), ...Object.keys(lastMap)])];
+
+      const comparison = allCats.map((cat) => ({
+        category: cat,
+        this_month: thisMap[cat] ?? 0,
+        last_month: lastMap[cat] ?? 0,
+        change: (thisMap[cat] ?? 0) - (lastMap[cat] ?? 0),
+        change_pct: lastMap[cat] ? Math.round((((thisMap[cat] ?? 0) - lastMap[cat]) / lastMap[cat]) * 100) : null,
+      })).sort((a, b) => Math.abs(b.change) - Math.abs(a.change));
+
+      return {
+        this_month_total: Math.round(Object.values(thisMap).reduce((a, b) => a + b, 0)),
+        last_month_total: Math.round(Object.values(lastMap).reduce((a, b) => a + b, 0)),
+        comparison,
+      };
+    }
+
+    case 'get_top_merchants': {
+      const now = new Date();
+      const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      const limit = Math.min(Number(args.limit) || 8, 15);
+
+      const merchants = await Transaction.aggregate([
+        { $match: { user_id: userObjectId, date: { $gte: thisMonthStart } } },
+        {
+          $group: {
+            _id: '$merchant',
+            total: { $sum: '$amount' },
+            count: { $sum: 1 },
+            category: { $first: '$category' },
+          },
+        },
+        { $sort: { total: -1 } },
+        { $limit: limit },
+      ]);
+
+      return {
+        merchants: merchants.map((m) => ({
+          merchant: m._id,
+          total: Math.round(m.total),
+          transactions: m.count,
+          category: m.category,
+        })),
+        period: 'this month',
+      };
+    }
+
     default:
       return { error: `Unknown tool ${toolName}` };
   }
@@ -340,10 +434,10 @@ router.post('/', async (req, res) => {
       timestamp: new Date(),
     });
 
-    const [history, user, latestInsight] = await Promise.all([
+    const [rawHistory, user, latestInsight] = await Promise.all([
       ChatMessage.find({ user_id: req.user.id })
         .sort({ timestamp: -1 })
-        .limit(10),
+        .limit(12),
       User.findById(req.user.id).select('-password'),
       Insight.findOne({ user_id: req.user.id }).sort({ generated_at: -1 }),
     ]);
@@ -352,42 +446,79 @@ router.post('/', async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const historyChronological = history.reverse();
-    const healthScore = latestInsight?.health_score ?? 'N/A';
-    const riskLevel = latestInsight?.risk_level ?? 'N/A';
-    const monthlySpend = latestInsight?.monthly_spend ?? 0;
-    const topCategory = latestInsight?.top_category ?? 'N/A';
+    const conversationHistory = rawHistory
+      .reverse()
+      .map((m) => ({ role: m.role, content: m.content }))
+      .map((m) => ({
+        ...m,
+        content: m.role === 'assistant' && m.content.length > 600
+          ? `${m.content.slice(0, 600)}...`
+          : m.content,
+      }));
 
-    const systemPrompt = [
-      'You are SmartSpend AI, a proactive personal finance assistant.',
-      'Be specific, data-driven, and practical.',
-      'Always call at least one tool before your first response to ground answers in real user data.',
-      'Use exact figures from tool results (INR amounts, categories, counts, or percentages) when answering.',
-      'Use exact category labels from data/tool output (for example: Food & Dining), not paraphrased variants.',
-      'Do not return generic advice without supporting numbers.',
-      `User name: ${user.name}`,
-      `Income: ${user.income}`,
-      `Monthly budget: ${user.monthly_budget}`,
-      `Health score: ${healthScore}`,
-      `Risk level: ${riskLevel}`,
-      `This month spend: ${monthlySpend}`,
-      `Top category: ${topCategory}`,
-      'When needed, call tools to retrieve exact values before answering.',
-    ].join('\n');
+    let financialSummary = '';
+    try {
+      const summaryRes = await aiService.getFinancialSummary({
+        user_name: user.name,
+        health_score: latestInsight?.health_score ?? 50,
+        risk_level: latestInsight?.risk_level ?? 'medium',
+        monthly_spend: latestInsight?.monthly_spend ?? 0,
+        monthly_budget: user.monthly_budget,
+        overspend_amount: latestInsight?.overspend_amount ?? 0,
+        savings_rate: latestInsight?.savings_rate ?? 0,
+        top_category: latestInsight?.top_category ?? 'Unknown',
+        risk_factors: latestInsight?.risk_factors ?? [],
+      });
+      financialSummary = summaryRes.summary;
+    } catch (e) {
+      financialSummary = `${user.name} has a health score of ${latestInsight?.health_score ?? 'N/A'}/100.`;
+    }
+
+    const systemPrompt = `You are SmartSpend AI, an expert personal finance assistant for ${user.name}.
+
+CURRENT FINANCIAL SNAPSHOT:
+${financialSummary}
+
+RAW DATA:
+- Monthly income: ₹${user.income?.toLocaleString('en-IN')}
+- Monthly budget: ₹${user.monthly_budget?.toLocaleString('en-IN')}
+- Health score: ${latestInsight?.health_score ?? 'N/A'}/100
+- Risk level: ${latestInsight?.risk_level ?? 'Unknown'}
+- This month's spend: ₹${Math.round(latestInsight?.monthly_spend ?? 0).toLocaleString('en-IN')}
+- Projected overspend: ₹${Math.round(latestInsight?.overspend_amount ?? 0).toLocaleString('en-IN')}
+- Top category: ${latestInsight?.top_category ?? 'Unknown'}
+- Savings rate: ${((latestInsight?.savings_rate ?? 0) * 100).toFixed(1)}%
+
+BEHAVIOR RULES:
+- Always call a tool before answering data questions. Never invent numbers.
+- Use ₹ for all amounts. Format large numbers with Indian comma notation (e.g. ₹1,23,456).
+- Be specific, not generic. Reference the user's actual category names and real amounts.
+- Keep responses under 200 words unless the user asks for detail.
+- If the user asks what to do, give 1-2 concrete actionable steps, not a list of 7 generic tips.
+- Sound like a knowledgeable friend who happens to be a CFP, not a bank chatbot.
+- If health score is below 60, acknowledge the situation is serious but keep the tone constructive.`;
+
+    const dataKeywords = [
+      'spend', 'spent', 'spending', 'budget', 'balance', 'forecast',
+      'risk', 'score', 'anomal', 'suspicious', 'unusual', 'category',
+      'merchant', 'this month', 'last month', 'much', 'compare', 'trend',
+      'saving', 'overspend', 'cut', 'reduce', 'simulate', 'what if', 'if i',
+    ];
+
+    const messageLower = message.toLowerCase();
+    const isDataQuestion = dataKeywords.some((kw) => messageLower.includes(kw));
+    const toolChoice = isDataQuestion ? 'required' : 'auto';
 
     const conversation = [
       { role: 'system', content: systemPrompt },
-      ...historyChronological.map((entry) => ({
-        role: entry.role,
-        content: entry.content,
-      })),
+      ...conversationHistory,
     ];
 
     let completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: conversation,
       tools,
-      tool_choice: 'required',
+      tool_choice: toolChoice,
       max_tokens: 1000,
     });
 
@@ -457,8 +588,14 @@ router.post('/', async (req, res) => {
     });
 
     return res.json({ reply: finalContent });
-  } catch (error) {
-    return res.status(500).json({ error: 'Failed to process chat message' });
+  } catch (err) {
+    const errorMessage = err?.status === 429
+      ? 'The AI is receiving too many requests right now. Please wait 10 seconds and try again.'
+      : err?.status === 401
+        ? 'AI service authentication issue. Please contact support.'
+        : 'I ran into a problem fetching your data. Please try again in a moment.';
+
+    return res.status(500).json({ error: errorMessage });
   }
 });
 
