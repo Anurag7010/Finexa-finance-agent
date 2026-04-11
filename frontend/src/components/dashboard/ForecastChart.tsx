@@ -19,15 +19,15 @@ interface Props {
 function CustomTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-slate-900/95 backdrop-blur border border-slate-700 rounded-xl px-4 py-3 shadow-xl">
-      <p className="text-slate-400 text-xs mb-1">
+    <div className="rounded-xl border border-white/15 bg-[rgba(8,13,16,0.96)] px-4 py-3 shadow-xl backdrop-blur">
+      <p className="mb-1 text-xs text-[var(--fingaurd-text-muted)]">
         {label ? formatDate(label) : ""}
       </p>
-      <p className="text-white font-bold text-base">
+      <p className="text-base font-bold text-[var(--fingaurd-text)]">
         {formatCurrency(payload[0]?.value ?? 0)}
       </p>
       {payload[1] && (
-        <p className="text-slate-400 text-xs mt-0.5">
+        <p className="mt-0.5 text-xs text-[var(--fingaurd-text-muted)]">
           Spend: {formatCurrency(payload[1]?.value ?? 0)}
         </p>
       )}
@@ -38,11 +38,11 @@ function CustomTooltip({ active, payload, label }: any) {
 export default function ForecastChart({ data }: Props) {
   if (!data || data.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-        <h2 className="text-sm font-semibold text-slate-700 mb-2">
+      <div className="rounded-2xl border border-[var(--fingaurd-border)] bg-[var(--fingaurd-surface)] p-6">
+        <h2 className="mb-2 text-sm font-semibold text-[var(--fingaurd-text)]">
           30-Day Balance Forecast
         </h2>
-        <div className="h-48 flex items-center justify-center text-slate-400 text-sm">
+        <div className="flex h-48 items-center justify-center text-sm text-[var(--fingaurd-text-muted)]">
           No forecast data available. Click Refresh Analysis.
         </div>
       </div>
@@ -65,25 +65,25 @@ export default function ForecastChart({ data }: Props) {
 
   // Gradient colors: amber→red for declining trend
   const gradientId = "balanceGradient";
-  const startColor = isCritical ? "#f97316" : "#6366f1";
-  const endColor = isCritical ? "#ef4444" : "#8b5cf6";
+  const startColor = isCritical ? "#e36b63" : "#0d9e8a";
+  const endColor = isCritical ? "#d6544c" : "#3eb29f";
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+    <div className="rounded-2xl border border-[var(--fingaurd-border)] bg-[var(--fingaurd-surface)] p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h2 className="text-sm font-semibold text-slate-700">
+          <h2 className="text-sm font-semibold text-[var(--fingaurd-text)]">
             30-Day Balance Forecast
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-[var(--fingaurd-text-muted)] mt-0.5">
             Projected daily remaining balance
           </p>
         </div>
         {isCritical && (
-          <div className="flex items-center gap-1.5 bg-red-50 border border-red-200 rounded-lg px-3 py-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-            <span className="text-xs text-red-600 font-semibold">
+          <div className="flex items-center gap-1.5 rounded-lg border border-[rgba(227,107,99,0.4)] bg-[rgba(227,107,99,0.12)] px-3 py-1.5">
+            <div className="h-1.5 w-1.5 rounded-full bg-[var(--fingaurd-coral)] animate-pulse" />
+            <span className="text-xs font-semibold text-[var(--fingaurd-coral)]">
               Balance approaching zero
             </span>
           </div>
@@ -91,7 +91,10 @@ export default function ForecastChart({ data }: Props) {
       </div>
 
       <ResponsiveContainer width="100%" height={220}>
-        <AreaChart data={chartData} margin={{ top: 5, right: 10, bottom: 0, left: 0 }}>
+        <AreaChart
+          data={chartData}
+          margin={{ top: 5, right: 10, bottom: 0, left: 0 }}
+        >
           <defs>
             <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor={startColor} stopOpacity={0.25} />
@@ -99,11 +102,14 @@ export default function ForecastChart({ data }: Props) {
             </linearGradient>
           </defs>
 
-          <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="rgba(232,245,244,0.08)"
+          />
 
           <XAxis
             dataKey="shortDate"
-            tick={{ fontSize: 10, fill: "#94a3b8" }}
+            tick={{ fontSize: 10, fill: "rgba(232,245,244,0.56)" }}
             tickLine={false}
             axisLine={false}
             interval={4}
@@ -112,7 +118,7 @@ export default function ForecastChart({ data }: Props) {
             tickFormatter={(v) =>
               v >= 1000 ? `₹${(v / 1000).toFixed(0)}k` : `₹${v}`
             }
-            tick={{ fontSize: 10, fill: "#94a3b8" }}
+            tick={{ fontSize: 10, fill: "rgba(232,245,244,0.56)" }}
             tickLine={false}
             axisLine={false}
             width={48}
@@ -124,14 +130,14 @@ export default function ForecastChart({ data }: Props) {
           {/* Zero balance warning line */}
           <ReferenceLine
             y={0}
-            stroke="#ef4444"
+            stroke="rgba(227,107,99,0.9)"
             strokeDasharray="5 4"
             strokeWidth={1.5}
             label={{
-              value: "₹0",
+              value: "Zero balance",
               position: "left",
               fontSize: 10,
-              fill: "#ef4444",
+              fill: "rgba(227,107,99,0.9)",
             }}
           />
 
@@ -142,7 +148,12 @@ export default function ForecastChart({ data }: Props) {
             strokeWidth={2.5}
             fill={`url(#${gradientId})`}
             dot={false}
-            activeDot={{ r: 5, fill: startColor, strokeWidth: 2, stroke: "#fff" }}
+            activeDot={{
+              r: 5,
+              fill: startColor,
+              strokeWidth: 2,
+              stroke: "#0b1114",
+            }}
             animationDuration={1200}
             name="Balance"
           />
@@ -150,14 +161,21 @@ export default function ForecastChart({ data }: Props) {
       </ResponsiveContainer>
 
       {/* Legend */}
-      <div className="flex items-center gap-4 mt-2 pl-2">
+      <div className="mt-2 flex items-center gap-4 pl-2">
         <div className="flex items-center gap-1.5">
-          <div className="w-4 h-0.5 rounded" style={{ background: startColor }} />
-          <span className="text-[11px] text-slate-500">Projected Balance</span>
+          <div
+            className="w-4 h-0.5 rounded"
+            style={{ background: startColor }}
+          />
+          <span className="text-[11px] text-[var(--fingaurd-text-muted)]">
+            Projected Balance
+          </span>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="w-4 h-0 border-t border-dashed border-red-400" />
-          <span className="text-[11px] text-slate-500">Zero line</span>
+          <div className="w-4 h-0 border-t border-dashed border-[rgba(227,107,99,0.9)]" />
+          <span className="text-[11px] text-[var(--fingaurd-text-muted)]">
+            Zero line
+          </span>
         </div>
       </div>
     </div>

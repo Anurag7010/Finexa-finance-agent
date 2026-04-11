@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AlertCircle, Bell } from "lucide-react";
 import { useStore } from "@/store/useStore";
 import { getAlerts } from "@/lib/api";
@@ -11,7 +11,7 @@ export default function AlertsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const loadAlerts = async () => {
+  const loadAlerts = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -23,62 +23,66 @@ export default function AlertsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [setAlerts, setUnreadCount]);
 
   useEffect(() => {
     void loadAlerts();
-  }, [setAlerts, setUnreadCount]);
+  }, [loadAlerts]);
 
   const unreadCount = alerts.filter((a) => !a.read).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 animate-in fade-in duration-200">
+    <div className="min-h-full animate-in fade-in duration-200">
       {/* Page header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-5">
-        <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
-            <Bell className="w-5 h-5 text-red-500" />
+      <div className="rounded-2xl border border-[var(--fingaurd-border)] bg-[var(--fingaurd-surface)] px-6 py-5">
+        <div className="mx-auto flex max-w-3xl items-center gap-3">
+          <div className="h-10 w-10 rounded-xl border border-[rgba(227,107,99,0.35)] bg-[rgba(227,107,99,0.14)] flex items-center justify-center">
+            <Bell className="h-5 w-5 text-[var(--fingaurd-coral)]" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Alerts</h1>
+            <h1 className="text-xl font-bold text-[var(--fingaurd-text)]">
+              Alerts
+            </h1>
             {unreadCount > 0 ? (
-              <p className="text-sm text-gray-500">
-                <span className="font-semibold text-red-500">
+              <p className="text-sm text-[var(--fingaurd-text-muted)]">
+                <span className="font-semibold text-[var(--fingaurd-coral)]">
                   {unreadCount} unread
                 </span>{" "}
                 alert{unreadCount > 1 ? "s" : ""} waiting for your attention
               </p>
             ) : (
-              <p className="text-sm text-gray-400">All caught up!</p>
+              <p className="text-sm text-[var(--fingaurd-text-muted)]">
+                All caught up!
+              </p>
             )}
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-6 py-6">
+      <div className="mx-auto max-w-3xl py-5">
         {loading ? (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-4 space-y-3">
+          <div className="space-y-3 overflow-hidden rounded-xl border border-[var(--fingaurd-border)] bg-[var(--fingaurd-surface)] p-4 shadow-sm">
             {[...Array(4)].map((_, i) => (
               <Skeleton key={i} className="h-16 rounded-lg" />
             ))}
           </div>
         ) : error ? (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
-            <AlertCircle className="mx-auto mb-3 h-6 w-6 text-red-600" />
-            <p className="font-medium text-red-700">
+          <div className="rounded-xl border border-[rgba(227,107,99,0.45)] bg-[rgba(227,107,99,0.12)] p-6 text-center">
+            <AlertCircle className="mx-auto mb-3 h-6 w-6 text-[var(--fingaurd-coral)]" />
+            <p className="font-medium text-[#ffbeb8]">
               Failed to load alerts. Please try again.
             </p>
             <Button
               variant="outline"
-              className="mt-4"
+              className="mt-4 border-white/15 bg-[rgba(255,255,255,0.04)] text-[var(--fingaurd-text)] hover:bg-[rgba(255,255,255,0.1)]"
               onClick={() => void loadAlerts()}
             >
               Retry
             </Button>
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="overflow-hidden rounded-xl border border-[var(--fingaurd-border)] bg-[var(--fingaurd-surface)] shadow-sm">
             <AlertsPanel />
           </div>
         )}

@@ -6,6 +6,7 @@ import { getAlerts, getMe, USE_MOCK } from "./lib/api";
 import { getSocket, registerSocket } from "./lib/socket";
 
 import LoginPage from "./pages/LoginPage";
+import LandingPage from "./pages/LandingPage.tsx";
 import DashboardPage from "./pages/DashboardPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import AlertsPage from "./pages/AlertsPage";
@@ -22,11 +23,11 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50">
+    <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar />
       <div className="flex flex-col flex-1 overflow-hidden">
         <TopBar />
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-6 lg:p-7">{children}</main>
       </div>
     </div>
   );
@@ -91,10 +92,21 @@ export default function App() {
             path="/"
             element={
               token ? (
-                <Navigate to="/dashboard" replace />
+                <Navigate to="/home" replace />
               ) : (
                 <Navigate to="/login" replace />
               )
+            }
+          />
+
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <AppShell>
+                  <LandingPage />
+                </AppShell>
+              </ProtectedRoute>
             }
           />
 
