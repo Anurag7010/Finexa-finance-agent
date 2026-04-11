@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import type { Insight, User } from "../../lib/api";
 import {
   formatCurrency,
@@ -24,25 +25,27 @@ export default function CategoryBreakdown({ insight, user }: Props) {
     .slice(0, 6);
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+    <div className="rounded-2xl border border-[var(--fingaurd-border)] bg-[var(--fingaurd-surface)] p-6">
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h2 className="text-sm font-semibold text-slate-700">
+          <h2 className="text-sm font-semibold text-[var(--fingaurd-text)]">
             Category Breakdown
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">This month vs budget</p>
+          <p className="mt-0.5 text-xs text-[var(--fingaurd-text-muted)]">
+            This month vs budget
+          </p>
         </div>
-        <div className="flex items-center gap-3 text-[10px] text-slate-500">
+        <div className="flex items-center gap-3 text-[10px] text-[var(--fingaurd-text-muted)]">
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-sm bg-emerald-500 inline-block" />
+            <span className="w-2 h-2 rounded-sm bg-[var(--fingaurd-success)] inline-block" />
             &lt;70%
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-sm bg-amber-500 inline-block" />
+            <span className="w-2 h-2 rounded-sm bg-[var(--fingaurd-amber)] inline-block" />
             70–90%
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-sm bg-red-500 inline-block" />
+            <span className="w-2 h-2 rounded-sm bg-[var(--fingaurd-coral)] inline-block" />
             &gt;90%
           </span>
         </div>
@@ -55,29 +58,31 @@ export default function CategoryBreakdown({ insight, user }: Props) {
 
           return (
             <div key={name}>
-              <div className="flex items-center justify-between mb-1.5">
+              <div className="mb-1.5 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-base leading-none">
-                    {getCategoryIcon(name)}
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[rgba(255,255,255,0.06)] text-base leading-none">
+                    {createElement(getCategoryIcon(name), {
+                      className: "h-4 w-4 text-[var(--fingaurd-text-muted)]",
+                    })}
                   </span>
-                  <span className="text-sm font-medium text-slate-700">
+                  <span className="text-sm font-medium text-[var(--fingaurd-text)]">
                     {name}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-[var(--fingaurd-text-muted)]">
                     {formatCurrency(spent)}{" "}
-                    <span className="text-slate-300">
+                    <span className="text-[rgba(232,245,244,0.34)]">
                       / {formatCurrency(budget)}
                     </span>
                   </span>
                   <span
                     className={`text-xs font-bold w-10 text-right ${
                       pct >= 90
-                        ? "text-red-600"
+                        ? "text-[var(--fingaurd-coral)]"
                         : pct >= 70
-                          ? "text-amber-600"
-                          : "text-emerald-600"
+                          ? "text-[var(--fingaurd-amber)]"
+                          : "text-[var(--fingaurd-success)]"
                     }`}
                   >
                     {pct.toFixed(1)}%
@@ -86,7 +91,7 @@ export default function CategoryBreakdown({ insight, user }: Props) {
               </div>
 
               {/* Progress track */}
-              <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-2 rounded-full overflow-hidden bg-[rgba(232,245,244,0.12)]">
                 <div
                   className={`h-full rounded-full transition-all duration-700 ${barColor}`}
                   style={{ width: `${cappedPct}%` }}
@@ -94,7 +99,7 @@ export default function CategoryBreakdown({ insight, user }: Props) {
               </div>
 
               {pct > 100 && (
-                <p className="text-[10px] text-red-500 mt-0.5 font-medium">
+                <p className="mt-0.5 text-[10px] font-medium text-[var(--fingaurd-coral)]">
                   Over budget by {formatCurrency(spent - budget)}
                 </p>
               )}

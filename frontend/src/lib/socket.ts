@@ -17,7 +17,7 @@ export function getSocket(): Socket {
 export function registerSocket(userId: string): void {
   const s = getSocket();
   if (!s.connected) s.connect();
-  s.emit("register", { userId });
+  s.emit("register", userId);
 }
 
 export function disconnectSocket(): void {

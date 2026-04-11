@@ -2,6 +2,9 @@ import { getScoreStrokeColor, getScoreColor } from "../../lib/utils";
 
 interface Props {
   score: number;
+  savingsRate?: number;
+  budgetUsedPct?: number;
+  anomaliesCount?: number;
 }
 
 const RADIUS = 90;
@@ -18,7 +21,12 @@ function getScoreLabel(score: number): { label: string; desc: string } {
   return { label: "At Risk", desc: "Immediate action recommended." };
 }
 
-export default function HealthScoreCard({ score }: Props) {
+export default function HealthScoreCard({
+  score,
+  savingsRate,
+  budgetUsedPct,
+  anomaliesCount,
+}: Props) {
   const roundedScore = Math.round(score);
   const color = getScoreStrokeColor(roundedScore);
   const textColorClass = getScoreColor(roundedScore);
@@ -33,13 +41,13 @@ export default function HealthScoreCard({ score }: Props) {
   const rotation = 150;
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center">
-      <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">
+    <div className="rounded-2xl border border-[var(--fingaurd-border)] bg-[var(--fingaurd-surface)] p-6 shadow-[0_18px_36px_rgba(0,0,0,0.22)]">
+      <h2 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--fingaurd-text-muted)]">
         Financial Health Score
       </h2>
 
       {/* Arc gauge */}
-      <div className="relative">
+      <div className="relative mx-auto w-fit">
         <svg
           width="220"
           height="180"
@@ -52,7 +60,7 @@ export default function HealthScoreCard({ score }: Props) {
             cy="110"
             r={RADIUS}
             fill="none"
-            stroke="#e2e8f0"
+            stroke="rgba(232,245,244,0.16)"
             strokeWidth={STROKE}
             strokeDasharray={`${ARC_LENGTH} ${CIRCUMFERENCE}`}
             strokeDashoffset={0}
@@ -85,7 +93,7 @@ export default function HealthScoreCard({ score }: Props) {
             dominantBaseline="middle"
             className={textColorClass}
             style={{
-              fontSize: "42px",
+              fontSize: "52px",
               fontWeight: "800",
               fontFamily: "Inter, sans-serif",
               fill: color,
@@ -99,17 +107,17 @@ export default function HealthScoreCard({ score }: Props) {
             textAnchor="middle"
             style={{
               fontSize: "12px",
-              fill: "#94a3b8",
+              fill: "rgba(232,245,244,0.58)",
               fontFamily: "Inter, sans-serif",
               fontWeight: "500",
             }}
           >
-            out of 100
+            Financial Health
           </text>
         </svg>
 
         {/* Bottom range labels */}
-        <div className="absolute bottom-0 left-0 right-0 flex justify-between px-2 text-[10px] text-slate-400 font-medium">
+        <div className="absolute bottom-0 left-0 right-0 flex justify-between px-2 text-[10px] text-[var(--fingaurd-text-muted)] font-medium">
           <span>0</span>
           <span>100</span>
         </div>
@@ -117,7 +125,7 @@ export default function HealthScoreCard({ score }: Props) {
 
       {/* Label badge */}
       <div
-        className="mt-2 px-4 py-1.5 rounded-full text-sm font-bold"
+        className="mx-auto mt-2 w-fit rounded-full px-4 py-1.5 text-sm font-bold"
         style={{
           background: `${color}18`,
           color: color,
@@ -128,51 +136,51 @@ export default function HealthScoreCard({ score }: Props) {
       </div>
 
       {/* Description */}
-      <p className="text-slate-500 text-sm text-center mt-2 max-w-[220px]">
+      <p className="mx-auto mt-2 max-w-[230px] text-center text-sm text-[var(--fingaurd-text-muted)]">
         {desc}
       </p>
 
-      {/* Score breakdown mini bars */}
-      <div className="w-full mt-5 pt-4 border-t border-slate-100 space-y-2">
-        <ScoreBar
-          label="Spending Rate"
-          value={score >= 60 ? 70 : 35}
-          color={color}
-        />
-        <ScoreBar
+      <div className="mt-6 grid grid-cols-3 gap-2 border-t border-white/10 pt-4">
+        <MetricPill
           label="Savings Rate"
-          value={score >= 80 ? 85 : score >= 60 ? 55 : 20}
-          color={color}
+          value={
+            typeof savingsRate === "number"
+              ? `${(savingsRate * 100).toFixed(1)}%`
+              : "--"
+          }
         />
-        <ScoreBar
-          label="Budget Control"
-          value={score >= 80 ? 90 : score >= 60 ? 60 : 30}
-          color={color}
+        <MetricPill
+          label="Budget Used"
+          value={
+            typeof budgetUsedPct === "number"
+              ? `${budgetUsedPct.toFixed(1)}%`
+              : "--"
+          }
+        />
+        <MetricPill
+          label="Anomalies"
+          value={
+            typeof anomaliesCount === "number" ? String(anomaliesCount) : "--"
+          }
         />
       </div>
+
+      <p className={`mt-4 text-center text-xs font-semibold ${textColorClass}`}>
+        Score status: {label}
+      </p>
     </div>
   );
 }
 
-function ScoreBar({
-  label,
-  value,
-  color,
-}: {
-  label: string;
-  value: number;
-  color: string;
-}) {
+function MetricPill({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center gap-3">
-      <span className="text-slate-500 text-xs w-28 shrink-0">{label}</span>
-      <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-        <div
-          className="h-full rounded-full transition-all duration-700"
-          style={{ width: `${value}%`, background: color }}
-        />
-      </div>
-      <span className="text-xs text-slate-400 w-8 text-right">{value}%</span>
+    <div className="rounded-xl border border-white/10 bg-[rgba(255,255,255,0.02)] px-3 py-2 text-center">
+      <p className="text-[10px] uppercase tracking-[0.1em] text-[var(--fingaurd-text-muted)]">
+        {label}
+      </p>
+      <p className="mt-1 text-sm font-semibold text-[var(--fingaurd-text)]">
+        {value}
+      </p>
     </div>
   );
 }
