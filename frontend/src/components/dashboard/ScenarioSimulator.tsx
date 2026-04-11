@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/store/useStore";
 import { sendChatMessage } from "@/lib/api";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 
 interface SimulationResult {
   category: string;
@@ -21,10 +21,6 @@ interface SimulationResult {
   annualSaving: number;
   newProjectedBalance: number;
   healthScoreChange: number;
-}
-
-function formatINR(n: number): string {
-  return "₹" + n.toLocaleString("en-IN");
 }
 
 // ─── Temporary mock simulation — remove when backend is live ───
@@ -208,7 +204,7 @@ export default function ScenarioSimulator() {
                     Current
                   </p>
                   <p className="text-sm font-bold text-gray-900">
-                    {formatINR(result.currentMonthlySpend)}
+                    {formatCurrency(result.currentMonthlySpend)}
                   </p>
                   <p className="text-[10px] text-gray-400">monthly spend</p>
                 </div>
@@ -217,7 +213,7 @@ export default function ScenarioSimulator() {
                     Projected
                   </p>
                   <p className="text-sm font-bold text-gray-900">
-                    {formatINR(result.newProjectedSpend)}
+                    {formatCurrency(result.newProjectedSpend)}
                   </p>
                   <p className="text-[10px] text-gray-400">monthly spend</p>
                 </div>
@@ -231,7 +227,7 @@ export default function ScenarioSimulator() {
                     Monthly saving
                   </div>
                   <span className="font-bold text-green-600">
-                    {formatINR(result.monthlySaving)}
+                    {formatCurrency(result.monthlySaving)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-green-100">
@@ -240,7 +236,7 @@ export default function ScenarioSimulator() {
                     Annual saving
                   </div>
                   <span className="font-bold text-green-600">
-                    {formatINR(result.annualSaving)}
+                    {formatCurrency(result.annualSaving)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-blue-100">
@@ -249,7 +245,7 @@ export default function ScenarioSimulator() {
                     New projected balance
                   </div>
                   <span className="font-bold text-blue-600">
-                    {formatINR(result.newProjectedBalance)}
+                    {formatCurrency(result.newProjectedBalance)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-purple-100">

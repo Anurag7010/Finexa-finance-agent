@@ -11,18 +11,21 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 const ARC_LENGTH = (240 / 360) * CIRCUMFERENCE;
 
 function getScoreLabel(score: number): { label: string; desc: string } {
-  if (score >= 80) return { label: "Excellent", desc: "You're on track — keep it up!" };
-  if (score >= 60) return { label: "Fair", desc: "Needs attention this month." };
+  if (score >= 80)
+    return { label: "Excellent", desc: "You're on track — keep it up!" };
+  if (score >= 60)
+    return { label: "Fair", desc: "Needs attention this month." };
   return { label: "At Risk", desc: "Immediate action recommended." };
 }
 
 export default function HealthScoreCard({ score }: Props) {
-  const color = getScoreStrokeColor(score);
-  const textColorClass = getScoreColor(score);
-  const { label, desc } = getScoreLabel(score);
+  const roundedScore = Math.round(score);
+  const color = getScoreStrokeColor(roundedScore);
+  const textColorClass = getScoreColor(roundedScore);
+  const { label, desc } = getScoreLabel(roundedScore);
 
   // Compute how much of the arc to fill
-  const fillLength = (score / 100) * ARC_LENGTH;
+  const fillLength = (roundedScore / 100) * ARC_LENGTH;
   const dashOffset = ARC_LENGTH - fillLength;
 
   // SVG viewBox is 220×220; center is (110,110)
@@ -37,7 +40,12 @@ export default function HealthScoreCard({ score }: Props) {
 
       {/* Arc gauge */}
       <div className="relative">
-        <svg width="220" height="180" viewBox="0 0 220 200" aria-label={`Health score: ${score} out of 100`}>
+        <svg
+          width="220"
+          height="180"
+          viewBox="0 0 220 200"
+          aria-label={`Health score: ${roundedScore} out of 100`}
+        >
           {/* Track */}
           <circle
             cx="110"
@@ -66,7 +74,7 @@ export default function HealthScoreCard({ score }: Props) {
             className="arc-animate"
             style={{
               filter: `drop-shadow(0 0 8px ${color}88)`,
-              transition: "stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1)",
+              transition: "stroke-dashoffset 700ms cubic-bezier(0.4,0,0.2,1)",
             }}
           />
           {/* Score number centered */}
@@ -83,7 +91,7 @@ export default function HealthScoreCard({ score }: Props) {
               fill: color,
             }}
           >
-            {score}
+            {roundedScore}
           </text>
           <text
             x="110"
@@ -126,15 +134,35 @@ export default function HealthScoreCard({ score }: Props) {
 
       {/* Score breakdown mini bars */}
       <div className="w-full mt-5 pt-4 border-t border-slate-100 space-y-2">
-        <ScoreBar label="Spending Rate" value={score >= 60 ? 70 : 35} color={color} />
-        <ScoreBar label="Savings Rate" value={score >= 80 ? 85 : score >= 60 ? 55 : 20} color={color} />
-        <ScoreBar label="Budget Control" value={score >= 80 ? 90 : score >= 60 ? 60 : 30} color={color} />
+        <ScoreBar
+          label="Spending Rate"
+          value={score >= 60 ? 70 : 35}
+          color={color}
+        />
+        <ScoreBar
+          label="Savings Rate"
+          value={score >= 80 ? 85 : score >= 60 ? 55 : 20}
+          color={color}
+        />
+        <ScoreBar
+          label="Budget Control"
+          value={score >= 80 ? 90 : score >= 60 ? 60 : 30}
+          color={color}
+        />
       </div>
     </div>
   );
 }
 
-function ScoreBar({ label, value, color }: { label: string; value: number; color: string }) {
+function ScoreBar({
+  label,
+  value,
+  color,
+}: {
+  label: string;
+  value: number;
+  color: string;
+}) {
   return (
     <div className="flex items-center gap-3">
       <span className="text-slate-500 text-xs w-28 shrink-0">{label}</span>

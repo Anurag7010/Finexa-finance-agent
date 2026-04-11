@@ -1,34 +1,38 @@
 import { useEffect, useState } from "react";
-import { Bell } from "lucide-react";
+import { AlertCircle, Bell } from "lucide-react";
 import { useStore } from "@/store/useStore";
 import { getAlerts } from "@/lib/api";
 import AlertsPanel from "@/components/alerts/AlertsPanel";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AlertsPage() {
   const { alerts, setAlerts, setUnreadCount } = useStore();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const loadAlerts = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const { alerts, unreadCount } = await getAlerts();
+      setAlerts(alerts);
+      setUnreadCount(unreadCount);
+    } catch {
+      setError("Failed to load alerts. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      try {
-        const { alerts, unreadCount } = await getAlerts();
-        setAlerts(alerts);
-        setUnreadCount(unreadCount);
-      } catch {
-        setAlerts([]);
-        setUnreadCount(0);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
+    void loadAlerts();
   }, [setAlerts, setUnreadCount]);
 
   const unreadCount = alerts.filter((a) => !a.read).length;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 animate-in fade-in duration-200">
       {/* Page header */}
       <div className="bg-white border-b border-gray-200 px-6 py-5">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
@@ -54,24 +58,24 @@ export default function AlertsPage() {
       {/* Content */}
       <div className="max-w-2xl mx-auto px-6 py-6">
         {loading ? (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-4 border-b border-gray-100">
-              <div className="h-4 w-24 bg-gray-200 rounded animate-pulse" />
-            </div>
-            <div className="divide-y divide-gray-100">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="px-4 py-4">
-                  <div className="flex gap-3">
-                    <div className="w-2.5 h-2.5 rounded-full bg-gray-200 animate-pulse mt-1.5" />
-                    <div className="flex-1 space-y-2">
-                      <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4" />
-                      <div className="h-3 bg-gray-100 rounded animate-pulse w-full" />
-                      <div className="h-3 bg-gray-100 rounded animate-pulse w-2/3" />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-4 space-y-3">
+            {[...Array(4)].map((_, i) => (
+              <Skeleton key={i} className="h-16 rounded-lg" />
+            ))}
+          </div>
+        ) : error ? (
+          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
+            <AlertCircle className="mx-auto mb-3 h-6 w-6 text-red-600" />
+            <p className="font-medium text-red-700">
+              Failed to load alerts. Please try again.
+            </p>
+            <Button
+              variant="outline"
+              className="mt-4"
+              onClick={() => void loadAlerts()}
+            >
+              Retry
+            </Button>
           </div>
         ) : (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">

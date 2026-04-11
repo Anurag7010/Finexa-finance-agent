@@ -1,11 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
-import { Send, Trash2, Loader2, Sparkles } from "lucide-react";
+import { Send, Trash2, Loader2, Sparkles, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { sendChatMessage, getChatHistory, clearChatHistory } from "@/lib/api";
 import ChatMessage from "./ChatMessage";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 const SUGGESTED_PROMPTS = [
   "Why am I spending so much this month?",
@@ -54,39 +56,43 @@ export default function ChatPanel() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [historyLoaded, setHistoryLoaded] = useState(false);
+  const [historyError, setHistoryError] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const loadHistory = useCallback(async () => {
+    setHistoryLoaded(false);
+    setHistoryError("");
+    try {
+      const history = await getChatHistory();
+      if (history && history.length > 0) {
+        setMessages(
+          history.map(
+            (m: {
+              role: "user" | "assistant";
+              content: string;
+              timestamp?: string;
+              _id?: string;
+            }) => ({
+              id: m._id || String(Date.now() + Math.random()),
+              role: m.role,
+              content: m.content,
+              timestamp: m.timestamp || new Date().toISOString(),
+            }),
+          ),
+        );
+      }
+    } catch {
+      setHistoryError("Failed to load chat history. Please try again.");
+    } finally {
+      setHistoryLoaded(true);
+    }
+  }, []);
+
   // Load history on mount
   useEffect(() => {
-    const load = async () => {
-      try {
-        const history = await getChatHistory();
-        if (history && history.length > 0) {
-          setMessages(
-            history.map(
-              (m: {
-                role: "user" | "assistant";
-                content: string;
-                timestamp?: string;
-                _id?: string;
-              }) => ({
-                id: m._id || String(Date.now() + Math.random()),
-                role: m.role,
-                content: m.content,
-                timestamp: m.timestamp || new Date().toISOString(),
-              }),
-            ),
-          );
-        }
-      } catch {
-        // Start empty when history cannot be loaded.
-      } finally {
-        setHistoryLoaded(true);
-      }
-    };
-    load();
-  }, []);
+    void loadHistory();
+  }, [loadHistory]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -132,6 +138,7 @@ export default function ChatPanel() {
         prev.filter((m) => m.id !== typingId).concat(assistantMsg),
       );
     } catch {
+      toast.error("Could not reach AI assistant. Please try again.");
       const errorMsg: LocalMessage = {
         id: `error-${Date.now()}`,
         role: "assistant",
@@ -172,6 +179,44 @@ export default function ChatPanel() {
   };
 
   const isEmpty = historyLoaded && messages.length === 0;
+
+  if (!historyLoaded) {
+    return (
+      <div className="flex h-full flex-col bg-white p-4">
+        <div className="space-y-3">
+          <div className="flex justify-start">
+            <Skeleton className="h-12 w-2/3 rounded-2xl rounded-tl-sm" />
+          </div>
+          <div className="flex justify-end">
+            <Skeleton className="h-12 w-1/2 rounded-2xl rounded-br-sm" />
+          </div>
+          <div className="flex justify-start">
+            <Skeleton className="h-12 w-3/5 rounded-2xl rounded-tl-sm" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (historyError) {
+    return (
+      <div className="flex h-full items-center justify-center bg-white p-6">
+        <div className="w-full max-w-md rounded-xl border border-red-200 bg-red-50 p-6 text-center">
+          <AlertCircle className="mx-auto mb-3 h-6 w-6 text-red-600" />
+          <p className="font-medium text-red-700">
+            Failed to load chat history. Please try again.
+          </p>
+          <Button
+            variant="outline"
+            className="mt-4"
+            onClick={() => void loadHistory()}
+          >
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-full bg-white">
