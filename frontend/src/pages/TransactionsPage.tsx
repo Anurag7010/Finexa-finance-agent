@@ -10,8 +10,12 @@ export default function TransactionsPage() {
   const [anomalyCount, setAnomalyCount] = useState(0);
 
   useEffect(() => {
-    getTransactionSummary().then(setSummary).catch(() => {});
-    getAnomalies().then((a) => setAnomalyCount(a.length)).catch(() => {});
+    getTransactionSummary()
+      .then(setSummary)
+      .catch(() => {});
+    getAnomalies()
+      .then((a) => setAnomalyCount(a.length))
+      .catch(() => {});
   }, []);
 
   const topCategory = summary?.summary.sort((a, b) => b.total - a.total)[0];
@@ -26,7 +30,9 @@ export default function TransactionsPage() {
             <Receipt size={20} className="text-indigo-600" />
           </div>
           <div>
-            <p className="text-xs text-slate-500 font-medium">Total This Month</p>
+            <p className="text-xs text-slate-500 font-medium">
+              Total This Month
+            </p>
             <p className="text-xl font-extrabold text-slate-800">
               {summary ? formatCurrency(summary.totalSpend) : "—"}
             </p>
@@ -68,7 +74,11 @@ export default function TransactionsPage() {
         {/* Top category */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex items-center gap-4">
           <div className="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center text-xl">
-            {topCategory ? getCategoryIcon(topCategory._id) : <ShoppingBag size={20} className="text-amber-600" />}
+            {topCategory ? (
+              getCategoryIcon(topCategory.category)
+            ) : (
+              <ShoppingBag size={20} className="text-amber-600" />
+            )}
           </div>
           <div>
             <p className="text-xs text-slate-500 font-medium">
@@ -76,7 +86,7 @@ export default function TransactionsPage() {
             </p>
             <p className="text-xl font-extrabold text-slate-800">
               {topCategory
-                ? `${topCategory._id} (${formatCurrency(topCategory.total)})`
+                ? `${topCategory.category} (${formatCurrency(topCategory.total)})`
                 : "—"}
             </p>
           </div>

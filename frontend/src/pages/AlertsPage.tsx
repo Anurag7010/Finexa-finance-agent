@@ -1,62 +1,31 @@
-import { useEffect, useState } from 'react'
-import { Bell } from 'lucide-react'
-import { useStore } from '@/useStore'
-import { getAlerts } from '@/api'
-import AlertsPanel from '@/components/alerts/AlertsPanel'
-
-// ─── Temporary mock data — remove when backend is live ───
-const MOCK_ALERTS = [
-  {
-    _id: '1',
-    type: 'overspend_pace',
-    severity: 'high' as const,
-    title: 'Spending ahead of pace',
-    message: "You've spent ₹38,200 — 22% above your expected pace for day 18.",
-    read: false,
-    triggered_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    _id: '2',
-    type: 'category_breach',
-    severity: 'medium' as const,
-    title: 'Shopping budget at 94%',
-    message: "You've used ₹6,580 of your ₹7,000 Shopping budget.",
-    category: 'Shopping',
-    read: false,
-    triggered_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    _id: '3',
-    type: 'anomaly',
-    severity: 'high' as const,
-    title: 'Unusual transaction detected',
-    message: '₹11,400 at UNKNOWN MERCHANT 4821 at 2am was flagged as suspicious.',
-    read: true,
-    triggered_at: new Date(Date.now() - 28 * 60 * 60 * 1000).toISOString(),
-  },
-]
+import { useEffect, useState } from "react";
+import { Bell } from "lucide-react";
+import { useStore } from "@/store/useStore";
+import { getAlerts } from "@/lib/api";
+import AlertsPanel from "@/components/alerts/AlertsPanel";
 
 export default function AlertsPage() {
-  const { alerts, setAlerts } = useStore()
-  const [loading, setLoading] = useState(false)
+  const { alerts, setAlerts, setUnreadCount } = useStore();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const load = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
-        const data = await getAlerts()
-        setAlerts(data)
+        const { alerts, unreadCount } = await getAlerts();
+        setAlerts(alerts);
+        setUnreadCount(unreadCount);
       } catch {
-        // Backend not live — use mock data
-        setAlerts(MOCK_ALERTS)
+        setAlerts([]);
+        setUnreadCount(0);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    load()
-  }, [])
+    };
+    load();
+  }, [setAlerts, setUnreadCount]);
 
-  const unreadCount = alerts.filter((a) => !a.read).length
+  const unreadCount = alerts.filter((a) => !a.read).length;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -70,8 +39,10 @@ export default function AlertsPage() {
             <h1 className="text-xl font-bold text-gray-900">Alerts</h1>
             {unreadCount > 0 ? (
               <p className="text-sm text-gray-500">
-                <span className="font-semibold text-red-500">{unreadCount} unread</span>{' '}
-                alert{unreadCount > 1 ? 's' : ''} waiting for your attention
+                <span className="font-semibold text-red-500">
+                  {unreadCount} unread
+                </span>{" "}
+                alert{unreadCount > 1 ? "s" : ""} waiting for your attention
               </p>
             ) : (
               <p className="text-sm text-gray-400">All caught up!</p>
@@ -109,5 +80,5 @@ export default function AlertsPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

@@ -1,39 +1,56 @@
-import { useState } from 'react'
-import { ChevronDown, ChevronUp, Loader2, TrendingDown, TrendingUp, DollarSign } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useStore } from '@/useStore'
-import { simulateScenario, sendChatMessage } from '@/api'
-import { cn } from '@/lib/utils'
+import { useState } from "react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Loader2,
+  TrendingDown,
+  TrendingUp,
+  DollarSign,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useStore } from "@/store/useStore";
+import { sendChatMessage } from "@/lib/api";
+import { cn } from "@/lib/utils";
 
 interface SimulationResult {
-  category: string
-  cutPct: number
-  currentMonthlySpend: number
-  newProjectedSpend: number
-  monthlySaving: number
-  annualSaving: number
-  newProjectedBalance: number
-  healthScoreChange: number
+  category: string;
+  cutPct: number;
+  currentMonthlySpend: number;
+  newProjectedSpend: number;
+  monthlySaving: number;
+  annualSaving: number;
+  newProjectedBalance: number;
+  healthScoreChange: number;
 }
 
 function formatINR(n: number): string {
-  return '₹' + n.toLocaleString('en-IN')
+  return "₹" + n.toLocaleString("en-IN");
 }
 
 // ─── Temporary mock simulation — remove when backend is live ───
-function computeMockResult(category: string, pct: number, insight: { category_summary?: Record<string, number>; forecast_end_balance?: number; health_score?: number } | null): SimulationResult {
+function computeMockResult(
+  category: string,
+  pct: number,
+  insight: {
+    category_summary?: Record<string, number>;
+    forecast?: Array<{ projected_balance: number }>;
+    health_score?: number;
+  } | null,
+): SimulationResult {
   const categorySummary = insight?.category_summary || {
-    'Food & Dining': 12400,
+    "Food & Dining": 12400,
     Shopping: 6580,
     Transport: 3200,
     Utilities: 2800,
     Entertainment: 2100,
-  }
-  const currentMonthlySpend = categorySummary[category] ?? 5000
-  const saving = Math.round(currentMonthlySpend * (Math.abs(pct) / 100))
-  const newProjectedSpend = currentMonthlySpend - saving
-  const newProjectedBalance = (insight?.forecast_end_balance ?? 8200) + saving
-  const healthScoreChange = Math.round(saving / 800)
+  };
+  const currentMonthlySpend = categorySummary[category] ?? 5000;
+  const saving = Math.round(currentMonthlySpend * (Math.abs(pct) / 100));
+  const newProjectedSpend = currentMonthlySpend - saving;
+  const lastProjectedBalance =
+    insight?.forecast?.[insight.forecast.length - 1]?.projected_balance ?? 8200;
+  const newProjectedBalance = lastProjectedBalance + saving;
+  const healthScoreChange = Math.round(saving / 800);
 
   return {
     category,
@@ -44,44 +61,46 @@ function computeMockResult(category: string, pct: number, insight: { category_su
     annualSaving: saving * 12,
     newProjectedBalance,
     healthScoreChange,
-  }
+  };
 }
 
 export default function ScenarioSimulator() {
-  const { insight } = useStore()
-  const [open, setOpen] = useState(false)
-  const [category, setCategory] = useState('')
-  const [pct, setPct] = useState(30)
-  const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<SimulationResult | null>(null)
+  const { insight } = useStore();
+  const [open, setOpen] = useState(false);
+  const [category, setCategory] = useState("");
+  const [pct, setPct] = useState(30);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<SimulationResult | null>(null);
 
   // Build category list from insight or fallback
   const categories = insight?.category_summary
     ? Object.keys(insight.category_summary)
-    : ['Food & Dining', 'Shopping', 'Transport', 'Utilities', 'Entertainment']
+    : ["Food & Dining", "Shopping", "Transport", "Utilities", "Entertainment"];
 
-  const selectedCategory = category || categories[0]
+  const selectedCategory = category || categories[0];
 
   const handleRun = async () => {
-    setLoading(true)
-    setResult(null)
+    setLoading(true);
+    setResult(null);
     try {
-      // Try dedicated endpoint first
-      let data: SimulationResult
+      let data: SimulationResult;
       try {
-        data = await simulateScenario(selectedCategory, pct)
+        await sendChatMessage(
+          `What would happen if I cut my ${selectedCategory} budget by ${pct}%?`,
+        );
       } catch {
-        // Fallback: send as chat message and compute locally
-        try {
-          await sendChatMessage(`simulate_scenario: cut ${selectedCategory} by ${pct}%`)
-        } catch {/* ignore */}
-        data = computeMockResult(selectedCategory, pct, insight as Parameters<typeof computeMockResult>[2])
+        // Ignore chat errors and still provide an on-device what-if estimate.
       }
-      setResult(data)
+      data = computeMockResult(
+        selectedCategory,
+        pct,
+        insight as Parameters<typeof computeMockResult>[2],
+      );
+      setResult(data);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -95,8 +114,12 @@ export default function ScenarioSimulator() {
             <TrendingDown className="w-4 h-4 text-purple-600" />
           </div>
           <div className="text-left">
-            <h3 className="text-sm font-bold text-gray-900">What-if Simulator</h3>
-            <p className="text-xs text-gray-400">Explore how budget cuts change your finances</p>
+            <h3 className="text-sm font-bold text-gray-900">
+              What-if Simulator
+            </h3>
+            <p className="text-xs text-gray-400">
+              Explore how budget cuts change your finances
+            </p>
           </div>
         </div>
         {open ? (
@@ -181,14 +204,18 @@ export default function ScenarioSimulator() {
               {/* Before / After */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-white rounded-lg p-3 border border-red-100">
-                  <p className="text-[10px] font-semibold uppercase text-red-400 mb-1">Current</p>
+                  <p className="text-[10px] font-semibold uppercase text-red-400 mb-1">
+                    Current
+                  </p>
                   <p className="text-sm font-bold text-gray-900">
                     {formatINR(result.currentMonthlySpend)}
                   </p>
                   <p className="text-[10px] text-gray-400">monthly spend</p>
                 </div>
                 <div className="bg-white rounded-lg p-3 border border-green-100">
-                  <p className="text-[10px] font-semibold uppercase text-green-500 mb-1">Projected</p>
+                  <p className="text-[10px] font-semibold uppercase text-green-500 mb-1">
+                    Projected
+                  </p>
                   <p className="text-sm font-bold text-gray-900">
                     {formatINR(result.newProjectedSpend)}
                   </p>
@@ -203,29 +230,43 @@ export default function ScenarioSimulator() {
                     <TrendingDown className="w-3.5 h-3.5 text-green-500" />
                     Monthly saving
                   </div>
-                  <span className="font-bold text-green-600">{formatINR(result.monthlySaving)}</span>
+                  <span className="font-bold text-green-600">
+                    {formatINR(result.monthlySaving)}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-green-100">
                   <div className="flex items-center gap-1.5 text-sm text-gray-600">
                     <TrendingDown className="w-3.5 h-3.5 text-green-500" />
                     Annual saving
                   </div>
-                  <span className="font-bold text-green-600">{formatINR(result.annualSaving)}</span>
+                  <span className="font-bold text-green-600">
+                    {formatINR(result.annualSaving)}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-blue-100">
                   <div className="flex items-center gap-1.5 text-sm text-gray-600">
                     <DollarSign className="w-3.5 h-3.5 text-blue-500" />
                     New projected balance
                   </div>
-                  <span className="font-bold text-blue-600">{formatINR(result.newProjectedBalance)}</span>
+                  <span className="font-bold text-blue-600">
+                    {formatINR(result.newProjectedBalance)}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-purple-100">
                   <div className="flex items-center gap-1.5 text-sm text-gray-600">
                     <TrendingUp className="w-3.5 h-3.5 text-purple-500" />
                     Health score change
                   </div>
-                  <span className={cn('font-bold', result.healthScoreChange > 0 ? 'text-green-600' : 'text-gray-600')}>
-                    {result.healthScoreChange > 0 ? '+' : ''}{result.healthScoreChange} pts
+                  <span
+                    className={cn(
+                      "font-bold",
+                      result.healthScoreChange > 0
+                        ? "text-green-600"
+                        : "text-gray-600",
+                    )}
+                  >
+                    {result.healthScoreChange > 0 ? "+" : ""}
+                    {result.healthScoreChange} pts
                   </span>
                 </div>
               </div>
@@ -234,5 +275,5 @@ export default function ScenarioSimulator() {
         </div>
       )}
     </div>
-  )
+  );
 }

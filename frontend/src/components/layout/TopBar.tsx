@@ -14,8 +14,7 @@ const PAGE_TITLES: Record<string, string> = {
 
 export default function TopBar() {
   const location = useLocation();
-  const { unreadCount, setInsight, setUnreadCount, isRefreshing, setIsRefreshing } =
-    useStore();
+  const { unreadCount, setInsight, isRefreshing, setIsRefreshing } = useStore();
 
   const title = PAGE_TITLES[location.pathname] ?? "SmartSpend AI";
 
@@ -46,10 +45,7 @@ export default function TopBar() {
           disabled={isRefreshing}
           className="gap-2 text-xs"
         >
-          <RefreshCw
-            size={13}
-            className={isRefreshing ? "animate-spin" : ""}
-          />
+          <RefreshCw size={13} className={isRefreshing ? "animate-spin" : ""} />
           {isRefreshing ? "Refreshing…" : "Refresh Analysis"}
         </Button>
 

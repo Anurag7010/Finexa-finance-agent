@@ -6,6 +6,7 @@ import RiskCard from "../components/dashboard/RiskCard";
 import StatsRow from "../components/dashboard/StatsRow";
 import ForecastChart from "../components/dashboard/ForecastChart";
 import CategoryBreakdown from "../components/dashboard/CategoryBreakdown";
+import ScenarioSimulator from "../components/dashboard/ScenarioSimulator";
 import { RefreshCw } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { refreshInsights } from "../lib/api";
@@ -16,7 +17,8 @@ function SkeletonCard({ className = "" }: { className?: string }) {
 }
 
 export default function DashboardPage() {
-  const { user, insight, setInsight, setIsRefreshing, isRefreshing } = useStore();
+  const { user, insight, setInsight, setIsRefreshing, isRefreshing } =
+    useStore();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -86,15 +88,16 @@ export default function DashboardPage() {
           <p className="text-slate-500 text-sm mb-6">
             Run your first financial analysis to see your dashboard.
           </p>
-          {error && (
-            <p className="text-red-500 text-xs mb-4">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-xs mb-4">{error}</p>}
           <Button
             onClick={handleRefresh}
             disabled={isRefreshing}
             className="gap-2 bg-indigo-600 hover:bg-indigo-700 text-white"
           >
-            <RefreshCw size={14} className={isRefreshing ? "animate-spin" : ""} />
+            <RefreshCw
+              size={14}
+              className={isRefreshing ? "animate-spin" : ""}
+            />
             {isRefreshing ? "Analyzing…" : "Run Analysis"}
           </Button>
         </div>
@@ -119,6 +122,7 @@ export default function DashboardPage() {
         {/* Left column — 60% */}
         <div className="col-span-3 space-y-5">
           <ForecastChart data={insight.forecast} />
+          <ScenarioSimulator />
           <CategoryBreakdown insight={insight} user={user} />
         </div>
 
