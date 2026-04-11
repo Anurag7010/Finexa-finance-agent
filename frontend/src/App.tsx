@@ -16,6 +16,19 @@ function Sidebar() {
   const alerts = useStore((s) => s.alerts)
   const unread = alerts.filter((a) => !a.read).length
 
+// Layout
+import Sidebar from "./components/layout/Sidebar";
+import TopBar from "./components/layout/TopBar";
+
+// ─── Protected Route ───────────────────────────────────────────────────────────
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const token = useStore((s) => s.token);
+  if (!token) return <Navigate to="/login" replace />;
+  return <>{children}</>;
+}
+
+// ─── App Shell with Sidebar + TopBar ──────────────────────────────────────────
+function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <nav className="flex flex-col w-56 min-h-screen bg-gray-900 text-white px-3 py-6 shrink-0">
       {/* Logo */}
