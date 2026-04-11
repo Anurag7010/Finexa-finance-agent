@@ -33,7 +33,6 @@ FALLBACK_NUDGES = {
     "weekly_spike": "Your weekly spend increased sharply; a quick check-in can help keep your month on track.",
 }
 
-OPENAI_CALLS_ENABLED = os.getenv("ENABLE_OPENAI_CALLS", "false").lower() == "true"
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 openai_client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
@@ -110,6 +109,21 @@ class CategorizeResponse(BaseModel):
     category: str
 
 
+class BatchCategorizeItem(BaseModel):
+    index: int
+    description: str = ""
+    merchant: str = ""
+    amount: float = Field(ge=0)
+
+
+class BatchCategorizeRequest(BaseModel):
+    transactions: List[BatchCategorizeItem]
+
+
+class BatchCategorizeResponse(BaseModel):
+    results: List[Dict[str, Any]]
+
+
 class ForecastRequest(BaseModel):
     user_id: str
     transactions: List[TransactionInput]
@@ -145,6 +159,22 @@ class NudgeRequest(BaseModel):
 
 class NudgeResponse(BaseModel):
     message: str
+
+
+class FinancialSummaryRequest(BaseModel):
+    user_name: str
+    health_score: int
+    risk_level: str
+    monthly_spend: float
+    monthly_budget: float
+    overspend_amount: float
+    savings_rate: float
+    top_category: str
+    risk_factors: List[str]
+
+
+class FinancialSummaryResponse(BaseModel):
+    summary: str
 
 
 def _round2(value: float) -> float:
@@ -205,29 +235,33 @@ def _build_forecast(
     horizon_days: int = 30,
 ) -> List[ForecastPoint]:
     now = datetime.utcnow()
+    day_of_month = max(now.day, 1)
+
+    # Compute average daily spend from last 30 days of actual data.
     lookback_start = now - timedelta(days=30)
     recent = [tx for tx in transactions if _normalize_dt(tx.date) >= lookback_start]
-
     total_recent_spend = sum(tx.amount for tx in recent)
-    avg_daily_spend = total_recent_spend / 30.0 if recent else max(monthly_spend / max(now.day, 1), 0.0)
+    avg_daily_spend = total_recent_spend / 30.0 if recent else monthly_spend / max(day_of_month, 1)
 
-    running_balance = income - monthly_spend
-    projected_spend = monthly_spend
-    forecast: List[ForecastPoint] = []
+    # Remaining budget this month; forecast projects from current balance down.
+    remaining_month_budget = max(income - monthly_spend, 0.0)
+    running_balance = remaining_month_budget
 
     rng = np.random.default_rng(42)
+    forecast: List[ForecastPoint] = []
+    cumulative_projected_spend = monthly_spend
 
     for i in range(1, horizon_days + 1):
-        variance_multiplier = float(rng.uniform(0.95, 1.05))
-        day_spend = max(avg_daily_spend * variance_multiplier, 0.0)
-        projected_spend += day_spend
+        variance = float(rng.uniform(0.92, 1.08))
+        day_spend = max(avg_daily_spend * variance, 0.0)
         running_balance -= day_spend
+        cumulative_projected_spend += day_spend
 
         forecast.append(
             ForecastPoint(
                 date=now + timedelta(days=i),
                 projected_balance=_round2(running_balance),
-                projected_spend=_round2(projected_spend),
+                projected_spend=_round2(cumulative_projected_spend),
             )
         )
 
@@ -240,23 +274,32 @@ def compute_health_score(
     savings_rate: float,
     breach_count: int,
     anomaly_count: int,
+    day_of_month: int = 15,
+    days_in_month: int = 30,
 ) -> int:
     score = 100
 
-    spend_ratio = (monthly_spend / monthly_budget) if monthly_budget > 0 else 0.0
-    if spend_ratio >= 1.0:
-        score -= 25
-    elif spend_ratio >= 0.85:
-        score -= 12
-    elif spend_ratio >= 0.70:
-        score -= 5
+    # Compare against paced budget to avoid over-penalizing early-month spend.
+    paced_budget = (day_of_month / days_in_month) * monthly_budget if days_in_month > 0 else monthly_budget
+    spend_ratio = (monthly_spend / paced_budget) if paced_budget > 0 else 0.0
 
-    if savings_rate < 0.10:
+    if spend_ratio >= 1.30:
+        score -= 28
+    elif spend_ratio >= 1.15:
+        score -= 18
+    elif spend_ratio >= 1.00:
         score -= 10
-    elif savings_rate < 0.20:
+    elif spend_ratio >= 0.85:
         score -= 4
 
-    score -= min(max(breach_count, 0) * 3, 12)
+    if savings_rate < 0.05:
+        score -= 12
+    elif savings_rate < 0.10:
+        score -= 7
+    elif savings_rate < 0.20:
+        score -= 3
+
+    score -= min(max(breach_count, 0) * 4, 12)
     score -= min(max(anomaly_count, 0) * 2, 10)
 
     return int(max(0, min(100, score)))
@@ -284,7 +327,7 @@ def _heuristic_category(description: str, merchant: str) -> str:
 
 
 def _can_call_openai() -> bool:
-    return bool(OPENAI_CALLS_ENABLED and openai_client is not None and OPENAI_API_KEY)
+    return openai_client is not None and bool(OPENAI_API_KEY)
 
 
 def _categorize_with_openai(description: str, merchant: str, amount: float) -> str:
@@ -414,6 +457,8 @@ def analyze(payload: AnalyzeRequest) -> AnalyzeResponse:
             savings_rate=savings_rate,
             breach_count=breach_count,
             anomaly_count=anomaly_count,
+            day_of_month=day_of_month,
+            days_in_month=days_in_month,
         )
 
         if score < 50:
@@ -424,23 +469,39 @@ def analyze(payload: AnalyzeRequest) -> AnalyzeResponse:
             risk_level = "low"
 
         risk_factors: List[str] = []
-        if monthly_spend > expected_spend_by_now * 1.05 and expected_spend_by_now > 0:
-            over_pct = ((monthly_spend - expected_spend_by_now) / expected_spend_by_now) * 100
-            risk_factors.append(f"Spending pace is {_round2(over_pct)}% above expected for this point in the month.")
+        if expected_spend_by_now > 0:
+            pacing_ratio = monthly_spend / expected_spend_by_now
+            if pacing_ratio >= 1.20:
+                risk_factors.append(
+                    f"Spending {round((pacing_ratio - 1) * 100)}% faster than your monthly pace - "
+                    f"₹{round(monthly_spend):,} spent vs ₹{round(expected_spend_by_now):,} expected by day {day_of_month}."
+                )
+            elif pacing_ratio >= 1.05:
+                risk_factors.append(
+                    f"Slightly ahead of spending pace - ₹{round(monthly_spend):,} vs "
+                    f"₹{round(expected_spend_by_now):,} expected by today."
+                )
 
-        high_pressure_categories = [b for b in breaches if b.percentage >= 90]
-        for breach in high_pressure_categories[:2]:
+        for breach in breaches[:2]:
             risk_factors.append(
-                f"{breach.category} has reached {_round2(breach.percentage)}% of budget."
+                f"{breach.category} at {round(breach.percentage)}% of ₹{round(breach.budget):,} budget "
+                f"(₹{round(breach.spent):,} spent)."
             )
 
-        if savings_rate < 0.10:
-            risk_factors.append("Savings rate is critically low this month.")
-        elif savings_rate < 0.20:
-            risk_factors.append("Savings rate is below a healthy range.")
+        if savings_rate < 0.05:
+            risk_factors.append(
+                f"Savings rate is critically low at {round(savings_rate * 100, 1)}% - "
+                "aim for at least 20% of income."
+            )
+        elif savings_rate < 0.15:
+            risk_factors.append(
+                f"Savings rate of {round(savings_rate * 100, 1)}% is below healthy range (20%+)."
+            )
 
-        if overspend_amount > 0:
-            risk_factors.append(f"Projected overspend is {_round2(overspend_amount)} if current trend continues.")
+        if overspend_amount > 500:
+            risk_factors.append(
+                f"At current pace, projected to overspend by ₹{round(overspend_amount):,} by month end."
+            )
 
         risk_factors = risk_factors[:4]
 
@@ -458,7 +519,7 @@ def analyze(payload: AnalyzeRequest) -> AnalyzeResponse:
                 Recommendation(
                     category=category,
                     message=(
-                        f"Reduce {category} spending by 15% to save about INR {_round2(potential_saving)} this month."
+                        f"Reduce {category} spending by 15% to save about ₹{_round2(potential_saving)} this month."
                     ),
                     potential_saving=_round2(potential_saving),
                 )
@@ -510,6 +571,75 @@ def categorize(payload: CategorizeRequest) -> CategorizeResponse:
         return CategorizeResponse(category=category)
     except Exception:
         return CategorizeResponse(category=_heuristic_category(payload.description, payload.merchant))
+
+
+@app.post("/categorize-batch", response_model=BatchCategorizeResponse)
+def categorize_batch(payload: BatchCategorizeRequest) -> BatchCategorizeResponse:
+    if not payload.transactions:
+        return BatchCategorizeResponse(results=[])
+
+    if not _can_call_openai():
+        results = [
+            {"index": item.index, "category": _heuristic_category(item.description, item.merchant)}
+            for item in payload.transactions
+        ]
+        return BatchCategorizeResponse(results=results)
+
+    try:
+        items_text = "\n".join(
+            f"{item.index}. Merchant: {item.merchant} | Description: {item.description} | Amount: {item.amount}"
+            for item in payload.transactions[:20]
+        )
+
+        system_prompt = (
+            "You are a transaction categorizer. For each numbered transaction, "
+            "return ONLY the index and one category from: "
+            "Food & Dining, Transportation, Shopping, Entertainment, Utilities, Health, Groceries, Rent, Other. "
+            "Format: one line per transaction as: INDEX:CATEGORY"
+        )
+
+        completion = openai_client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": items_text},
+            ],
+            temperature=0,
+            max_tokens=200,
+        )
+
+        raw = (completion.choices[0].message.content or "").strip()
+        results = []
+        for line in raw.splitlines():
+            if ":" in line:
+                parts = line.split(":", 1)
+                try:
+                    idx = int(parts[0].strip())
+                    cat = parts[1].strip()
+                    if cat not in ALLOWED_CATEGORIES:
+                        cat = "Other"
+                    results.append({"index": idx, "category": cat})
+                except ValueError:
+                    continue
+
+        returned_indices = {r["index"] for r in results}
+        for item in payload.transactions:
+            if item.index not in returned_indices:
+                results.append(
+                    {
+                        "index": item.index,
+                        "category": _heuristic_category(item.description, item.merchant),
+                    }
+                )
+
+        return BatchCategorizeResponse(results=sorted(results, key=lambda r: r["index"]))
+
+    except Exception:
+        results = [
+            {"index": item.index, "category": _heuristic_category(item.description, item.merchant)}
+            for item in payload.transactions
+        ]
+        return BatchCategorizeResponse(results=results)
 
 
 @app.post("/forecast", response_model=ForecastResponse)
@@ -590,3 +720,45 @@ def nudge_message(payload: NudgeRequest) -> NudgeResponse:
         return NudgeResponse(message=message)
     except Exception:
         return NudgeResponse(message=FALLBACK_NUDGES.get(payload.trigger_type, "Stay mindful of your spending today."))
+
+
+@app.post("/financial-summary", response_model=FinancialSummaryResponse)
+def financial_summary(payload: FinancialSummaryRequest) -> FinancialSummaryResponse:
+    fallback = (
+        f"{payload.user_name} has a financial health score of {payload.health_score}/100 "
+        f"with {payload.risk_level} risk. "
+        f"This month's spend is ₹{round(payload.monthly_spend):,} against a ₹{round(payload.monthly_budget):,} budget."
+    )
+
+    if not _can_call_openai():
+        return FinancialSummaryResponse(summary=fallback)
+
+    try:
+        prompt = (
+            f"User: {payload.user_name}\n"
+            f"Health score: {payload.health_score}/100\n"
+            f"Risk level: {payload.risk_level}\n"
+            f"Spent: ₹{round(payload.monthly_spend):,} of ₹{round(payload.monthly_budget):,} budget\n"
+            f"Savings rate: {round(payload.savings_rate * 100, 1)}%\n"
+            f"Top spending category: {payload.top_category}\n"
+            f"Key risk factors: {'; '.join(payload.risk_factors)}\n\n"
+            "Write a 2-sentence plain-English financial snapshot for this user. "
+            "Be specific with numbers. Use ₹ for amounts. Sound like a knowledgeable friend, not a robot."
+        )
+
+        completion = openai_client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a concise, warm financial advisor. Use ₹ for rupees. Never give generic advice.",
+                },
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.6,
+            max_tokens=120,
+        )
+        summary = (completion.choices[0].message.content or "").strip()
+        return FinancialSummaryResponse(summary=summary or fallback)
+    except Exception:
+        return FinancialSummaryResponse(summary=fallback)
