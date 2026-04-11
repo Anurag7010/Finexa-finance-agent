@@ -1,24 +1,23 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useStore } from "../../store/useStore";
 import {
   LayoutDashboard,
-  ArrowLeftRight,
+  Receipt,
   Bell,
   MessageSquare,
   LogOut,
-  TrendingUp,
+  Circle,
 } from "lucide-react";
 
 const NAV_ITEMS = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/transactions", icon: ArrowLeftRight, label: "Transactions" },
+  { to: "/transactions", icon: Receipt, label: "Transactions" },
   { to: "/alerts", icon: Bell, label: "Alerts" },
-  { to: "/chat", icon: MessageSquare, label: "AI Chat" },
+  { to: "/chat", icon: MessageSquare, label: "Chat" },
 ];
 
 export default function Sidebar() {
   const { user, unreadCount, logout } = useStore();
-  const navigate = useNavigate();
 
   const initials = user?.name
     ? user.name
@@ -30,28 +29,20 @@ export default function Sidebar() {
 
   function handleLogout() {
     logout();
-    navigate("/login", { replace: true });
   }
 
   return (
     <aside
-      className="w-64 flex-shrink-0 flex flex-col h-full"
+      className="w-64 flex-shrink-0 flex flex-col h-full bg-slate-900"
       style={{ background: "var(--sidebar)" }}
     >
       {/* Logo */}
       <div className="px-6 py-5 border-b border-[oklch(0.25_0.02_264)]">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
-            <TrendingUp size={16} className="text-white" />
-          </div>
-          <div>
-            <p className="text-white font-bold text-sm leading-none">
-              SmartSpend
-            </p>
-            <p className="text-[oklch(0.6_0.12_264)] text-[10px] font-medium mt-0.5 leading-none">
-              AI Finance
-            </p>
-          </div>
+        <div className="flex items-center gap-2">
+          <Circle size={8} className="fill-teal-400 text-teal-400" />
+          <p className="text-white font-bold text-sm leading-none">
+            SmartSpend AI
+          </p>
         </div>
       </div>
 
@@ -64,8 +55,8 @@ export default function Sidebar() {
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 group relative ${
                 isActive
-                  ? "bg-[oklch(0.6_0.18_264)] text-white shadow-md"
-                  : "text-[oklch(0.7_0_0)] hover:bg-[oklch(0.22_0.025_264)] hover:text-white"
+                  ? "bg-slate-700 text-white"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800"
               }`
             }
           >
@@ -83,15 +74,15 @@ export default function Sidebar() {
       {/* User + Logout */}
       <div className="px-3 py-4 border-t border-[oklch(0.25_0.02_264)]">
         <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center shrink-0">
             <span className="text-white text-xs font-bold">{initials}</span>
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-white text-sm font-medium truncate">
-              {user?.name ?? "Loading…"}
+              {user?.name ?? "Rohan Sharma"}
             </p>
             <p className="text-[oklch(0.55_0_0)] text-[11px] truncate">
-              {user?.email ?? ""}
+              {user?.email ?? "demo@smartspend.ai"}
             </p>
           </div>
         </div>

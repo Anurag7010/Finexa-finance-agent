@@ -44,7 +44,7 @@ function buildAlerts(userId, analysis, user) {
     ? analysis.category_breaches
     : [];
 
-  for (const breach of breaches) {
+  for (const breach of breaches.slice(0, 2)) {
     alerts.push({
       user_id: userId,
       type: 'category_breach',

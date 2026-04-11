@@ -3,8 +3,17 @@ import { getAnomalies, getTransactions } from "../../lib/api";
 import type { Transaction } from "../../lib/api";
 import TransactionRow from "./TransactionRow";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
-import { Search, ChevronDown, AlertTriangle, Loader2 } from "lucide-react";
+import {
+  Search,
+  ChevronDown,
+  AlertTriangle,
+  Loader2,
+  AlertCircle,
+  Receipt,
+  ShieldCheck,
+} from "lucide-react";
 import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
 
 const CATEGORIES = [
   "All",
@@ -159,13 +168,14 @@ export default function TransactionList() {
       <div className="p-4 space-y-2">
         {loading ? (
           <div className="space-y-2">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="skeleton h-16 rounded-xl" />
+            {[...Array(8)].map((_, i) => (
+              <Skeleton key={i} className="h-14 rounded-lg" />
             ))}
           </div>
         ) : error ? (
-          <div className="text-center py-8 text-red-500 text-sm">
-            <p>{error}</p>
+          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-6 text-center">
+            <AlertCircle className="mx-auto mb-2 h-5 w-5 text-red-600" />
+            <p className="text-sm font-medium text-red-700">{error}</p>
             <Button
               variant="outline"
               size="sm"
@@ -176,12 +186,21 @@ export default function TransactionList() {
             </Button>
           </div>
         ) : displayed.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-4xl mb-3">🔍</p>
-            <p className="text-slate-500 text-sm font-medium">
+          <div className="flex flex-col items-center py-12 text-center">
+            {tab === "anomalies" ? (
+              <ShieldCheck className="mb-3 h-8 w-8 text-emerald-500" />
+            ) : (
+              <Receipt className="mb-3 h-8 w-8 text-slate-400" />
+            )}
+            <p className="text-sm font-semibold text-slate-700">
               {tab === "anomalies"
-                ? "No anomalies found — your spending looks normal!"
-                : "No transactions match your filters."}
+                ? "No anomalies detected"
+                : "No transactions found"}
+            </p>
+            <p className="mt-1 text-xs text-slate-500">
+              {tab === "anomalies"
+                ? "Your recent transactions all look normal"
+                : "Try adjusting your filters or date range"}
             </p>
           </div>
         ) : (

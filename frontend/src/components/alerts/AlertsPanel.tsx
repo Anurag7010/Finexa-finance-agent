@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Bell,
   BellOff,
@@ -10,8 +9,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/store/useStore";
-import { getAlerts, markAlertRead, markAllAlertsRead } from "@/lib/api";
-import { cn } from "@/lib/utils";
+import { markAlertRead, markAllAlertsRead } from "@/lib/api";
+import { cn, formatCurrency } from "@/lib/utils";
+import { toast } from "sonner";
 
 function timeAgo(dateStr: string): string {
   const diff = (Date.now() - new Date(dateStr).getTime()) / 1000;
@@ -51,27 +51,6 @@ interface AlertsPanelProps {
 
 export default function AlertsPanel({ compact = false }: AlertsPanelProps) {
   const { alerts, setAlerts, unreadCount, setUnreadCount } = useStore();
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      try {
-        const data = await getAlerts();
-        setAlerts(data.alerts);
-        setUnreadCount(data.unreadCount);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (alerts.length === 0) {
-      load().catch(() => {
-        setAlerts([]);
-        setUnreadCount(0);
-      });
-    }
-  }, [alerts.length, setAlerts, setUnreadCount]);
 
   const sorted = [...alerts].sort(
     (a, b) =>
@@ -97,21 +76,12 @@ export default function AlertsPanel({ compact = false }: AlertsPanelProps) {
     setUnreadCount(0);
     try {
       await markAllAlertsRead();
+      toast.success("All alerts marked as read");
     } catch {
       setAlerts(beforeAlerts);
       setUnreadCount(beforeUnread);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="space-y-3 p-4">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="h-20 rounded-lg bg-gray-100 animate-pulse" />
-        ))}
-      </div>
-    );
-  }
 
   if (sorted.length === 0) {
     return (
@@ -119,8 +89,10 @@ export default function AlertsPanel({ compact = false }: AlertsPanelProps) {
         <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center">
           <BellOff className="w-7 h-7 text-green-500" />
         </div>
-        <p className="text-base font-medium text-gray-700">No alerts yet.</p>
-        <p className="text-sm text-gray-400">Your finances look quiet.</p>
+        <p className="text-base font-medium text-gray-700">No alerts</p>
+        <p className="text-sm text-gray-400">
+          Your finances look quiet. Keep it up.
+        </p>
       </div>
     );
   }
@@ -209,6 +181,11 @@ export default function AlertsPanel({ compact = false }: AlertsPanelProps) {
                 <p className="mt-0.5 text-xs text-gray-500 leading-relaxed">
                   {alert.message}
                 </p>
+                {typeof alert.amount === "number" && (
+                  <p className="mt-1 text-xs font-medium text-gray-600">
+                    Amount: {formatCurrency(alert.amount)}
+                  </p>
+                )}
                 {!alert.read && (
                   <span className="inline-block mt-1.5 text-xs font-medium text-blue-500">
                     Click to mark as read

@@ -4,6 +4,7 @@ import { login, refreshInsights } from "../lib/api";
 import { useStore } from "../store/useStore";
 import { Button } from "../components/ui/button";
 import { TrendingUp, Mail, Lock, Zap, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -30,10 +31,12 @@ export default function LoginPage() {
       const data = await refreshInsights();
       setInsight(data.insight);
       navigate("/dashboard", { replace: true });
+      toast.success("Welcome back, Rohan!");
     } catch (err: unknown) {
       const msg =
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (err as any)?.response?.data?.message ?? "Login failed. Please try again.";
+        (err as any)?.response?.data?.message ??
+        "Login failed. Please try again.";
       setError(msg);
     } finally {
       setLoading(false);
@@ -59,6 +62,7 @@ export default function LoginPage() {
       const data = await refreshInsights();
       setInsight(data.insight);
       navigate("/dashboard", { replace: true });
+      toast.success("Welcome back, Rohan!");
     } catch {
       setError("Demo login failed. Please try again.");
     } finally {
@@ -195,10 +199,6 @@ export default function LoginPage() {
             <Zap size={14} className="text-amber-400" />
             Demo Login
           </Button>
-
-          <p className="text-center text-slate-600 text-xs mt-4">
-            demo@smartspend.ai · demo1234
-          </p>
         </div>
 
         {/* Footer */}

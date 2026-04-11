@@ -1,6 +1,13 @@
 import type { User, Insight } from "../../lib/api";
 import { formatCurrency } from "../../lib/utils";
-import { TrendingUp, TrendingDown, Wallet, Target, PiggyBank, DollarSign } from "lucide-react";
+import {
+  TrendingUp,
+  TrendingDown,
+  Wallet,
+  Target,
+  PiggyBank,
+  DollarSign,
+} from "lucide-react";
 
 interface Props {
   user: User;
@@ -18,7 +25,16 @@ interface StatCardProps {
   highlight?: boolean;
 }
 
-function StatCard({ label, value, icon: Icon, iconBg, iconColor, trend, trendLabel, highlight }: StatCardProps) {
+function StatCard({
+  label,
+  value,
+  icon: Icon,
+  iconBg,
+  iconColor,
+  trend,
+  trendLabel,
+  highlight,
+}: StatCardProps) {
   return (
     <div
       className={`bg-white rounded-2xl border shadow-sm p-5 flex flex-col gap-3 ${
@@ -26,19 +42,35 @@ function StatCard({ label, value, icon: Icon, iconBg, iconColor, trend, trendLab
       }`}
     >
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{label}</p>
-        <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${iconBg}`}>
+        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+          {label}
+        </p>
+        <div
+          className={`w-9 h-9 rounded-xl flex items-center justify-center ${iconBg}`}
+        >
           <Icon size={16} className={iconColor} />
         </div>
       </div>
-      <p className={`text-2xl font-extrabold tracking-tight ${highlight ? "text-red-600" : "text-slate-800"}`}>
+      <p
+        className={`text-2xl font-extrabold tracking-tight ${highlight ? "text-red-600" : "text-slate-800"}`}
+      >
         {value}
       </p>
       {trend && trendLabel && (
-        <div className={`flex items-center gap-1 text-xs font-medium ${
-          trend === "up" ? "text-red-500" : trend === "down" ? "text-emerald-500" : "text-slate-500"
-        }`}>
-          {trend === "up" ? <TrendingUp size={12} /> : trend === "down" ? <TrendingDown size={12} /> : null}
+        <div
+          className={`flex items-center gap-1 text-xs font-medium ${
+            trend === "up"
+              ? "text-red-500"
+              : trend === "down"
+                ? "text-emerald-500"
+                : "text-slate-500"
+          }`}
+        >
+          {trend === "up" ? (
+            <TrendingUp size={12} />
+          ) : trend === "down" ? (
+            <TrendingDown size={12} />
+          ) : null}
           {trendLabel}
         </div>
       )}
@@ -48,7 +80,10 @@ function StatCard({ label, value, icon: Icon, iconBg, iconColor, trend, trendLab
 
 export default function StatsRow({ user, insight }: Props) {
   const remaining = insight.monthly_budget - insight.monthly_spend;
-  const spentPct = ((insight.monthly_spend / insight.monthly_budget) * 100).toFixed(0);
+  const spentPct = (
+    (insight.monthly_spend / insight.monthly_budget) *
+    100
+  ).toFixed(1);
 
   return (
     <div className="grid grid-cols-4 gap-4">
@@ -87,7 +122,11 @@ export default function StatsRow({ user, insight }: Props) {
         iconBg={remaining < 5000 ? "bg-red-50" : "bg-emerald-50"}
         iconColor={remaining < 5000 ? "text-red-600" : "text-emerald-600"}
         trend={remaining < 5000 ? "up" : "down"}
-        trendLabel={remaining < 5000 ? "Critically low" : "Savings rate " + (insight.savings_rate * 100).toFixed(0) + "%"}
+        trendLabel={
+          remaining < 5000
+            ? "Critically low"
+            : "Savings rate " + (insight.savings_rate * 100).toFixed(1) + "%"
+        }
         highlight={remaining < 0}
       />
     </div>
