@@ -2,7 +2,7 @@ import axios from "axios";
 
 // ─── Mock flag ────────────────────────────────────────────────────────────────
 // Set to false when Person A confirms the backend is live.
-export const USE_MOCK = true;
+export const USE_MOCK = false;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 export interface User {
@@ -55,14 +55,16 @@ export interface Transaction {
 }
 
 export interface TransactionSummaryItem {
-  _id: string;
+  category: string;
   total: number;
   count: number;
+  avg?: number;
 }
 
 export interface TransactionSummary {
   totalSpend: number;
   summary: TransactionSummaryItem[];
+  month?: string;
 }
 
 export interface Alert {
@@ -304,14 +306,14 @@ function generateMockTransactions(): Transaction[] {
 const MOCK_TRANSACTION_SUMMARY: TransactionSummary = {
   totalSpend: 38200,
   summary: [
-    { _id: "Shopping", total: 6580, count: 12 },
-    { _id: "Food & Dining", total: 7200, count: 38 },
-    { _id: "Rent", total: 20000, count: 1 },
-    { _id: "Groceries", total: 5100, count: 14 },
-    { _id: "Entertainment", total: 2800, count: 8 },
-    { _id: "Transportation", total: 2100, count: 22 },
-    { _id: "Utilities", total: 3200, count: 4 },
-    { _id: "Health", total: 1800, count: 5 },
+    { category: "Shopping", total: 6580, count: 12 },
+    { category: "Food & Dining", total: 7200, count: 38 },
+    { category: "Rent", total: 20000, count: 1 },
+    { category: "Groceries", total: 5100, count: 14 },
+    { category: "Entertainment", total: 2800, count: 8 },
+    { category: "Transportation", total: 2100, count: 22 },
+    { category: "Utilities", total: 3200, count: 4 },
+    { category: "Health", total: 1800, count: 5 },
   ],
 };
 
@@ -454,8 +456,8 @@ export async function getAnomalies(): Promise<Transaction[]> {
   if (USE_MOCK) {
     return mockDelay(MOCK_TRANSACTIONS.filter((t) => t.is_anomaly));
   }
-  const res = await api.get<Transaction[]>("/api/transactions/anomalies");
-  return res.data;
+  const res = await api.get<{ anomalies: Transaction[] }>("/api/transactions/anomalies");
+  return res.data.anomalies || [];
 }
 
 export async function getInsights(): Promise<{ insight: Insight }> {
@@ -475,8 +477,8 @@ export async function refreshInsights(): Promise<{ insight: Insight }> {
 
 export async function getForecast(): Promise<ForecastPoint[]> {
   if (USE_MOCK) return mockDelay(MOCK_INSIGHT.forecast);
-  const res = await api.get<ForecastPoint[]>("/api/insights/forecast");
-  return res.data;
+  const res = await api.get<{ forecast: ForecastPoint[] }>("/api/insights/forecast");
+  return res.data.forecast || [];
 }
 
 export async function getAlerts(): Promise<{
@@ -500,12 +502,16 @@ export async function markAlertRead(id: string): Promise<void> {
   await api.patch(`/api/alerts/${id}/read`);
 }
 
-export async function markAllRead(): Promise<void> {
+export async function markAllAlertsRead(): Promise<void> {
   if (USE_MOCK) {
     MOCK_ALERTS.forEach((a) => (a.read = true));
     return mockDelay(undefined as unknown as void, 200);
   }
   await api.patch("/api/alerts/read-all");
+}
+
+export async function markAllRead(): Promise<void> {
+  await markAllAlertsRead();
 }
 
 export async function sendChatMessage(
@@ -528,8 +534,10 @@ export async function getChatHistory(): Promise<
   Array<{ role: "user" | "assistant"; content: string; timestamp: string }>
 > {
   if (USE_MOCK) return mockDelay([]);
-  const res = await api.get("/api/chat/history");
-  return res.data;
+  const res = await api.get<{
+    messages: Array<{ role: "user" | "assistant"; content: string; timestamp: string }>;
+  }>("/api/chat/history");
+  return res.data.messages || [];
 }
 
 export async function clearChatHistory(): Promise<void> {

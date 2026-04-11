@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { getTransactions } from "../../lib/api";
+import { getAnomalies, getTransactions } from "../../lib/api";
 import type { Transaction } from "../../lib/api";
 import TransactionRow from "./TransactionRow";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
@@ -26,6 +26,7 @@ export default function TransactionList() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
+  const [anomalyTotal, setAnomalyTotal] = useState(0);
 
   // Filters
   const [search, setSearch] = useState("");
@@ -39,6 +40,25 @@ export default function TransactionList() {
       else setLoadingMore(true);
       setError("");
       try {
+        if (tab === "anomalies") {
+          const anomalies = await getAnomalies();
+          const filtered = anomalies.filter((t) => {
+            const byCategory = category === "All" || t.category === category;
+            const q = search.trim().toLowerCase();
+            const bySearch =
+              !q ||
+              t.merchant.toLowerCase().includes(q) ||
+              t.description.toLowerCase().includes(q);
+            return byCategory && bySearch;
+          });
+
+          setAnomalyTotal(anomalies.length);
+          setTransactions(filtered);
+          setTotal(filtered.length);
+          setSkip(filtered.length);
+          return;
+        }
+
         const catParam = category === "All" ? undefined : category;
         const { transactions: data, total: tot } = await getTransactions({
           limit: PAGE_SIZE,
@@ -54,6 +74,9 @@ export default function TransactionList() {
           setSkip((s) => s + PAGE_SIZE);
         }
         setTotal(tot);
+
+        const anomalies = await getAnomalies();
+        setAnomalyTotal(anomalies.length);
       } catch {
         setError("Failed to load transactions.");
       } finally {
@@ -61,7 +84,7 @@ export default function TransactionList() {
         setLoadingMore(false);
       }
     },
-    [category, search]
+    [category, search, tab],
   );
 
   useEffect(() => {
@@ -70,17 +93,10 @@ export default function TransactionList() {
       fetchTransactions(true, 0);
     }, 300);
     return () => clearTimeout(timer);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, search, tab]);
 
-
-  // Filter by tab client-side (anomalies tab)
-  const displayed =
-    tab === "anomalies"
-      ? transactions.filter((t) => t.is_anomaly)
-      : transactions;
-
-  const anomalyCount = transactions.filter((t) => t.is_anomaly).length;
+  const displayed = transactions;
 
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
@@ -123,17 +139,17 @@ export default function TransactionList() {
         </div>
 
         {/* Tab switcher */}
-        <Tabs value={tab} onValueChange={(v) => setTab(v as "all" | "anomalies")}>
+        <Tabs
+          value={tab}
+          onValueChange={(v) => setTab(v as "all" | "anomalies")}
+        >
           <TabsList className="h-9">
             <TabsTrigger value="all" className="text-xs px-3">
               All ({total})
             </TabsTrigger>
-            <TabsTrigger
-              value="anomalies"
-              className="text-xs px-3 gap-1.5"
-            >
+            <TabsTrigger value="anomalies" className="text-xs px-3 gap-1.5">
               <AlertTriangle size={11} className="text-red-500" />
-              Anomalies ({anomalyCount})
+              Anomalies ({anomalyTotal})
             </TabsTrigger>
           </TabsList>
         </Tabs>

@@ -1,51 +1,26 @@
-import { useEffect, useRef, useState, KeyboardEvent } from 'react'
-import { Send, Trash2, Loader2, Sparkles } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { useStore } from '@/useStore'
-import { sendChatMessage, getChatHistory, clearChatHistory } from '@/api'
-import ChatMessage from './ChatMessage'
-import { cn } from '@/lib/utils'
-
-// ─── Temporary mock — remove when backend is live ───
-const mockReply = async (msg: string): Promise<{ reply: string }> => {
-  await new Promise((r) => setTimeout(r, 1500))
-
-  // Demo-quality mock responses with ₹ amounts
-  if (msg.toLowerCase().includes('spending so much') || msg.toLowerCase().includes('spending this month')) {
-    return {
-      reply: `Great question! Here's your **spending breakdown** for April:\n\n- **Food & Dining**: ₹12,400 (↑34% vs last month)\n- **Shopping**: ₹6,580 (94% of ₹7,000 budget)\n- **Transport**: ₹3,200\n- **Utilities**: ₹2,800\n\nYour biggest overspend is **Dining** — you're ₹3,200 over budget. Consider cooking at home 3 more days a week to save ~₹1,500.`,
-    }
-  }
-  if (msg.toLowerCase().includes('cut') && msg.toLowerCase().includes('dining')) {
-    return {
-      reply: `**Scenario: Cut Dining budget by 30%**\n\nCurrent dining spend: ₹12,400/month\nNew projectedspend: ₹8,680/month\n**Monthly saving: ₹3,720**\n**Annual saving: ₹44,640**\n\nYour projected end-of-month balance would improve from ₹8,200 → **₹11,920**.\nEstimated health score improvement: **+8 points** (52 → 60).`,
-    }
-  }
-  if (msg.toLowerCase().includes('suspicious') || msg.toLowerCase().includes('anomaly')) {
-    return {
-      reply: `🚨 **Most suspicious transactions this month:**\n\n1. ₹11,400 · UNKNOWN MERCHANT 4821 · 2am on Apr 9 — **High risk**\n2. ₹4,200 · INTL TXN PROC SRVCS · Apr 7 — unfamiliar merchant\n3. ₹2,150 · ATM WITHDRAWAL · 11:47pm · Apr 5\n\nTransaction 1 is the most concerning. I recommend checking with your bank and enabling 2FA on your account.`,
-    }
-  }
-  return {
-    reply: `Mock response to: "${msg}". Real AI connecting soon. Backend is not yet live.`,
-  }
-}
+import { useEffect, useRef, useState } from "react";
+import type { KeyboardEvent } from "react";
+import { Send, Trash2, Loader2, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { sendChatMessage, getChatHistory, clearChatHistory } from "@/lib/api";
+import ChatMessage from "./ChatMessage";
+import { cn } from "@/lib/utils";
 
 const SUGGESTED_PROMPTS = [
-  'Why am I spending so much this month?',
-  'What would happen if I cut my dining budget by 30%?',
-  'Show me my most suspicious transactions',
-]
+  "Why am I spending so much this month?",
+  "What would happen if I cut my dining budget by 30%?",
+  "Show me my most suspicious transactions",
+];
 
 interface LocalMessage {
-  id: string
-  role: 'user' | 'assistant'
-  content: string
-  timestamp: string
-  isTyping?: boolean
-  isError?: boolean
-  pendingMessage?: string
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: string;
+  isTyping?: boolean;
+  isError?: boolean;
+  pendingMessage?: string;
 }
 
 function TypingIndicator() {
@@ -58,140 +33,145 @@ function TypingIndicator() {
         <div className="flex items-center gap-1.5">
           <span
             className="w-2 h-2 rounded-full bg-teal-500 animate-bounce"
-            style={{ animationDelay: '0ms' }}
+            style={{ animationDelay: "0ms" }}
           />
           <span
             className="w-2 h-2 rounded-full bg-teal-500 animate-bounce"
-            style={{ animationDelay: '150ms' }}
+            style={{ animationDelay: "150ms" }}
           />
           <span
             className="w-2 h-2 rounded-full bg-teal-500 animate-bounce"
-            style={{ animationDelay: '300ms' }}
+            style={{ animationDelay: "300ms" }}
           />
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function ChatPanel() {
-  const { chatMessages, setChatMessages, clearChat } = useStore()
-  const [messages, setMessages] = useState<LocalMessage[]>([])
-  const [input, setInput] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [historyLoaded, setHistoryLoaded] = useState(false)
-  const bottomRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const [messages, setMessages] = useState<LocalMessage[]>([]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [historyLoaded, setHistoryLoaded] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Load history on mount
   useEffect(() => {
     const load = async () => {
       try {
-        const history = await getChatHistory()
+        const history = await getChatHistory();
         if (history && history.length > 0) {
           setMessages(
-            history.map((m: { role: string; content: string; timestamp?: string; _id?: string }) => ({
-              id: m._id || String(Date.now() + Math.random()),
-              role: m.role,
-              content: m.content,
-              timestamp: m.timestamp || new Date().toISOString(),
-            }))
-          )
+            history.map(
+              (m: {
+                role: "user" | "assistant";
+                content: string;
+                timestamp?: string;
+                _id?: string;
+              }) => ({
+                id: m._id || String(Date.now() + Math.random()),
+                role: m.role,
+                content: m.content,
+                timestamp: m.timestamp || new Date().toISOString(),
+              }),
+            ),
+          );
         }
       } catch {
-        // Backend not live — start with empty history
+        // Start empty when history cannot be loaded.
       } finally {
-        setHistoryLoaded(true)
+        setHistoryLoaded(true);
       }
-    }
-    load()
-  }, [])
+    };
+    load();
+  }, []);
 
   // Auto-scroll to bottom
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const sendMessage = async (text: string) => {
-    if (!text.trim() || isLoading) return
+    if (!text.trim() || isLoading) return;
 
     const userMsg: LocalMessage = {
       id: `user-${Date.now()}`,
-      role: 'user',
+      role: "user",
       content: text.trim(),
       timestamp: new Date().toISOString(),
-    }
+    };
 
-    const typingId = `typing-${Date.now()}`
+    const typingId = `typing-${Date.now()}`;
     const typingMsg: LocalMessage = {
       id: typingId,
-      role: 'assistant',
-      content: '',
+      role: "assistant",
+      content: "",
       timestamp: new Date().toISOString(),
       isTyping: true,
       pendingMessage: text.trim(),
-    }
+    };
 
     // Optimistic: add user message + typing indicator immediately
-    setMessages((prev) => [...prev, userMsg, typingMsg])
-    setInput('')
-    setIsLoading(true)
+    setMessages((prev) => [...prev, userMsg, typingMsg]);
+    setInput("");
+    setIsLoading(true);
 
     try {
-      let result: { reply: string }
-      try {
-        result = await sendChatMessage(text.trim())
-      } catch {
-        // Backend not live — use mock
-        result = await mockReply(text.trim())
-      }
+      const result = await sendChatMessage(text.trim());
 
       const assistantMsg: LocalMessage = {
         id: `assistant-${Date.now()}`,
-        role: 'assistant',
+        role: "assistant",
         content: result.reply,
         timestamp: new Date().toISOString(),
-      }
+      };
 
-      setMessages((prev) => prev.filter((m) => m.id !== typingId).concat(assistantMsg))
+      setMessages((prev) =>
+        prev.filter((m) => m.id !== typingId).concat(assistantMsg),
+      );
     } catch {
       const errorMsg: LocalMessage = {
         id: `error-${Date.now()}`,
-        role: 'assistant',
+        role: "assistant",
         content: "Sorry, I couldn't connect. Please try again.",
         timestamp: new Date().toISOString(),
         isError: true,
         pendingMessage: text.trim(),
-      }
-      setMessages((prev) => prev.filter((m) => m.id !== typingId).concat(errorMsg))
+      };
+      setMessages((prev) =>
+        prev.filter((m) => m.id !== typingId).concat(errorMsg),
+      );
     } finally {
-      setIsLoading(false)
-      inputRef.current?.focus()
+      setIsLoading(false);
+      inputRef.current?.focus();
     }
-  }
+  };
 
   const handleRetry = (pendingMessage: string) => {
-    setMessages((prev) => prev.filter((m) => !m.isError))
-    sendMessage(pendingMessage)
-  }
+    setMessages((prev) => prev.filter((m) => !m.isError));
+    sendMessage(pendingMessage);
+  };
 
   const handleClear = async () => {
-    setMessages([])
-    clearChat()
+    setMessages([]);
     try {
-      await clearChatHistory()
-    } catch {/* ignore */}
-    inputRef.current?.focus()
-  }
+      await clearChatHistory();
+    } catch {
+      /* ignore */
+    }
+    inputRef.current?.focus();
+  };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      sendMessage(input)
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(input);
     }
-  }
+  };
 
-  const isEmpty = historyLoaded && messages.length === 0
+  const isEmpty = historyLoaded && messages.length === 0;
 
   return (
     <div className="flex flex-col h-full bg-white">
@@ -202,7 +182,9 @@ export default function ChatPanel() {
             <Sparkles className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-gray-900 leading-tight">SmartSpend AI</h2>
+            <h2 className="text-sm font-bold text-gray-900 leading-tight">
+              SmartSpend AI
+            </h2>
             <Badge className="text-[10px] px-1.5 py-0 bg-teal-50 text-teal-700 border border-teal-200 font-normal">
               Powered by GPT-4o
             </Badge>
@@ -228,8 +210,12 @@ export default function ChatPanel() {
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center mx-auto shadow-lg">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-base font-semibold text-gray-800">Ask me anything about your finances</h3>
-              <p className="text-sm text-gray-400">Try one of these to get started:</p>
+              <h3 className="text-base font-semibold text-gray-800">
+                Ask me anything about your finances
+              </h3>
+              <p className="text-sm text-gray-400">
+                Try one of these to get started:
+              </p>
             </div>
             <div className="flex flex-col gap-2.5 w-full max-w-sm">
               {SUGGESTED_PROMPTS.map((prompt) => (
@@ -237,10 +223,10 @@ export default function ChatPanel() {
                   key={prompt}
                   onClick={() => sendMessage(prompt)}
                   className={cn(
-                    'w-full text-left px-4 py-3 rounded-xl border-2 border-dashed border-teal-200',
-                    'bg-teal-50 text-teal-800 text-sm font-medium',
-                    'hover:bg-teal-100 hover:border-teal-400 hover:shadow-sm',
-                    'transition-all duration-150 cursor-pointer'
+                    "w-full text-left px-4 py-3 rounded-xl border-2 border-dashed border-teal-200",
+                    "bg-teal-50 text-teal-800 text-sm font-medium",
+                    "hover:bg-teal-100 hover:border-teal-400 hover:shadow-sm",
+                    "transition-all duration-150 cursor-pointer",
                   )}
                 >
                   {prompt}
@@ -261,9 +247,13 @@ export default function ChatPanel() {
               content={msg.content}
               timestamp={msg.timestamp}
               isError={msg.isError}
-              onRetry={msg.pendingMessage ? () => handleRetry(msg.pendingMessage!) : undefined}
+              onRetry={
+                msg.pendingMessage
+                  ? () => handleRetry(msg.pendingMessage!)
+                  : undefined
+              }
             />
-          )
+          ),
         )}
         <div ref={bottomRef} />
       </div>
@@ -295,9 +285,10 @@ export default function ChatPanel() {
           </Button>
         </div>
         <p className="text-center text-[10px] text-gray-300 mt-1.5">
-          AI can make mistakes. Verify important financial decisions independently.
+          AI can make mistakes. Verify important financial decisions
+          independently.
         </p>
       </div>
     </div>
-  )
+  );
 }
