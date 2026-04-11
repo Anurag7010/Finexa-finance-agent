@@ -54,10 +54,16 @@ async function generateNudge(triggerType, context = {}) {
   return response.data;
 }
 
+async function getFinancialSummary(payload) {
+  const response = await aiClient.post('/financial-summary', payload);
+  return response.data;
+}
+
 module.exports = {
   analyze,
   categorize,
   forecast,
   detectAnomalies,
   generateNudge,
+  getFinancialSummary,
 };
