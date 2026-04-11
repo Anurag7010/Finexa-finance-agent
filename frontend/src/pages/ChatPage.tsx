@@ -1,19 +1,18 @@
-// ChatPage.tsx — owned by B2 scope
-// This is a placeholder so routing works. B2 will replace this file.
+import ChatPanel from '@/components/chat/ChatPanel'
 
 export default function ChatPage() {
   return (
-    <div className="flex items-center justify-center h-full page-enter">
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-10 text-center max-w-sm">
-        <div className="text-5xl mb-4">🤖</div>
-        <h2 className="text-xl font-bold text-slate-700 mb-2">
-          AI Chat Assistant
-        </h2>
-        <p className="text-slate-500 text-sm">
-          This section is being built by the B2 team. The GPT-4o chat assistant
-          with financial tool use will appear here.
-        </p>
+    <div className="flex flex-col h-screen bg-white" style={{ height: '100dvh' }}>
+      {/* TopBar */}
+      <div className="flex-none bg-gray-900 text-white px-4 py-3 flex items-center justify-between border-b border-gray-800">
+        <h1 className="text-sm font-semibold tracking-wide">AI Assistant</h1>
+        <span className="text-xs text-gray-400">SmartSpend AI</span>
+      </div>
+
+      {/* Chat fills remaining height */}
+      <div className="flex-1 min-h-0">
+        <ChatPanel />
       </div>
     </div>
-  );
+  )
 }
