@@ -1,81 +1,125 @@
-import { cn } from '@/lib/utils'
+import { cn } from "@/lib/utils";
 
 export interface ChatMessageProps {
-  role: 'user' | 'assistant'
-  content: string
-  timestamp: string
-  isError?: boolean
-  onRetry?: () => void
+  role: "user" | "assistant";
+  content: string;
+  timestamp: string;
+  isError?: boolean;
+  onRetry?: () => void;
 }
 
-function formatContent(text: string): React.ReactNode {
-  // Split by **bold** markers
-  const parts = text.split(/(\*\*[^*]+\*\*)/g)
-  return parts.map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i}>{part.slice(2, -2)}</strong>
+function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
+  const currencyRegex = /(₹\s?\d[\d,]*(?:\.\d+)?)/g;
+  const chunks = text.split(currencyRegex);
+  return chunks.map((chunk, idx) => {
+    if (/^₹\s?\d[\d,]*(?:\.\d+)?$/.test(chunk)) {
+      return (
+        <span
+          key={`${keyPrefix}-${idx}`}
+          className="font-semibold text-[var(--fingaurd-brand)]"
+        >
+          {chunk}
+        </span>
+      );
     }
-    // Replace \n with <br/>
-    const lines = part.split('\n')
-    return lines.map((line, j) => (
-      <span key={`${i}-${j}`}>
-        {line}
-        {j < lines.length - 1 && <br />}
+    return <span key={`${keyPrefix}-${idx}`}>{chunk}</span>;
+  });
+}
+
+function formatAssistantContent(text: string): React.ReactNode {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong
+          key={`b-${i}`}
+          className="font-semibold text-[var(--fingaurd-text)]"
+        >
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+
+    const lines = part.split("\n");
+    return (
+      <span key={`t-${i}`}>
+        {lines.map((line, j) => (
+          <span key={`line-${i}-${j}`}>
+            {renderInline(line, `money-${i}-${j}`)}
+            {j < lines.length - 1 && <br />}
+          </span>
+        ))}
       </span>
-    ))
-  })
+    );
+  });
 }
 
 function formatTime(iso: string): string {
-  const d = new Date(iso)
-  return d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })
+  const d = new Date(iso);
+  return d.toLocaleTimeString("en-IN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
 }
 
-export default function ChatMessage({ role, content, timestamp, isError, onRetry }: ChatMessageProps) {
-  const isUser = role === 'user'
+export default function ChatMessage({
+  role,
+  content,
+  timestamp,
+  isError,
+  onRetry,
+}: ChatMessageProps) {
+  const isUser = role === "user";
 
   if (isUser) {
     return (
       <div className="flex justify-end mb-3 group">
         <div className="max-w-[75%] flex flex-col items-end gap-1">
-          <div className="bg-slate-800 text-white px-4 py-2.5 rounded-2xl rounded-br-sm shadow-sm text-sm leading-relaxed break-words">
+          <div className="rounded-[18px] rounded-br-sm bg-[var(--fingaurd-brand)] px-4 py-2.5 text-sm leading-relaxed text-white shadow-[0_12px_28px_rgba(13,158,138,0.2)] break-words">
             {content}
           </div>
-          <span className="text-[11px] text-gray-400 px-1">{formatTime(timestamp)}</span>
+          <span className="px-1 text-[11px] text-[var(--fingaurd-text-muted)]">
+            {formatTime(timestamp)}
+          </span>
         </div>
       </div>
-    )
+    );
   }
 
   // Assistant message
   return (
     <div className="flex items-start gap-2.5 mb-3 group">
       {/* Avatar */}
-      <div className="flex-shrink-0 w-7 h-7 rounded-full bg-teal-500 flex items-center justify-center shadow-sm mt-0.5">
-        <span className="text-white text-xs font-bold leading-none">S</span>
+      <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[rgba(13,158,138,0.35)] bg-[rgba(13,158,138,0.2)] shadow-sm">
+        <span className="text-[10px] font-bold leading-none text-[var(--fingaurd-text)]">
+          FG
+        </span>
       </div>
 
       <div className="max-w-[75%] flex flex-col gap-1">
         <div
           className={cn(
-            'px-4 py-2.5 rounded-2xl rounded-tl-sm shadow-sm text-sm leading-relaxed break-words',
+            "rounded-[18px] rounded-tl-sm px-4 py-2.5 text-sm leading-relaxed shadow-sm break-words border",
             isError
-              ? 'bg-red-50 border border-red-200 text-red-700'
-              : 'bg-slate-100 text-gray-800'
+              ? "border-[rgba(227,107,99,0.45)] bg-[rgba(227,107,99,0.14)] text-[#ffbeb8]"
+              : "border-white/10 bg-[rgba(255,255,255,0.04)] text-[var(--fingaurd-text)]",
           )}
         >
-          {formatContent(content)}
+          {formatAssistantContent(content)}
           {isError && onRetry && (
             <button
               onClick={onRetry}
-              className="mt-2 block text-xs font-semibold text-red-600 hover:text-red-800 underline underline-offset-2"
+              className="mt-2 block text-xs font-semibold text-[var(--fingaurd-coral)] underline underline-offset-2 hover:opacity-90"
             >
-              ↻ Retry
+              Retry
             </button>
           )}
         </div>
-        <span className="text-[11px] text-gray-400 px-1">{formatTime(timestamp)}</span>
+        <span className="px-1 text-[11px] text-[var(--fingaurd-text-muted)]">
+          {formatTime(timestamp)}
+        </span>
       </div>
     </div>
-  )
+  );
 }
