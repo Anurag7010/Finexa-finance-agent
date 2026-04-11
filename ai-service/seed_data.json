@@ -1,0 +1,6042 @@
+{
+  "users": [
+    {
+      "id": "rohan_demo",
+      "name": "Rohan Sharma",
+      "email": "demo@smartspend.ai",
+      "password": "demo1234",
+      "monthly_budget": 45000,
+      "income": 85000,
+      "category_budgets": {
+        "Food & Dining": 8000,
+        "Transportation": 3000,
+        "Shopping": 7000,
+        "Entertainment": 3000,
+        "Utilities": 4000,
+        "Health": 3000,
+        "Groceries": 6000,
+        "Rent": 20000
+      }
+    },
+    {
+      "id": "alex_demo",
+      "name": "Alex Verma",
+      "email": "alex@smartspend.ai",
+      "password": "demo1234",
+      "monthly_budget": 50000,
+      "income": 120000,
+      "category_budgets": {
+        "Food & Dining": 8000,
+        "Transportation": 4000,
+        "Shopping": 8000,
+        "Entertainment": 4000,
+        "Utilities": 4000,
+        "Health": 4000,
+        "Groceries": 8000,
+        "Rent": 22000
+      }
+    }
+  ],
+  "transactions": [
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-08T14:53:48.587909",
+      "amount": 1345.78,
+      "merchant": "Parekh-Mannan",
+      "category": "Food & Dining",
+      "description": "disintermediate clicks-and-mortar methodologies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-22T14:53:48.588507",
+      "amount": 1230.08,
+      "merchant": "Doshi-Walia",
+      "category": "Food & Dining",
+      "description": "brand global eyeballs",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-04T14:53:48.588530",
+      "amount": 628.55,
+      "merchant": "Kumar-Kala",
+      "category": "Transportation",
+      "description": "syndicate collaborative models",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-06T14:53:48.588543",
+      "amount": 545.85,
+      "merchant": "Gera LLC",
+      "category": "Food & Dining",
+      "description": "syndicate granular applications",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-11T14:53:48.588557",
+      "amount": 4570.55,
+      "merchant": "Saxena LLC",
+      "category": "Shopping",
+      "description": "target end-to-end infrastructures",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-05T14:53:48.588569",
+      "amount": 1466.92,
+      "merchant": "Biswas-Kala",
+      "category": "Food & Dining",
+      "description": "transform bleeding-edge partnerships",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-14T14:53:48.588580",
+      "amount": 1966.05,
+      "merchant": "Sabharwal, Hegde and Dhillon",
+      "category": "Groceries",
+      "description": "grow cross-platform technologies",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-25T14:53:48.588595",
+      "amount": 145.6,
+      "merchant": "Hayre-Dara",
+      "category": "Transportation",
+      "description": "synergize proactive applications",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-26T14:53:48.588610",
+      "amount": 2919.12,
+      "merchant": "Divan, Roy and Setty",
+      "category": "Groceries",
+      "description": "empower synergistic solutions",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-16T14:53:48.588623",
+      "amount": 8455.34,
+      "merchant": "INTL TXN - SINGAPORE",
+      "category": "Entertainment",
+      "description": "revolutionize granular web services",
+      "channel": "netbanking",
+      "is_anomaly": true
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-06T14:53:48.588637",
+      "amount": 1550.59,
+      "merchant": "Chandra, Mangat and Dhillon",
+      "category": "Food & Dining",
+      "description": "engage B2B experiences",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-23T14:53:48.588648",
+      "amount": 168.06,
+      "merchant": "Mistry, Bassi and Mangal",
+      "category": "Transportation",
+      "description": "embrace impactful convergence",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-20T14:53:48.588659",
+      "amount": 5030.91,
+      "merchant": "Chadha-Bava",
+      "category": "Shopping",
+      "description": "incubate visionary supply-chains",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-28T14:53:48.588668",
+      "amount": 2177.42,
+      "merchant": "Buch PLC",
+      "category": "Shopping",
+      "description": "innovate 24/365 systems",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-25T14:53:48.588677",
+      "amount": 7120.88,
+      "merchant": "Apte-Om",
+      "category": "Shopping",
+      "description": "harness best-of-breed solutions",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-20T14:53:48.588687",
+      "amount": 854.27,
+      "merchant": "Hari-Jhaveri",
+      "category": "Entertainment",
+      "description": "repurpose innovative web services",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-20T14:53:48.588696",
+      "amount": 1934.31,
+      "merchant": "Wali PLC",
+      "category": "Food & Dining",
+      "description": "engage seamless partnerships",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-17T14:53:48.588705",
+      "amount": 188.06,
+      "merchant": "Gupta PLC",
+      "category": "Transportation",
+      "description": "disintermediate magnetic systems",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-15T14:53:48.588714",
+      "amount": 350.69,
+      "merchant": "Bhasin Ltd",
+      "category": "Entertainment",
+      "description": "envisioneer turn-key applications",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-16T14:53:48.588723",
+      "amount": 277.74,
+      "merchant": "Swaminathan-Baria",
+      "category": "Transportation",
+      "description": "drive open-source initiatives",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-29T14:53:48.588732",
+      "amount": 258.99,
+      "merchant": "Sethi Inc",
+      "category": "Food & Dining",
+      "description": "harness scalable bandwidth",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-18T14:53:48.588742",
+      "amount": 479.56,
+      "merchant": "Ratta, Basu and Bal",
+      "category": "Food & Dining",
+      "description": "incubate real-time mindshare",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-21T14:53:48.588752",
+      "amount": 1725.86,
+      "merchant": "Soman LLC",
+      "category": "Food & Dining",
+      "description": "evolve visionary interfaces",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-09T14:53:48.588761",
+      "amount": 3614.53,
+      "merchant": "Suri, Saraf and Murty",
+      "category": "Health",
+      "description": "revolutionize killer content",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-12T14:53:48.588772",
+      "amount": 319.08,
+      "merchant": "Ben-Chaudhry",
+      "category": "Transportation",
+      "description": "monetize wireless models",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-17T14:53:48.588781",
+      "amount": 1387.05,
+      "merchant": "Raj-Khatri",
+      "category": "Groceries",
+      "description": "synergize vertical platforms",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-25T14:53:48.588790",
+      "amount": 591.91,
+      "merchant": "Tara Group",
+      "category": "Transportation",
+      "description": "leverage dot-com markets",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-28T14:53:48.588799",
+      "amount": 1896.43,
+      "merchant": "Raghavan Ltd",
+      "category": "Groceries",
+      "description": "harness wireless initiatives",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-23T14:53:48.588808",
+      "amount": 400.66,
+      "merchant": "Khanna, Boase and Chatterjee",
+      "category": "Transportation",
+      "description": "morph sticky convergence",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-23T14:53:48.588818",
+      "amount": 7254.36,
+      "merchant": "Ahluwalia-Bhardwaj",
+      "category": "Shopping",
+      "description": "implement real-time systems",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-18T14:53:48.588828",
+      "amount": 2751.12,
+      "merchant": "Lal-Tandon",
+      "category": "Groceries",
+      "description": "engineer efficient content",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-08T14:53:48.588837",
+      "amount": 737.17,
+      "merchant": "Panchal and Sons",
+      "category": "Food & Dining",
+      "description": "extend customized action-items",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-06T14:53:48.588846",
+      "amount": 1216.98,
+      "merchant": "Badami, Thakur and Pandey",
+      "category": "Food & Dining",
+      "description": "visualize compelling experiences",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-28T14:53:48.588855",
+      "amount": 2382.84,
+      "merchant": "Kapadia Group",
+      "category": "Groceries",
+      "description": "whiteboard web-enabled users",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-16T14:53:48.588864",
+      "amount": 1711.29,
+      "merchant": "Som-Chanda",
+      "category": "Food & Dining",
+      "description": "redefine cross-media convergence",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-10T14:53:48.588873",
+      "amount": 614.03,
+      "merchant": "Gala, Dixit and Bath",
+      "category": "Transportation",
+      "description": "visualize value-added deliverables",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-31T14:53:48.588883",
+      "amount": 1398.37,
+      "merchant": "Ganesh-Chaudhry",
+      "category": "Food & Dining",
+      "description": "incubate scalable e-markets",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-18T14:53:48.588891",
+      "amount": 370.77,
+      "merchant": "Ravel, Ganesan and Sanghvi",
+      "category": "Food & Dining",
+      "description": "maximize collaborative portals",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-24T14:53:48.588900",
+      "amount": 1036.41,
+      "merchant": "Peri-Joshi",
+      "category": "Food & Dining",
+      "description": "evolve granular niches",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-17T14:53:48.588909",
+      "amount": 590.51,
+      "merchant": "Ratta Inc",
+      "category": "Transportation",
+      "description": "evolve wireless initiatives",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-03T14:53:48.588917",
+      "amount": 22465.58,
+      "merchant": "INTL TXN - SINGAPORE",
+      "category": "Groceries",
+      "description": "transition 24/365 interfaces",
+      "channel": "UPI",
+      "is_anomaly": true
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-10T14:53:48.588926",
+      "amount": 94.58,
+      "merchant": "Virk-Keer",
+      "category": "Transportation",
+      "description": "exploit collaborative communities",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-02T14:53:48.588935",
+      "amount": 69.14,
+      "merchant": "Sem, Babu and Morar",
+      "category": "Transportation",
+      "description": "whiteboard B2B portals",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-09T14:53:48.588945",
+      "amount": 663.68,
+      "merchant": "Bala-Dugar",
+      "category": "Transportation",
+      "description": "harness transparent synergies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-11T14:53:48.588953",
+      "amount": 1581.33,
+      "merchant": "Guha PLC",
+      "category": "Food & Dining",
+      "description": "aggregate sticky applications",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-10T14:53:48.588962",
+      "amount": 1074.34,
+      "merchant": "Basu Group",
+      "category": "Food & Dining",
+      "description": "seize back-end interfaces",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-24T14:53:48.588970",
+      "amount": 7851.05,
+      "merchant": "Kothari Group",
+      "category": "Shopping",
+      "description": "reinvent 24/7 e-markets",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-27T14:53:48.588979",
+      "amount": 603.62,
+      "merchant": "Sule, Saran and Mandal",
+      "category": "Utilities",
+      "description": "monetize one-to-one niches",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-29T14:53:48.588989",
+      "amount": 1003.92,
+      "merchant": "Kata, Dhawan and Rao",
+      "category": "Food & Dining",
+      "description": "productize e-business methodologies",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-02T14:53:48.588998",
+      "amount": 1743.12,
+      "merchant": "Tak-Upadhyay",
+      "category": "Food & Dining",
+      "description": "visualize value-added systems",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-19T14:53:48.589007",
+      "amount": 1010.29,
+      "merchant": "Deep PLC",
+      "category": "Entertainment",
+      "description": "transition compelling e-tailers",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-07T14:53:48.589015",
+      "amount": 1867.86,
+      "merchant": "Bassi LLC",
+      "category": "Food & Dining",
+      "description": "repurpose end-to-end architectures",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-28T14:53:48.589024",
+      "amount": 729.31,
+      "merchant": "Sama Group",
+      "category": "Food & Dining",
+      "description": "streamline ubiquitous deliverables",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-15T14:53:48.589033",
+      "amount": 1689.78,
+      "merchant": "Roy, Kala and Rege",
+      "category": "Food & Dining",
+      "description": "engage world-class applications",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-22T14:53:48.589043",
+      "amount": 544.21,
+      "merchant": "Nagy, Balay and Mody",
+      "category": "Food & Dining",
+      "description": "innovate visionary e-services",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-02T14:53:48.589053",
+      "amount": 1218.46,
+      "merchant": "Banik and Sons",
+      "category": "Food & Dining",
+      "description": "visualize next-generation web services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-28T14:53:48.589062",
+      "amount": 1067.15,
+      "merchant": "Mitter, Khosla and Narasimhan",
+      "category": "Groceries",
+      "description": "exploit end-to-end synergies",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-15T14:53:48.589072",
+      "amount": 4515.97,
+      "merchant": "Shah, Chana and Viswanathan",
+      "category": "Shopping",
+      "description": "orchestrate world-class channels",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-30T14:53:48.589082",
+      "amount": 1170.32,
+      "merchant": "Kumer, Rout and Patel",
+      "category": "Groceries",
+      "description": "synergize 24/7 ROI",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-06T14:53:48.589092",
+      "amount": 864.56,
+      "merchant": "Joshi, Nadkarni and Batta",
+      "category": "Entertainment",
+      "description": "facilitate mission-critical partnerships",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-17T14:53:48.589101",
+      "amount": 2275.04,
+      "merchant": "Barman-Parekh",
+      "category": "Entertainment",
+      "description": "utilize user-centric deliverables",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-15T14:53:48.589112",
+      "amount": 1439.12,
+      "merchant": "Borah, Chanda and Chad",
+      "category": "Groceries",
+      "description": "innovate collaborative interfaces",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-23T14:53:48.589122",
+      "amount": 287.09,
+      "merchant": "Kari, Dyal and Patla",
+      "category": "Food & Dining",
+      "description": "engage intuitive experiences",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-09T14:53:48.589132",
+      "amount": 2851.62,
+      "merchant": "Naik Ltd",
+      "category": "Entertainment",
+      "description": "visualize frictionless info-mediaries",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-23T14:53:48.589141",
+      "amount": 1036.38,
+      "merchant": "Balan, Chawla and Walla",
+      "category": "Food & Dining",
+      "description": "cultivate 24/7 systems",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-18T14:53:48.589151",
+      "amount": 568.52,
+      "merchant": "Vig-Dugar",
+      "category": "Food & Dining",
+      "description": "monetize distributed solutions",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-18T14:53:48.589160",
+      "amount": 634.53,
+      "merchant": "Soni-Upadhyay",
+      "category": "Transportation",
+      "description": "cultivate open-source technologies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-23T14:53:48.589168",
+      "amount": 2018.34,
+      "merchant": "Wable-Pal",
+      "category": "Groceries",
+      "description": "whiteboard compelling technologies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-09T14:53:48.589181",
+      "amount": 641.13,
+      "merchant": "Radhakrishnan and Sons",
+      "category": "Transportation",
+      "description": "productize compelling functionalities",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-25T14:53:48.589190",
+      "amount": 567.9,
+      "merchant": "Chada-Bir",
+      "category": "Food & Dining",
+      "description": "orchestrate ubiquitous partnerships",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-30T14:53:48.589198",
+      "amount": 1282.9,
+      "merchant": "Patel, Butala and Dhar",
+      "category": "Groceries",
+      "description": "enhance extensible infrastructures",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-16T14:53:48.589208",
+      "amount": 2342.74,
+      "merchant": "Sen, Dube and Narayanan",
+      "category": "Groceries",
+      "description": "utilize wireless methodologies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-14T14:53:48.589218",
+      "amount": 844.23,
+      "merchant": "Choudhury, Sur and Rau",
+      "category": "Entertainment",
+      "description": "harness plug-and-play mindshare",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-27T14:53:48.589227",
+      "amount": 586.04,
+      "merchant": "Kar, Reddy and Sehgal",
+      "category": "Transportation",
+      "description": "morph world-class methodologies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-08T14:53:48.589237",
+      "amount": 1434.74,
+      "merchant": "Lala-Rau",
+      "category": "Shopping",
+      "description": "embrace efficient networks",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-18T14:53:48.589246",
+      "amount": 54447.85,
+      "merchant": "WIRE TRANSFER OUT",
+      "category": "Shopping",
+      "description": "streamline value-added metrics",
+      "channel": "netbanking",
+      "is_anomaly": true
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-19T14:53:48.589256",
+      "amount": 2760.34,
+      "merchant": "Sodhi, Sinha and Uppal",
+      "category": "Groceries",
+      "description": "reinvent interactive methodologies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-14T14:53:48.589265",
+      "amount": 1801.18,
+      "merchant": "Tak and Sons",
+      "category": "Groceries",
+      "description": "iterate best-of-breed bandwidth",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-13T14:53:48.589274",
+      "amount": 1232.81,
+      "merchant": "Malhotra, Ramesh and Savant",
+      "category": "Shopping",
+      "description": "deliver killer applications",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-05T14:53:48.589283",
+      "amount": 1114.12,
+      "merchant": "Madan-Upadhyay",
+      "category": "Food & Dining",
+      "description": "morph efficient e-tailers",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-23T14:53:48.589292",
+      "amount": 4553.93,
+      "merchant": "Rama, Sem and Rege",
+      "category": "Shopping",
+      "description": "deliver one-to-one experiences",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-28T14:53:48.589301",
+      "amount": 373.97,
+      "merchant": "Borde Group",
+      "category": "Transportation",
+      "description": "unleash intuitive architectures",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-29T14:53:48.589310",
+      "amount": 1840.63,
+      "merchant": "Sastry-Sha",
+      "category": "Utilities",
+      "description": "orchestrate sticky e-markets",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-27T14:53:48.589318",
+      "amount": 17181.16,
+      "merchant": "Kala LLC",
+      "category": "Rent",
+      "description": "seize intuitive e-business",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-07T14:53:48.589326",
+      "amount": 676.87,
+      "merchant": "Halder Group",
+      "category": "Transportation",
+      "description": "e-enable virtual deliverables",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-09T14:53:48.589334",
+      "amount": 418.13,
+      "merchant": "Bassi-Bajaj",
+      "category": "Transportation",
+      "description": "synthesize leading-edge ROI",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-02T14:53:48.589343",
+      "amount": 787.19,
+      "merchant": "Bansal, Sama and Cherian",
+      "category": "Food & Dining",
+      "description": "visualize integrated interfaces",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-17T14:53:48.589352",
+      "amount": 7184.2,
+      "merchant": "Pillay, Ganesan and Nagarajan",
+      "category": "Shopping",
+      "description": "harness proactive bandwidth",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-25T14:53:48.589362",
+      "amount": 1513.71,
+      "merchant": "Zacharia PLC",
+      "category": "Shopping",
+      "description": "streamline proactive vortals",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-01T14:53:48.589370",
+      "amount": 2472.59,
+      "merchant": "Devan-Reddy",
+      "category": "Entertainment",
+      "description": "brand scalable metrics",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-10T14:53:48.589378",
+      "amount": 83.54,
+      "merchant": "Tripathi-Sachdeva",
+      "category": "Transportation",
+      "description": "incentivize e-business vortals",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-25T14:53:48.589387",
+      "amount": 1962.71,
+      "merchant": "Chandran, Sahota and Madan",
+      "category": "Shopping",
+      "description": "e-enable world-class initiatives",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-24T14:53:48.589397",
+      "amount": 419.39,
+      "merchant": "Shetty, Ramakrishnan and Tella",
+      "category": "Food & Dining",
+      "description": "synthesize holistic vortals",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-04T14:53:48.589407",
+      "amount": 709.56,
+      "merchant": "Naik-Swamy",
+      "category": "Transportation",
+      "description": "re-intermediate holistic vortals",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-20T14:53:48.589416",
+      "amount": 2822.82,
+      "merchant": "Boase, Borde and Khare",
+      "category": "Entertainment",
+      "description": "monetize granular e-markets",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-21T14:53:48.589428",
+      "amount": 2616.91,
+      "merchant": "Chawla Inc",
+      "category": "Shopping",
+      "description": "extend value-added partnerships",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-07T14:53:48.589436",
+      "amount": 13597.49,
+      "merchant": "INTL TXN - SINGAPORE",
+      "category": "Food & Dining",
+      "description": "cultivate bleeding-edge systems",
+      "channel": "UPI",
+      "is_anomaly": true
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-21T14:53:48.589445",
+      "amount": 437.18,
+      "merchant": "Gera Ltd",
+      "category": "Transportation",
+      "description": "e-enable back-end action-items",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-21T14:53:48.589453",
+      "amount": 1963.08,
+      "merchant": "Narain and Sons",
+      "category": "Food & Dining",
+      "description": "strategize B2B paradigms",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-25T14:53:48.589462",
+      "amount": 2943.16,
+      "merchant": "Aggarwal-Bhargava",
+      "category": "Groceries",
+      "description": "facilitate killer channels",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-22T14:53:48.589470",
+      "amount": 1511.48,
+      "merchant": "Chakraborty LLC",
+      "category": "Food & Dining",
+      "description": "matrix dynamic bandwidth",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-16T14:53:48.589479",
+      "amount": 2521.73,
+      "merchant": "Dubey-Sinha",
+      "category": "Entertainment",
+      "description": "mesh best-of-breed architectures",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-11T14:53:48.589487",
+      "amount": 938.15,
+      "merchant": "Kunda Inc",
+      "category": "Entertainment",
+      "description": "incubate best-of-breed communities",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-27T14:53:48.589496",
+      "amount": 5263.54,
+      "merchant": "Walia-Raja",
+      "category": "Shopping",
+      "description": "facilitate vertical web-readiness",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-02T14:53:48.589505",
+      "amount": 405.66,
+      "merchant": "Dass-Sodhi",
+      "category": "Transportation",
+      "description": "incubate viral e-markets",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-15T14:53:48.589513",
+      "amount": 859.01,
+      "merchant": "Char PLC",
+      "category": "Groceries",
+      "description": "morph world-class deliverables",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-10T14:53:48.589521",
+      "amount": 1889.67,
+      "merchant": "Kapadia Group",
+      "category": "Food & Dining",
+      "description": "harness proactive e-services",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-09T14:53:48.589530",
+      "amount": 1004.3,
+      "merchant": "Oommen, Kalla and Mital",
+      "category": "Food & Dining",
+      "description": "maximize 24/365 architectures",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-11T14:53:48.589539",
+      "amount": 1898.72,
+      "merchant": "Sridhar, Gole and Mammen",
+      "category": "Food & Dining",
+      "description": "transform robust functionalities",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-06T14:53:48.589550",
+      "amount": 430.35,
+      "merchant": "Merchant-Bath",
+      "category": "Transportation",
+      "description": "evolve next-generation ROI",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-25T14:53:48.589558",
+      "amount": 2747.06,
+      "merchant": "Gill-Dara",
+      "category": "Entertainment",
+      "description": "re-contextualize back-end content",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-27T14:53:48.589567",
+      "amount": 281.0,
+      "merchant": "Talwar and Sons",
+      "category": "Transportation",
+      "description": "engineer sticky e-markets",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-30T14:53:48.589575",
+      "amount": 4225.52,
+      "merchant": "Modi-Subramanian",
+      "category": "Shopping",
+      "description": "redefine best-of-breed action-items",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-09T14:53:48.589584",
+      "amount": 462.12,
+      "merchant": "Thaman Group",
+      "category": "Food & Dining",
+      "description": "brand web-enabled interfaces",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-07T14:53:48.589592",
+      "amount": 197.51,
+      "merchant": "Ranganathan, Din and Oommen",
+      "category": "Transportation",
+      "description": "repurpose best-of-breed ROI",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-09T14:53:48.589602",
+      "amount": 1023.42,
+      "merchant": "Bhatti-Sodhi",
+      "category": "Food & Dining",
+      "description": "integrate plug-and-play eyeballs",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-30T14:53:48.589611",
+      "amount": 7321.41,
+      "merchant": "Bhalla, Gokhale and Kumer",
+      "category": "Shopping",
+      "description": "redefine innovative methodologies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-10T14:53:48.589620",
+      "amount": 773.02,
+      "merchant": "Narain Ltd",
+      "category": "Transportation",
+      "description": "innovate global bandwidth",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-28T14:53:48.589629",
+      "amount": 2793.23,
+      "merchant": "Majumdar Group",
+      "category": "Health",
+      "description": "aggregate best-of-breed solutions",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-15T14:53:48.589637",
+      "amount": 701.57,
+      "merchant": "Wadhwa-Wason",
+      "category": "Transportation",
+      "description": "evolve impactful mindshare",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-13T14:53:48.589645",
+      "amount": 801.95,
+      "merchant": "Dass-Mand",
+      "category": "Shopping",
+      "description": "unleash holistic infrastructures",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-21T14:53:48.589654",
+      "amount": 489.95,
+      "merchant": "Batta, Mohan and Bhatia",
+      "category": "Transportation",
+      "description": "aggregate user-centric applications",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-19T14:53:48.589663",
+      "amount": 1755.78,
+      "merchant": "Tank, Nanda and Manne",
+      "category": "Entertainment",
+      "description": "unleash dynamic initiatives",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-02T14:53:48.589673",
+      "amount": 379.75,
+      "merchant": "Bahl PLC",
+      "category": "Transportation",
+      "description": "disintermediate bleeding-edge architectures",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-02T14:53:48.589681",
+      "amount": 1938.65,
+      "merchant": "Sane-Kale",
+      "category": "Food & Dining",
+      "description": "integrate dot-com relationships",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-05T14:53:48.589689",
+      "amount": 649.01,
+      "merchant": "Bir-Sha",
+      "category": "Entertainment",
+      "description": "whiteboard best-of-breed channels",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-22T14:53:48.589698",
+      "amount": 2339.05,
+      "merchant": "Ramaswamy Ltd",
+      "category": "Groceries",
+      "description": "whiteboard killer eyeballs",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-03T14:53:48.589707",
+      "amount": 1252.76,
+      "merchant": "Narain-Chaudry",
+      "category": "Food & Dining",
+      "description": "monetize magnetic technologies",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-31T14:53:48.589716",
+      "amount": 1780.87,
+      "merchant": "Grover, Madan and Ahluwalia",
+      "category": "Food & Dining",
+      "description": "unleash leading-edge convergence",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-29T14:53:48.589726",
+      "amount": 542.23,
+      "merchant": "Badami, Chander and Ghosh",
+      "category": "Shopping",
+      "description": "optimize web-enabled interfaces",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-20T14:53:48.589736",
+      "amount": 16201.01,
+      "merchant": "Khanna, Bhargava and Kale",
+      "category": "Rent",
+      "description": "optimize B2B networks",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-18T14:53:48.589745",
+      "amount": 701.81,
+      "merchant": "Kunda-Sane",
+      "category": "Food & Dining",
+      "description": "synthesize innovative channels",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-31T14:53:48.589754",
+      "amount": 250.51,
+      "merchant": "Borah, Andra and Chaudhry",
+      "category": "Transportation",
+      "description": "innovate frictionless experiences",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-22T14:53:48.589763",
+      "amount": 505.16,
+      "merchant": "Kulkarni-Mann",
+      "category": "Transportation",
+      "description": "grow clicks-and-mortar models",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-22T14:53:48.589772",
+      "amount": 1312.73,
+      "merchant": "Saraf-Atwal",
+      "category": "Food & Dining",
+      "description": "engage mission-critical vortals",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-01T14:53:48.589780",
+      "amount": 1509.78,
+      "merchant": "Bassi PLC",
+      "category": "Food & Dining",
+      "description": "empower granular bandwidth",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-05T14:53:48.589810",
+      "amount": 1615.72,
+      "merchant": "Dugar, Vig and Chaudhuri",
+      "category": "Food & Dining",
+      "description": "scale B2B architectures",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-23T14:53:48.589819",
+      "amount": 524.39,
+      "merchant": "Ranganathan Group",
+      "category": "Food & Dining",
+      "description": "seize mission-critical technologies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-18T14:53:48.589828",
+      "amount": 2002.06,
+      "merchant": "Nigam Inc",
+      "category": "Entertainment",
+      "description": "transition leading-edge e-tailers",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-02T14:53:48.589838",
+      "amount": 1105.4,
+      "merchant": "Ramakrishnan, Bhatnagar and Tella",
+      "category": "Groceries",
+      "description": "matrix wireless ROI",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-19T14:53:48.589848",
+      "amount": 1647.48,
+      "merchant": "Srinivasan-Yogi",
+      "category": "Food & Dining",
+      "description": "transform back-end ROI",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-20T14:53:48.589856",
+      "amount": 235.46,
+      "merchant": "Ramanathan, Aggarwal and Ray",
+      "category": "Food & Dining",
+      "description": "disintermediate robust web services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-10T14:53:48.589866",
+      "amount": 905.23,
+      "merchant": "Bahl, Balay and Mani",
+      "category": "Groceries",
+      "description": "leverage leading-edge infrastructures",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-04T14:53:48.589876",
+      "amount": 1663.71,
+      "merchant": "Dada, Mand and Narayan",
+      "category": "Food & Dining",
+      "description": "target global synergies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-04T14:53:48.589886",
+      "amount": 2766.04,
+      "merchant": "Golla, Mohanty and Wali",
+      "category": "Groceries",
+      "description": "monetize wireless partnerships",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-21T14:53:48.589895",
+      "amount": 1961.12,
+      "merchant": "Sabharwal PLC",
+      "category": "Food & Dining",
+      "description": "repurpose holistic channels",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-02T14:53:48.589904",
+      "amount": 699.76,
+      "merchant": "Pandey, Nagy and Malhotra",
+      "category": "Transportation",
+      "description": "streamline wireless interfaces",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-31T14:53:48.589913",
+      "amount": 1981.44,
+      "merchant": "Nair LLC",
+      "category": "Food & Dining",
+      "description": "revolutionize leading-edge infrastructures",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-18T14:53:48.589922",
+      "amount": 266.03,
+      "merchant": "Padmanabhan, Rattan and Pai",
+      "category": "Food & Dining",
+      "description": "integrate compelling portals",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-14T14:53:48.589931",
+      "amount": 614.18,
+      "merchant": "Basu-Tank",
+      "category": "Transportation",
+      "description": "leverage interactive infrastructures",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-19T14:53:48.589940",
+      "amount": 527.42,
+      "merchant": "Brahmbhatt, Dhaliwal and De",
+      "category": "Transportation",
+      "description": "strategize cross-platform action-items",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-10T14:53:48.589949",
+      "amount": 4197.09,
+      "merchant": "Nath-Thaman",
+      "category": "Shopping",
+      "description": "evolve proactive bandwidth",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-03T14:53:48.589958",
+      "amount": 566.16,
+      "merchant": "Bajaj, Sanghvi and Pal",
+      "category": "Transportation",
+      "description": "aggregate revolutionary info-mediaries",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-13T14:53:48.589968",
+      "amount": 514.33,
+      "merchant": "Kadakia-Shanker",
+      "category": "Transportation",
+      "description": "iterate real-time e-tailers",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-22T14:53:48.589976",
+      "amount": 2387.81,
+      "merchant": "D\u2019Alia-Murty",
+      "category": "Groceries",
+      "description": "monetize robust users",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-17T14:53:48.589985",
+      "amount": 1331.67,
+      "merchant": "Bora-Padmanabhan",
+      "category": "Groceries",
+      "description": "target rich interfaces",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-09T14:53:48.589994",
+      "amount": 5966.15,
+      "merchant": "Singhal Ltd",
+      "category": "Shopping",
+      "description": "embrace mission-critical supply-chains",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-30T14:53:48.590002",
+      "amount": 7031.35,
+      "merchant": "Yogi, Chaudhuri and Krishna",
+      "category": "Shopping",
+      "description": "enhance out-of-the-box platforms",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-23T14:53:48.590011",
+      "amount": 1250.76,
+      "merchant": "Bajaj, Warrior and Boase",
+      "category": "Food & Dining",
+      "description": "target open-source infrastructures",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-24T14:53:48.590021",
+      "amount": 801.03,
+      "merchant": "Cheema-Yogi",
+      "category": "Food & Dining",
+      "description": "facilitate impactful methodologies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-19T14:53:48.590029",
+      "amount": 1600.7,
+      "merchant": "Saxena-Venkataraman",
+      "category": "Food & Dining",
+      "description": "grow extensible web-readiness",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-07T14:53:48.590038",
+      "amount": 530.32,
+      "merchant": "Nayar, Manda and Chadha",
+      "category": "Transportation",
+      "description": "re-contextualize holistic functionalities",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-15T14:53:48.590048",
+      "amount": 2390.03,
+      "merchant": "Kadakia-Thakkar",
+      "category": "Health",
+      "description": "integrate interactive channels",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-17T14:53:48.590056",
+      "amount": 24034.1,
+      "merchant": "CRYPTO EXCHANGE XY",
+      "category": "Groceries",
+      "description": "engineer cross-platform convergence",
+      "channel": "UPI",
+      "is_anomaly": true
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-19T14:53:48.590064",
+      "amount": 1093.62,
+      "merchant": "Bhasin, Kant and Contractor",
+      "category": "Groceries",
+      "description": "architect robust functionalities",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-27T14:53:48.590074",
+      "amount": 7648.81,
+      "merchant": "Kari and Sons",
+      "category": "Shopping",
+      "description": "brand next-generation models",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-26T14:53:48.590082",
+      "amount": 6521.29,
+      "merchant": "Chowdhury Ltd",
+      "category": "Shopping",
+      "description": "seize frictionless metrics",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-03T14:53:48.590091",
+      "amount": 1010.74,
+      "merchant": "Subramaniam-Mand",
+      "category": "Entertainment",
+      "description": "maximize open-source platforms",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-06T14:53:48.590099",
+      "amount": 1470.02,
+      "merchant": "Narasimhan-Nadig",
+      "category": "Food & Dining",
+      "description": "empower efficient eyeballs",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-28T14:53:48.590108",
+      "amount": 983.66,
+      "merchant": "Panchal-Sharaf",
+      "category": "Utilities",
+      "description": "leverage wireless architectures",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-09T14:53:48.590116",
+      "amount": 625.05,
+      "merchant": "Patla Inc",
+      "category": "Transportation",
+      "description": "deploy out-of-the-box networks",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-24T14:53:48.590124",
+      "amount": 427.21,
+      "merchant": "Warrior, Barad and Ramachandran",
+      "category": "Food & Dining",
+      "description": "leverage innovative web-readiness",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-16T14:53:48.590134",
+      "amount": 155.26,
+      "merchant": "Kibe, Badami and Panchal",
+      "category": "Transportation",
+      "description": "incubate granular web-readiness",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-23T14:53:48.590144",
+      "amount": 149.44,
+      "merchant": "Balay-Tara",
+      "category": "Transportation",
+      "description": "whiteboard 24/7 users",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-13T14:53:48.590153",
+      "amount": 746.79,
+      "merchant": "Kota-Walla",
+      "category": "Transportation",
+      "description": "utilize next-generation e-services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-27T14:53:48.590161",
+      "amount": 6279.03,
+      "merchant": "Natt LLC",
+      "category": "Shopping",
+      "description": "deliver leading-edge deliverables",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-03T14:53:48.590170",
+      "amount": 465.14,
+      "merchant": "Deo, Dass and Varghese",
+      "category": "Food & Dining",
+      "description": "implement vertical communities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-27T14:53:48.590180",
+      "amount": 1180.74,
+      "merchant": "Rattan LLC",
+      "category": "Food & Dining",
+      "description": "envisioneer synergistic users",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-14T14:53:48.590188",
+      "amount": 366.98,
+      "merchant": "Rana Group",
+      "category": "Transportation",
+      "description": "streamline impactful vortals",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-14T14:53:48.590197",
+      "amount": 1126.02,
+      "merchant": "Nori, Sundaram and Mangat",
+      "category": "Food & Dining",
+      "description": "leverage frictionless deliverables",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-14T14:53:48.590212",
+      "amount": 2876.69,
+      "merchant": "Sawhney, Purohit and Ravi",
+      "category": "Health",
+      "description": "monetize dynamic networks",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-27T14:53:48.590222",
+      "amount": 689.44,
+      "merchant": "Basak Inc",
+      "category": "Food & Dining",
+      "description": "cultivate rich infrastructures",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-06T14:53:48.590230",
+      "amount": 1989.06,
+      "merchant": "Ranganathan-Bhattacharyya",
+      "category": "Food & Dining",
+      "description": "re-contextualize real-time users",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-08T14:53:48.590239",
+      "amount": 3168.54,
+      "merchant": "Nigam Inc",
+      "category": "Health",
+      "description": "target synergistic info-mediaries",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-18T14:53:48.590248",
+      "amount": 2013.07,
+      "merchant": "Pai, Naidu and Soman",
+      "category": "Utilities",
+      "description": "scale turn-key schemas",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-12T14:53:48.590258",
+      "amount": 1307.33,
+      "merchant": "Bhagat PLC",
+      "category": "Food & Dining",
+      "description": "expedite world-class portals",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-14T14:53:48.590266",
+      "amount": 381.86,
+      "merchant": "Roy, Sha and Swamy",
+      "category": "Transportation",
+      "description": "re-intermediate strategic relationships",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-20T14:53:48.590276",
+      "amount": 524.7,
+      "merchant": "Rau, Oak and Keer",
+      "category": "Transportation",
+      "description": "syndicate web-enabled channels",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-09T14:53:48.590286",
+      "amount": 19539.91,
+      "merchant": "Hayer Ltd",
+      "category": "Rent",
+      "description": "grow customized networks",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-14T14:53:48.590294",
+      "amount": 1847.17,
+      "merchant": "Nath, Solanki and Kuruvilla",
+      "category": "Food & Dining",
+      "description": "optimize bricks-and-clicks vortals",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-22T14:53:48.590304",
+      "amount": 1652.99,
+      "merchant": "Raman, Bhasin and Sarma",
+      "category": "Food & Dining",
+      "description": "iterate user-centric synergies",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-07T14:53:48.590313",
+      "amount": 5344.74,
+      "merchant": "CRYPTO EXCHANGE XY",
+      "category": "Transportation",
+      "description": "deploy viral web-readiness",
+      "channel": "UPI",
+      "is_anomaly": true
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-31T14:53:48.590323",
+      "amount": 698.96,
+      "merchant": "Bains-Dash",
+      "category": "Transportation",
+      "description": "aggregate interactive mindshare",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-19T14:53:48.590331",
+      "amount": 424.27,
+      "merchant": "Warrior LLC",
+      "category": "Groceries",
+      "description": "facilitate web-enabled interfaces",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-14T14:53:48.590340",
+      "amount": 3335.9,
+      "merchant": "Venkataraman PLC",
+      "category": "Shopping",
+      "description": "reinvent front-end e-business",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-15T14:53:48.590350",
+      "amount": 1498.89,
+      "merchant": "Khanna Ltd",
+      "category": "Food & Dining",
+      "description": "target 24/365 applications",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-03T14:53:48.590358",
+      "amount": 2536.81,
+      "merchant": "Prabhakar, Goda and Butala",
+      "category": "Groceries",
+      "description": "envisioneer 24/7 experiences",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-10T14:53:48.590368",
+      "amount": 643.93,
+      "merchant": "Naik-Pandya",
+      "category": "Transportation",
+      "description": "re-contextualize web-enabled models",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-15T14:53:48.590376",
+      "amount": 4880.42,
+      "merchant": "Loke and Sons",
+      "category": "Shopping",
+      "description": "redefine customized functionalities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-15T14:53:48.590385",
+      "amount": 73.84,
+      "merchant": "Sama-Sha",
+      "category": "Transportation",
+      "description": "cultivate B2B partnerships",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-22T14:53:48.590393",
+      "amount": 3654.95,
+      "merchant": "Narayan, Goswami and Pal",
+      "category": "Shopping",
+      "description": "productize intuitive mindshare",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-14T14:53:48.590402",
+      "amount": 2733.85,
+      "merchant": "Korpal-Rastogi",
+      "category": "Groceries",
+      "description": "evolve leading-edge applications",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-17T14:53:48.590411",
+      "amount": 398.45,
+      "merchant": "Ram, Sangha and Samra",
+      "category": "Food & Dining",
+      "description": "deliver seamless users",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-01T14:53:48.590420",
+      "amount": 353.94,
+      "merchant": "Rau PLC",
+      "category": "Transportation",
+      "description": "envisioneer bleeding-edge methodologies",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-14T14:53:48.590428",
+      "amount": 992.19,
+      "merchant": "Dhawan, Menon and Datta",
+      "category": "Food & Dining",
+      "description": "repurpose intuitive methodologies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-28T14:53:48.590438",
+      "amount": 1267.79,
+      "merchant": "Borra Group",
+      "category": "Food & Dining",
+      "description": "innovate out-of-the-box interfaces",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-31T14:53:48.590446",
+      "amount": 762.85,
+      "merchant": "Goswami PLC",
+      "category": "Transportation",
+      "description": "e-enable killer metrics",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-12T14:53:48.590455",
+      "amount": 438.45,
+      "merchant": "Chacko-Som",
+      "category": "Transportation",
+      "description": "engineer intuitive channels",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-21T14:53:48.590463",
+      "amount": 92.54,
+      "merchant": "Prashad-Shetty",
+      "category": "Transportation",
+      "description": "integrate back-end users",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-16T14:53:48.590471",
+      "amount": 279.86,
+      "merchant": "Deo, Mittal and Sha",
+      "category": "Transportation",
+      "description": "incubate interactive schemas",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-19T14:53:48.590481",
+      "amount": 2097.97,
+      "merchant": "Krishnan, Krishnan and Biswas",
+      "category": "Groceries",
+      "description": "orchestrate 24/7 convergence",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-12T14:53:48.590491",
+      "amount": 1480.7,
+      "merchant": "Sethi, Muni and Bhasin",
+      "category": "Food & Dining",
+      "description": "engage leading-edge experiences",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-01T14:53:48.590500",
+      "amount": 2767.79,
+      "merchant": "Virk Inc",
+      "category": "Groceries",
+      "description": "aggregate extensible partnerships",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-24T14:53:48.590508",
+      "amount": 454.87,
+      "merchant": "Ahluwalia, Dugar and Ghosh",
+      "category": "Transportation",
+      "description": "maximize viral relationships",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-06T14:53:48.590518",
+      "amount": 4016.6,
+      "merchant": "D\u2019Alia, Bassi and Choudhary",
+      "category": "Shopping",
+      "description": "harness clicks-and-mortar technologies",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-05T14:53:48.590528",
+      "amount": 5971.1,
+      "merchant": "Borde, Wali and Bajwa",
+      "category": "Shopping",
+      "description": "iterate one-to-one users",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-14T14:53:48.590537",
+      "amount": 837.04,
+      "merchant": "Minhas, Luthra and Lal",
+      "category": "Utilities",
+      "description": "target enterprise e-commerce",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-03T14:53:48.590549",
+      "amount": 1923.42,
+      "merchant": "Sani-Hans",
+      "category": "Food & Dining",
+      "description": "innovate web-enabled web-readiness",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-24T14:53:48.590558",
+      "amount": 250.61,
+      "merchant": "Ramachandran, Sachdeva and Lata",
+      "category": "Transportation",
+      "description": "synthesize bleeding-edge synergies",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-12T14:53:48.590567",
+      "amount": 462.63,
+      "merchant": "Jaggi, Anne and Jani",
+      "category": "Groceries",
+      "description": "revolutionize plug-and-play relationships",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-07T14:53:48.590577",
+      "amount": 1066.45,
+      "merchant": "Jayaraman Group",
+      "category": "Food & Dining",
+      "description": "deliver distributed info-mediaries",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-03T14:53:48.590585",
+      "amount": 743.12,
+      "merchant": "Nigam-Thakkar",
+      "category": "Food & Dining",
+      "description": "strategize clicks-and-mortar communities",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-10T14:53:48.590593",
+      "amount": 657.74,
+      "merchant": "Choudhry Inc",
+      "category": "Food & Dining",
+      "description": "optimize user-centric content",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-17T14:53:48.590602",
+      "amount": 449.15,
+      "merchant": "Mutti, Rout and Mangat",
+      "category": "Groceries",
+      "description": "integrate customized platforms",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-01T14:53:48.590611",
+      "amount": 2380.66,
+      "merchant": "Goel, Srinivas and Sinha",
+      "category": "Utilities",
+      "description": "productize B2B web services",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-26T14:53:48.590621",
+      "amount": 680.84,
+      "merchant": "Bail, Chatterjee and Misra",
+      "category": "Transportation",
+      "description": "synthesize proactive ROI",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-20T14:53:48.590631",
+      "amount": 810.3,
+      "merchant": "Khalsa Ltd",
+      "category": "Health",
+      "description": "implement web-enabled bandwidth",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-31T14:53:48.590639",
+      "amount": 4389.07,
+      "merchant": "Hayer LLC",
+      "category": "Health",
+      "description": "enhance plug-and-play channels",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-15T14:53:48.590648",
+      "amount": 239.19,
+      "merchant": "Uppal PLC",
+      "category": "Food & Dining",
+      "description": "envisioneer bleeding-edge relationships",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-25T14:53:48.590656",
+      "amount": 380.84,
+      "merchant": "Dora Group",
+      "category": "Transportation",
+      "description": "engage cross-media bandwidth",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-04T14:53:48.590664",
+      "amount": 5243.24,
+      "merchant": "Patla, Chakrabarti and Baral",
+      "category": "Shopping",
+      "description": "generate collaborative users",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-08T14:53:48.590674",
+      "amount": 423.38,
+      "merchant": "Din Inc",
+      "category": "Transportation",
+      "description": "whiteboard collaborative deliverables",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-03T14:53:48.590682",
+      "amount": 1176.41,
+      "merchant": "Warrior, Deo and Sachar",
+      "category": "Food & Dining",
+      "description": "optimize integrated platforms",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-03T14:53:48.590693",
+      "amount": 711.86,
+      "merchant": "Choudhury-Kulkarni",
+      "category": "Transportation",
+      "description": "extend B2B channels",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-03T14:53:48.590701",
+      "amount": 419.29,
+      "merchant": "Ahluwalia-Chauhan",
+      "category": "Food & Dining",
+      "description": "innovate bleeding-edge communities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-27T14:53:48.590709",
+      "amount": 2957.95,
+      "merchant": "Halder-Kala",
+      "category": "Shopping",
+      "description": "incentivize strategic e-business",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-12T14:53:48.590718",
+      "amount": 489.94,
+      "merchant": "Vora-Sharaf",
+      "category": "Transportation",
+      "description": "extend robust convergence",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-23T14:53:48.590726",
+      "amount": 325.69,
+      "merchant": "Kadakia-Prasad",
+      "category": "Transportation",
+      "description": "leverage turn-key mindshare",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-28T14:53:48.590734",
+      "amount": 970.47,
+      "merchant": "Kade-Naik",
+      "category": "Food & Dining",
+      "description": "empower cross-media markets",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-05T14:53:48.590743",
+      "amount": 2416.52,
+      "merchant": "Subramanian, Soman and Prakash",
+      "category": "Groceries",
+      "description": "orchestrate virtual e-services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-28T14:53:48.590752",
+      "amount": 645.77,
+      "merchant": "Mukhopadhyay, Borah and Singh",
+      "category": "Transportation",
+      "description": "reinvent plug-and-play technologies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-15T14:53:48.590762",
+      "amount": 2571.07,
+      "merchant": "Nagar Inc",
+      "category": "Entertainment",
+      "description": "redefine customized niches",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-24T14:53:48.590770",
+      "amount": 1628.43,
+      "merchant": "Jaggi-Sinha",
+      "category": "Groceries",
+      "description": "architect clicks-and-mortar paradigms",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-24T14:53:48.590779",
+      "amount": 3678.98,
+      "merchant": "Ahuja, Padmanabhan and Murthy",
+      "category": "Health",
+      "description": "seize e-business markets",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-06T14:53:48.590788",
+      "amount": 782.81,
+      "merchant": "Garg and Sons",
+      "category": "Transportation",
+      "description": "e-enable efficient web services",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-24T14:53:48.590796",
+      "amount": 2943.93,
+      "merchant": "Ghosh-Subramaniam",
+      "category": "Groceries",
+      "description": "mesh extensible supply-chains",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-08T14:53:48.590805",
+      "amount": 252.86,
+      "merchant": "Chadha, Sandal and Gole",
+      "category": "Transportation",
+      "description": "implement B2B content",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-22T14:53:48.590815",
+      "amount": 785.29,
+      "merchant": "Wable, Chhabra and Sahni",
+      "category": "Transportation",
+      "description": "reinvent distributed deliverables",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-20T14:53:48.590825",
+      "amount": 351.71,
+      "merchant": "Sandal-Hegde",
+      "category": "Transportation",
+      "description": "engineer real-time channels",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-25T14:53:48.590833",
+      "amount": 266.17,
+      "merchant": "Sahni PLC",
+      "category": "Transportation",
+      "description": "benchmark front-end niches",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-21T14:53:48.590841",
+      "amount": 5918.9,
+      "merchant": "CRYPTO EXCHANGE XY",
+      "category": "Transportation",
+      "description": "expedite plug-and-play infrastructures",
+      "channel": "card",
+      "is_anomaly": true
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-13T14:53:48.590851",
+      "amount": 2682.58,
+      "merchant": "Sethi, Sathe and Tata",
+      "category": "Shopping",
+      "description": "cultivate frictionless applications",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-13T14:53:48.590860",
+      "amount": 2107.62,
+      "merchant": "Pant-Parmar",
+      "category": "Utilities",
+      "description": "streamline B2B paradigms",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-29T14:53:48.590869",
+      "amount": 21968.62,
+      "merchant": "Pathak-Dutta",
+      "category": "Rent",
+      "description": "envisioneer frictionless bandwidth",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-28T14:53:48.590877",
+      "amount": 194.44,
+      "merchant": "Brar Group",
+      "category": "Transportation",
+      "description": "benchmark user-centric relationships",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-20T14:53:48.590886",
+      "amount": 1443.64,
+      "merchant": "Sengupta, Bawa and Parikh",
+      "category": "Food & Dining",
+      "description": "utilize extensible e-services",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-28T14:53:48.590896",
+      "amount": 713.17,
+      "merchant": "Kannan, Viswanathan and Rama",
+      "category": "Transportation",
+      "description": "redefine robust web-readiness",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-11T14:53:48.590905",
+      "amount": 452.04,
+      "merchant": "Sehgal-Atwal",
+      "category": "Transportation",
+      "description": "scale virtual architectures",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-09T14:53:48.590914",
+      "amount": 710.66,
+      "merchant": "Bahl-Gokhale",
+      "category": "Food & Dining",
+      "description": "brand cutting-edge e-tailers",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-19T14:53:48.590922",
+      "amount": 111.24,
+      "merchant": "Gour, Rege and Goel",
+      "category": "Transportation",
+      "description": "disintermediate rich systems",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-28T14:53:48.590933",
+      "amount": 2496.12,
+      "merchant": "Raman, Mohan and Kale",
+      "category": "Entertainment",
+      "description": "iterate end-to-end deliverables",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-26T14:53:48.590943",
+      "amount": 5685.56,
+      "merchant": "Pandit Inc",
+      "category": "Shopping",
+      "description": "matrix end-to-end platforms",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-29T14:53:48.590952",
+      "amount": 1689.48,
+      "merchant": "Nagar, Bose and Deshpande",
+      "category": "Groceries",
+      "description": "integrate real-time portals",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-09T14:53:48.590962",
+      "amount": 2021.99,
+      "merchant": "Narasimhan PLC",
+      "category": "Groceries",
+      "description": "transform compelling web services",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-03T14:53:48.590970",
+      "amount": 438.11,
+      "merchant": "Goda-Kaur",
+      "category": "Transportation",
+      "description": "architect compelling e-services",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-09T14:53:48.590979",
+      "amount": 2026.08,
+      "merchant": "Shankar Group",
+      "category": "Entertainment",
+      "description": "repurpose open-source synergies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-19T14:53:48.590987",
+      "amount": 1151.05,
+      "merchant": "Dara, Sur and Sem",
+      "category": "Utilities",
+      "description": "redefine B2C users",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-18T14:53:48.590996",
+      "amount": 5860.04,
+      "merchant": "Prasad, Vora and Tailor",
+      "category": "Shopping",
+      "description": "embrace distributed supply-chains",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-25T14:53:48.591007",
+      "amount": 1312.34,
+      "merchant": "Patel, Bhandari and Sem",
+      "category": "Shopping",
+      "description": "incubate scalable bandwidth",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-05T14:53:48.591017",
+      "amount": 1475.26,
+      "merchant": "Seth, Ratti and Anne",
+      "category": "Groceries",
+      "description": "streamline cross-platform convergence",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-18T14:53:48.591027",
+      "amount": 7246.42,
+      "merchant": "Ramakrishnan, Agarwal and Din",
+      "category": "Shopping",
+      "description": "generate enterprise technologies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-18T14:53:48.591037",
+      "amount": 160.33,
+      "merchant": "Bhagat, Dutt and Mane",
+      "category": "Transportation",
+      "description": "implement strategic markets",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-18T14:53:48.591046",
+      "amount": 1213.48,
+      "merchant": "Chaudhari, Loyal and Ganesh",
+      "category": "Food & Dining",
+      "description": "visualize 24/7 deliverables",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-26T14:53:48.591056",
+      "amount": 106.26,
+      "merchant": "Chana and Sons",
+      "category": "Transportation",
+      "description": "utilize open-source platforms",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-15T14:53:48.591065",
+      "amount": 1186.74,
+      "merchant": "Halder Group",
+      "category": "Utilities",
+      "description": "deploy open-source vortals",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-03T14:53:48.591073",
+      "amount": 179.74,
+      "merchant": "Tiwari Group",
+      "category": "Transportation",
+      "description": "productize robust functionalities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-31T14:53:48.591082",
+      "amount": 829.95,
+      "merchant": "Sengupta, Lata and Singhal",
+      "category": "Entertainment",
+      "description": "leverage extensible solutions",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-23T14:53:48.591092",
+      "amount": 465.3,
+      "merchant": "Bera-Srinivasan",
+      "category": "Transportation",
+      "description": "maximize value-added users",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-09T14:53:48.591101",
+      "amount": 1794.19,
+      "merchant": "Tailor Group",
+      "category": "Food & Dining",
+      "description": "embrace innovative initiatives",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-26T14:53:48.591109",
+      "amount": 721.68,
+      "merchant": "Doctor and Sons",
+      "category": "Utilities",
+      "description": "syndicate value-added vortals",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-07T14:53:48.591118",
+      "amount": 1596.82,
+      "merchant": "Raman-Brahmbhatt",
+      "category": "Food & Dining",
+      "description": "implement interactive ROI",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-02T14:53:48.591127",
+      "amount": 660.13,
+      "merchant": "Varma-Kalita",
+      "category": "Groceries",
+      "description": "incentivize killer bandwidth",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-03T14:53:48.591135",
+      "amount": 429.23,
+      "merchant": "Kar PLC",
+      "category": "Groceries",
+      "description": "transform compelling functionalities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-22T14:53:48.591143",
+      "amount": 2831.96,
+      "merchant": "Chauhan-Mallick",
+      "category": "Entertainment",
+      "description": "engineer dynamic models",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-14T14:53:48.591152",
+      "amount": 427.95,
+      "merchant": "Dey-Tripathi",
+      "category": "Transportation",
+      "description": "revolutionize user-centric e-tailers",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-28T14:53:48.591160",
+      "amount": 1757.18,
+      "merchant": "Bhatt, Pal and Iyer",
+      "category": "Groceries",
+      "description": "reinvent global content",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-22T14:53:48.591170",
+      "amount": 532.65,
+      "merchant": "Sharma, Verma and Mander",
+      "category": "Health",
+      "description": "grow collaborative web-readiness",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-26T14:53:48.591180",
+      "amount": 362.79,
+      "merchant": "Goda, Halder and Master",
+      "category": "Food & Dining",
+      "description": "embrace 24/365 solutions",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-04T14:53:48.591189",
+      "amount": 1843.07,
+      "merchant": "Vora, Tata and Kumer",
+      "category": "Food & Dining",
+      "description": "expedite bleeding-edge solutions",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-05T14:53:48.591199",
+      "amount": 865.45,
+      "merchant": "Prakash Ltd",
+      "category": "Groceries",
+      "description": "disintermediate next-generation systems",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-24T14:53:48.591207",
+      "amount": 14550.58,
+      "merchant": "UNKNOWN MERCHANT 4821",
+      "category": "Groceries",
+      "description": "redefine dynamic e-commerce",
+      "channel": "card",
+      "is_anomaly": true
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-27T14:53:48.591218",
+      "amount": 403.9,
+      "merchant": "Bakshi, Baria and Chaudry",
+      "category": "Transportation",
+      "description": "engineer distributed ROI",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-05T14:53:48.591228",
+      "amount": 2580.94,
+      "merchant": "Varma, Kalla and Soni",
+      "category": "Groceries",
+      "description": "transition synergistic synergies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-14T14:53:48.591238",
+      "amount": 464.88,
+      "merchant": "Banik, Rai and Tandon",
+      "category": "Groceries",
+      "description": "seize web-enabled functionalities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-02-13T14:53:48.591247",
+      "amount": 1973.59,
+      "merchant": "Seshadri PLC",
+      "category": "Food & Dining",
+      "description": "integrate cutting-edge e-commerce",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-20T14:53:48.591257",
+      "amount": 1087.98,
+      "merchant": "Korpal, Venkatesh and Bawa",
+      "category": "Food & Dining",
+      "description": "architect B2B web services",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-04-04T14:53:48.591268",
+      "amount": 63.36,
+      "merchant": "Chada and Sons",
+      "category": "Transportation",
+      "description": "envisioneer 24/7 applications",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-24T14:53:48.591276",
+      "amount": 19676.94,
+      "merchant": "Chaudhary-Muni",
+      "category": "Rent",
+      "description": "benchmark bleeding-edge technologies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-01-10T14:53:48.591284",
+      "amount": 2662.99,
+      "merchant": "Mani, Ranganathan and Sarin",
+      "category": "Entertainment",
+      "description": "harness ubiquitous functionalities",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "rohan_demo",
+      "date": "2026-03-15T14:53:48.591294",
+      "amount": 943.07,
+      "merchant": "Korpal, Ben and Pingle",
+      "category": "Groceries",
+      "description": "transform ubiquitous experiences",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-16T14:53:48.591316",
+      "amount": 234.43,
+      "merchant": "Mandal Inc",
+      "category": "Food & Dining",
+      "description": "disintermediate dynamic bandwidth",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-26T14:53:48.591325",
+      "amount": 254.05,
+      "merchant": "Chahal, Bains and Talwar",
+      "category": "Transportation",
+      "description": "mesh rich e-commerce",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-12T14:53:48.591336",
+      "amount": 527.01,
+      "merchant": "Patla, Kala and Tak",
+      "category": "Food & Dining",
+      "description": "e-enable distributed models",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-13T14:53:48.591346",
+      "amount": 2590.54,
+      "merchant": "Soni, Vasa and Padmanabhan",
+      "category": "Groceries",
+      "description": "embrace seamless applications",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-28T14:53:48.591356",
+      "amount": 499.8,
+      "merchant": "Srivastava, Prabhakar and Chowdhury",
+      "category": "Entertainment",
+      "description": "exploit real-time e-business",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-31T14:53:48.591366",
+      "amount": 2731.04,
+      "merchant": "Minhas Ltd",
+      "category": "Groceries",
+      "description": "synergize open-source supply-chains",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-09T14:53:48.591375",
+      "amount": 294.0,
+      "merchant": "Jhaveri-Seth",
+      "category": "Transportation",
+      "description": "architect sticky deliverables",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-12T14:53:48.591383",
+      "amount": 704.25,
+      "merchant": "Mahajan, Kadakia and Anne",
+      "category": "Transportation",
+      "description": "evolve vertical experiences",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-14T14:53:48.591393",
+      "amount": 4741.79,
+      "merchant": "Varkey-D\u2019Alia",
+      "category": "Shopping",
+      "description": "generate seamless content",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-09T14:53:48.591402",
+      "amount": 538.97,
+      "merchant": "Sahni, Palla and Mangat",
+      "category": "Food & Dining",
+      "description": "disintermediate granular platforms",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-17T14:53:48.591412",
+      "amount": 1689.49,
+      "merchant": "Khatri-Bose",
+      "category": "Food & Dining",
+      "description": "benchmark magnetic vortals",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-18T14:53:48.591421",
+      "amount": 1795.72,
+      "merchant": "Vaidya-Gole",
+      "category": "Groceries",
+      "description": "monetize user-centric infrastructures",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-15T14:53:48.591429",
+      "amount": 767.29,
+      "merchant": "Krishnamurthy-Bora",
+      "category": "Entertainment",
+      "description": "re-contextualize open-source supply-chains",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-15T14:53:48.591438",
+      "amount": 1734.84,
+      "merchant": "Comar, Chaudhry and Char",
+      "category": "Entertainment",
+      "description": "revolutionize mission-critical web services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-07T14:53:48.591447",
+      "amount": 1509.83,
+      "merchant": "Rana, Kalla and Viswanathan",
+      "category": "Groceries",
+      "description": "drive revolutionary info-mediaries",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-21T14:53:48.591457",
+      "amount": 2356.75,
+      "merchant": "Madan-Butala",
+      "category": "Groceries",
+      "description": "whiteboard synergistic supply-chains",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-16T14:53:48.591465",
+      "amount": 2435.2,
+      "merchant": "Goyal PLC",
+      "category": "Groceries",
+      "description": "embrace value-added initiatives",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-12T14:53:48.591474",
+      "amount": 425.19,
+      "merchant": "Mohan, Chakrabarti and Rege",
+      "category": "Food & Dining",
+      "description": "monetize enterprise applications",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-13T14:53:48.591484",
+      "amount": 524.71,
+      "merchant": "Mani-Sarkar",
+      "category": "Food & Dining",
+      "description": "innovate revolutionary synergies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-13T14:53:48.591492",
+      "amount": 356.34,
+      "merchant": "Mitra, Mishra and Pandya",
+      "category": "Food & Dining",
+      "description": "monetize visionary models",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-09T14:53:48.591502",
+      "amount": 770.25,
+      "merchant": "Tripathi Group",
+      "category": "Transportation",
+      "description": "implement collaborative web-readiness",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-07T14:53:48.591511",
+      "amount": 2419.9,
+      "merchant": "Merchant-Bhakta",
+      "category": "Groceries",
+      "description": "whiteboard plug-and-play mindshare",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-14T14:53:48.591519",
+      "amount": 969.78,
+      "merchant": "Bansal-Prakash",
+      "category": "Groceries",
+      "description": "utilize strategic ROI",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-09T14:53:48.591528",
+      "amount": 2730.26,
+      "merchant": "Bala-Zachariah",
+      "category": "Groceries",
+      "description": "re-contextualize real-time e-commerce",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-04T14:53:48.591536",
+      "amount": 495.55,
+      "merchant": "Amble-Hans",
+      "category": "Groceries",
+      "description": "redefine compelling e-business",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-13T14:53:48.591545",
+      "amount": 753.85,
+      "merchant": "Tandon, Sharma and Dua",
+      "category": "Shopping",
+      "description": "re-contextualize innovative partnerships",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-14T14:53:48.591554",
+      "amount": 657.31,
+      "merchant": "Ravi-Issac",
+      "category": "Transportation",
+      "description": "integrate e-business infrastructures",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-18T14:53:48.591563",
+      "amount": 5468.73,
+      "merchant": "Chawla, Murthy and Bains",
+      "category": "Shopping",
+      "description": "visualize customized technologies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-24T14:53:48.591572",
+      "amount": 375.51,
+      "merchant": "Rai-Palla",
+      "category": "Food & Dining",
+      "description": "innovate 24/7 markets",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-27T14:53:48.591581",
+      "amount": 7004.88,
+      "merchant": "Gupta PLC",
+      "category": "Shopping",
+      "description": "benchmark frictionless e-services",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-20T14:53:48.591589",
+      "amount": 475.9,
+      "merchant": "Bhandari-Ranganathan",
+      "category": "Transportation",
+      "description": "utilize sticky e-commerce",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-02T14:53:48.591598",
+      "amount": 1872.31,
+      "merchant": "Walia Ltd",
+      "category": "Groceries",
+      "description": "evolve revolutionary vortals",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-28T14:53:48.591606",
+      "amount": 468.82,
+      "merchant": "Baria, Lala and Lata",
+      "category": "Food & Dining",
+      "description": "evolve impactful solutions",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-23T14:53:48.591617",
+      "amount": 1823.88,
+      "merchant": "Ratti, Grewal and Goda",
+      "category": "Food & Dining",
+      "description": "disintermediate 24/365 convergence",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-08T14:53:48.591626",
+      "amount": 1120.74,
+      "merchant": "Khatri, Jhaveri and Sibal",
+      "category": "Food & Dining",
+      "description": "orchestrate interactive convergence",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-28T14:53:48.591636",
+      "amount": 2408.87,
+      "merchant": "Bansal-Mand",
+      "category": "Health",
+      "description": "facilitate seamless systems",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-28T14:53:48.591645",
+      "amount": 472.51,
+      "merchant": "Sankaran, Sankaran and Dua",
+      "category": "Transportation",
+      "description": "transition viral action-items",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-21T14:53:48.591654",
+      "amount": 2284.24,
+      "merchant": "Swaminathan Ltd",
+      "category": "Entertainment",
+      "description": "embrace collaborative interfaces",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-05T14:53:48.591663",
+      "amount": 1638.14,
+      "merchant": "Saha-Gade",
+      "category": "Food & Dining",
+      "description": "synthesize plug-and-play vortals",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-23T14:53:48.591671",
+      "amount": 440.96,
+      "merchant": "Khatri-Karnik",
+      "category": "Transportation",
+      "description": "monetize 24/7 users",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-02T14:53:48.591680",
+      "amount": 495.63,
+      "merchant": "Dash Inc",
+      "category": "Groceries",
+      "description": "drive back-end markets",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-24T14:53:48.591688",
+      "amount": 6692.17,
+      "merchant": "Karnik Ltd",
+      "category": "Shopping",
+      "description": "repurpose ubiquitous deliverables",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-05T14:53:48.591697",
+      "amount": 1106.23,
+      "merchant": "Khatri LLC",
+      "category": "Entertainment",
+      "description": "maximize visionary e-markets",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-28T14:53:48.591705",
+      "amount": 3250.9,
+      "merchant": "Chaudhry Group",
+      "category": "Shopping",
+      "description": "monetize 24/365 initiatives",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-20T14:53:48.591714",
+      "amount": 479.52,
+      "merchant": "Baria-Sabharwal",
+      "category": "Transportation",
+      "description": "maximize customized action-items",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-26T14:53:48.591723",
+      "amount": 1893.01,
+      "merchant": "Barad, Shere and Nazareth",
+      "category": "Groceries",
+      "description": "seize compelling bandwidth",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-22T14:53:48.591732",
+      "amount": 5092.49,
+      "merchant": "Srivastava, Tara and Aggarwal",
+      "category": "Shopping",
+      "description": "grow rich channels",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-28T14:53:48.591742",
+      "amount": 437.34,
+      "merchant": "Kumer Group",
+      "category": "Groceries",
+      "description": "monetize transparent e-services",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-03T14:53:48.591751",
+      "amount": 395.73,
+      "merchant": "Iyer PLC",
+      "category": "Transportation",
+      "description": "empower B2C applications",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-25T14:53:48.591759",
+      "amount": 109.88,
+      "merchant": "Nadig Group",
+      "category": "Transportation",
+      "description": "evolve frictionless info-mediaries",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-04T14:53:48.591768",
+      "amount": 1285.52,
+      "merchant": "Konda, Khalsa and Kashyap",
+      "category": "Entertainment",
+      "description": "streamline transparent portals",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-27T14:53:48.591777",
+      "amount": 2028.89,
+      "merchant": "Thakkar Ltd",
+      "category": "Groceries",
+      "description": "incentivize world-class ROI",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-23T14:53:48.591786",
+      "amount": 203.26,
+      "merchant": "Verma, Bhargava and Swaminathan",
+      "category": "Food & Dining",
+      "description": "enhance granular systems",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-17T14:53:48.591796",
+      "amount": 460.86,
+      "merchant": "Grewal-Subramanian",
+      "category": "Health",
+      "description": "target bleeding-edge markets",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-07T14:53:48.591821",
+      "amount": 579.92,
+      "merchant": "Doctor and Sons",
+      "category": "Transportation",
+      "description": "revolutionize bricks-and-clicks interfaces",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-01T14:53:48.591830",
+      "amount": 422.64,
+      "merchant": "Chatterjee-Tank",
+      "category": "Transportation",
+      "description": "target B2B ROI",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-22T14:53:48.591838",
+      "amount": 4107.17,
+      "merchant": "Pai, De and Vig",
+      "category": "Shopping",
+      "description": "engage intuitive platforms",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-06T14:53:48.591848",
+      "amount": 378.97,
+      "merchant": "Pau, Nazareth and Dada",
+      "category": "Transportation",
+      "description": "embrace innovative functionalities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-23T14:53:48.591858",
+      "amount": 916.47,
+      "merchant": "Atwal, Karan and Setty",
+      "category": "Food & Dining",
+      "description": "cultivate cross-media metrics",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-26T14:53:48.591867",
+      "amount": 2660.97,
+      "merchant": "Bhat, Rajagopalan and Vaidya",
+      "category": "Shopping",
+      "description": "expedite transparent platforms",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-29T14:53:48.591877",
+      "amount": 1448.34,
+      "merchant": "Kara Inc",
+      "category": "Groceries",
+      "description": "unleash integrated functionalities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-01T14:53:48.591885",
+      "amount": 315.29,
+      "merchant": "Mukherjee, Behl and Dugal",
+      "category": "Transportation",
+      "description": "enhance synergistic schemas",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-21T14:53:48.591895",
+      "amount": 768.65,
+      "merchant": "Deshmukh-Issac",
+      "category": "Transportation",
+      "description": "synergize one-to-one methodologies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-26T14:53:48.591903",
+      "amount": 1011.29,
+      "merchant": "Kothari, Krishnan and Warrior",
+      "category": "Food & Dining",
+      "description": "leverage scalable web services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-04T14:53:48.591913",
+      "amount": 655.96,
+      "merchant": "Acharya-Dash",
+      "category": "Shopping",
+      "description": "exploit B2C web services",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-25T14:53:48.591922",
+      "amount": 128.32,
+      "merchant": "Bhardwaj-Bhargava",
+      "category": "Transportation",
+      "description": "leverage revolutionary relationships",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-31T14:53:48.591930",
+      "amount": 2945.72,
+      "merchant": "Reddy Inc",
+      "category": "Entertainment",
+      "description": "mesh holistic infrastructures",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-25T14:53:48.591938",
+      "amount": 1465.31,
+      "merchant": "Kohli, Nagi and Kashyap",
+      "category": "Food & Dining",
+      "description": "generate dot-com niches",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-14T14:53:48.591948",
+      "amount": 3690.85,
+      "merchant": "Borra LLC",
+      "category": "Shopping",
+      "description": "incubate granular deliverables",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-30T14:53:48.591957",
+      "amount": 1400.3,
+      "merchant": "Parmer Ltd",
+      "category": "Food & Dining",
+      "description": "redefine proactive eyeballs",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-24T14:53:48.591965",
+      "amount": 70.97,
+      "merchant": "Sura, Date and Jani",
+      "category": "Transportation",
+      "description": "drive ubiquitous schemas",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-17T14:53:48.591975",
+      "amount": 901.28,
+      "merchant": "Divan, Tailor and Kale",
+      "category": "Food & Dining",
+      "description": "repurpose efficient channels",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-29T14:53:48.591984",
+      "amount": 655.33,
+      "merchant": "Chauhan, Merchant and Bali",
+      "category": "Food & Dining",
+      "description": "optimize 24/365 action-items",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-08T14:53:48.591996",
+      "amount": 1478.37,
+      "merchant": "Sundaram and Sons",
+      "category": "Food & Dining",
+      "description": "re-intermediate revolutionary bandwidth",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-01T14:53:48.592004",
+      "amount": 782.57,
+      "merchant": "Kapur-Bhattacharyya",
+      "category": "Transportation",
+      "description": "generate killer metrics",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-19T14:53:48.592013",
+      "amount": 387.12,
+      "merchant": "Ratta, Soman and Din",
+      "category": "Food & Dining",
+      "description": "deploy bricks-and-clicks functionalities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-01T14:53:48.592023",
+      "amount": 83.55,
+      "merchant": "D\u2019Alia Inc",
+      "category": "Transportation",
+      "description": "aggregate back-end e-services",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-15T14:53:48.592036",
+      "amount": 723.24,
+      "merchant": "Chaudhry Ltd",
+      "category": "Transportation",
+      "description": "mesh plug-and-play interfaces",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-23T14:53:48.592046",
+      "amount": 541.2,
+      "merchant": "Halder and Sons",
+      "category": "Transportation",
+      "description": "strategize value-added mindshare",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-12T14:53:48.592055",
+      "amount": 1999.05,
+      "merchant": "Padmanabhan-Pingle",
+      "category": "Food & Dining",
+      "description": "empower cutting-edge web services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-05T14:53:48.592064",
+      "amount": 357.27,
+      "merchant": "Rana Inc",
+      "category": "Food & Dining",
+      "description": "disintermediate killer systems",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-22T14:53:48.592074",
+      "amount": 1376.93,
+      "merchant": "Malhotra-Goyal",
+      "category": "Groceries",
+      "description": "repurpose killer experiences",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-25T14:53:48.592099",
+      "amount": 584.69,
+      "merchant": "Divan-Kumar",
+      "category": "Transportation",
+      "description": "evolve wireless functionalities",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-01T14:53:48.592120",
+      "amount": 2750.3,
+      "merchant": "Warrior, Deshpande and Chacko",
+      "category": "Groceries",
+      "description": "incentivize viral technologies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-11T14:53:48.592136",
+      "amount": 426.24,
+      "merchant": "Mukherjee-Salvi",
+      "category": "Transportation",
+      "description": "mesh mission-critical functionalities",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-26T14:53:48.592147",
+      "amount": 1036.04,
+      "merchant": "Nagar-Kibe",
+      "category": "Food & Dining",
+      "description": "disintermediate interactive synergies",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-11T14:53:48.592157",
+      "amount": 2865.49,
+      "merchant": "Varghese-Wagle",
+      "category": "Groceries",
+      "description": "productize strategic convergence",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-28T14:53:48.592167",
+      "amount": 241.95,
+      "merchant": "Chand, Grover and Vora",
+      "category": "Transportation",
+      "description": "productize cross-media schemas",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-05T14:53:48.592178",
+      "amount": 549.81,
+      "merchant": "Prabhakar, Puri and Thakur",
+      "category": "Transportation",
+      "description": "maximize plug-and-play interfaces",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-27T14:53:48.592190",
+      "amount": 431.66,
+      "merchant": "Ravi-Dutt",
+      "category": "Food & Dining",
+      "description": "revolutionize open-source networks",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-06T14:53:48.592200",
+      "amount": 7053.01,
+      "merchant": "Pal, Khosla and Sridhar",
+      "category": "Shopping",
+      "description": "innovate cross-media e-markets",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-08T14:53:48.592211",
+      "amount": 2305.94,
+      "merchant": "Muni-De",
+      "category": "Entertainment",
+      "description": "leverage transparent markets",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-04T14:53:48.592221",
+      "amount": 1804.54,
+      "merchant": "Panchal-Bhavsar",
+      "category": "Food & Dining",
+      "description": "disintermediate visionary web services",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-08T14:53:48.592231",
+      "amount": 738.72,
+      "merchant": "Koshy, Bansal and Dixit",
+      "category": "Entertainment",
+      "description": "engineer ubiquitous e-business",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-28T14:53:48.592242",
+      "amount": 418.07,
+      "merchant": "De, Varghese and Srinivasan",
+      "category": "Transportation",
+      "description": "re-contextualize user-centric content",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-12T14:53:48.592253",
+      "amount": 4222.3,
+      "merchant": "Tella LLC",
+      "category": "Health",
+      "description": "target bricks-and-clicks web services",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-20T14:53:48.592263",
+      "amount": 734.56,
+      "merchant": "Doshi Group",
+      "category": "Food & Dining",
+      "description": "drive cross-platform info-mediaries",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-17T14:53:48.592275",
+      "amount": 2569.86,
+      "merchant": "Bains, Dalal and Nori",
+      "category": "Entertainment",
+      "description": "maximize collaborative initiatives",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-20T14:53:48.592286",
+      "amount": 7284.18,
+      "merchant": "Chaudhry, Modi and Bail",
+      "category": "Shopping",
+      "description": "evolve ubiquitous relationships",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-24T14:53:48.592299",
+      "amount": 1422.99,
+      "merchant": "Puri-Ranganathan",
+      "category": "Food & Dining",
+      "description": "syndicate back-end solutions",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-27T14:53:48.592309",
+      "amount": 2783.43,
+      "merchant": "Sem-Sane",
+      "category": "Health",
+      "description": "seize world-class e-business",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-12T14:53:48.592318",
+      "amount": 417.44,
+      "merchant": "Kota, Dhawan and Bir",
+      "category": "Food & Dining",
+      "description": "evolve synergistic methodologies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-14T14:53:48.592329",
+      "amount": 1560.72,
+      "merchant": "Bail, Murthy and Mody",
+      "category": "Food & Dining",
+      "description": "brand e-business bandwidth",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-23T14:53:48.592340",
+      "amount": 189.63,
+      "merchant": "Gade Ltd",
+      "category": "Transportation",
+      "description": "implement next-generation ROI",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-13T14:53:48.592349",
+      "amount": 4673.69,
+      "merchant": "Sen Inc",
+      "category": "Shopping",
+      "description": "orchestrate integrated solutions",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-26T14:53:48.592359",
+      "amount": 2762.12,
+      "merchant": "Pandey-Barad",
+      "category": "Groceries",
+      "description": "generate interactive ROI",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-12T14:53:48.592368",
+      "amount": 1038.79,
+      "merchant": "Zacharia, Balakrishnan and Mohanty",
+      "category": "Entertainment",
+      "description": "streamline open-source web-readiness",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-05T14:53:48.592379",
+      "amount": 1784.72,
+      "merchant": "Krishnan, Keer and Tara",
+      "category": "Food & Dining",
+      "description": "optimize revolutionary eyeballs",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-17T14:53:48.592390",
+      "amount": 1714.02,
+      "merchant": "Dada PLC",
+      "category": "Food & Dining",
+      "description": "embrace clicks-and-mortar functionalities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-20T14:53:48.592400",
+      "amount": 1005.56,
+      "merchant": "Ravi-Kakar",
+      "category": "Food & Dining",
+      "description": "disintermediate real-time channels",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-20T14:53:48.592409",
+      "amount": 1831.2,
+      "merchant": "Nadkarni-Bala",
+      "category": "Food & Dining",
+      "description": "seize 24/7 e-markets",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-06T14:53:48.592419",
+      "amount": 674.46,
+      "merchant": "Joshi Group",
+      "category": "Transportation",
+      "description": "synergize front-end markets",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-31T14:53:48.592428",
+      "amount": 426.5,
+      "merchant": "Ram-Bawa",
+      "category": "Transportation",
+      "description": "engage frictionless content",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-06T14:53:48.592437",
+      "amount": 1380.89,
+      "merchant": "Barad-Balasubramanian",
+      "category": "Food & Dining",
+      "description": "drive global architectures",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-31T14:53:48.592447",
+      "amount": 1877.36,
+      "merchant": "Sur-Behl",
+      "category": "Food & Dining",
+      "description": "evolve strategic architectures",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-02T14:53:48.592456",
+      "amount": 591.59,
+      "merchant": "Soman Inc",
+      "category": "Food & Dining",
+      "description": "seize back-end e-services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-08T14:53:48.592465",
+      "amount": 1328.19,
+      "merchant": "Kalita, Chhabra and Basak",
+      "category": "Groceries",
+      "description": "leverage mission-critical bandwidth",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-04T14:53:48.592476",
+      "amount": 420.14,
+      "merchant": "Cheema, Mishra and Date",
+      "category": "Food & Dining",
+      "description": "re-intermediate impactful mindshare",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-03T14:53:48.592486",
+      "amount": 1972.97,
+      "merchant": "Pandya-Zachariah",
+      "category": "Groceries",
+      "description": "deliver holistic e-services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-28T14:53:48.592496",
+      "amount": 324.74,
+      "merchant": "Mistry-Agate",
+      "category": "Food & Dining",
+      "description": "optimize killer channels",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-11T14:53:48.592505",
+      "amount": 801.53,
+      "merchant": "Ganesan, Konda and Khosla",
+      "category": "Food & Dining",
+      "description": "matrix bleeding-edge relationships",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-15T14:53:48.592516",
+      "amount": 1397.94,
+      "merchant": "Dani-Khanna",
+      "category": "Groceries",
+      "description": "implement clicks-and-mortar e-markets",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-10T14:53:48.592525",
+      "amount": 2667.6,
+      "merchant": "Chaudhuri-Bora",
+      "category": "Groceries",
+      "description": "revolutionize one-to-one channels",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-14T14:53:48.592534",
+      "amount": 1931.39,
+      "merchant": "Chaudhary Ltd",
+      "category": "Groceries",
+      "description": "redefine best-of-breed infrastructures",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-28T14:53:48.592543",
+      "amount": 1776.52,
+      "merchant": "Chaudry Group",
+      "category": "Utilities",
+      "description": "synthesize 24/365 paradigms",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-07T14:53:48.592553",
+      "amount": 979.62,
+      "merchant": "Ray-Madan",
+      "category": "Food & Dining",
+      "description": "enable sticky systems",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-13T14:53:48.592562",
+      "amount": 287.56,
+      "merchant": "Sarkar Group",
+      "category": "Food & Dining",
+      "description": "morph dot-com deliverables",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-22T14:53:48.592571",
+      "amount": 630.41,
+      "merchant": "Roy, Kaul and Mangat",
+      "category": "Transportation",
+      "description": "re-contextualize impactful paradigms",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-05T14:53:48.592581",
+      "amount": 761.73,
+      "merchant": "Chaudhary and Sons",
+      "category": "Transportation",
+      "description": "incentivize plug-and-play technologies",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-01T14:53:48.592591",
+      "amount": 1981.27,
+      "merchant": "Rajan, Deep and Apte",
+      "category": "Utilities",
+      "description": "mesh virtual applications",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-27T14:53:48.592601",
+      "amount": 108.38,
+      "merchant": "Chakraborty-Choudhury",
+      "category": "Transportation",
+      "description": "monetize strategic e-services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-14T14:53:48.592610",
+      "amount": 2434.34,
+      "merchant": "Yogi, Kalla and Dube",
+      "category": "Entertainment",
+      "description": "benchmark leading-edge mindshare",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-06T14:53:48.592621",
+      "amount": 1830.52,
+      "merchant": "Malhotra, Upadhyay and Parmar",
+      "category": "Food & Dining",
+      "description": "evolve customized infrastructures",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-08T14:53:48.592631",
+      "amount": 542.52,
+      "merchant": "Nair-Palla",
+      "category": "Transportation",
+      "description": "incentivize one-to-one synergies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-08T14:53:48.592640",
+      "amount": 771.4,
+      "merchant": "Bhat-Mohan",
+      "category": "Transportation",
+      "description": "architect mission-critical synergies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-20T14:53:48.592650",
+      "amount": 3549.42,
+      "merchant": "Dubey, Dhaliwal and Datta",
+      "category": "Shopping",
+      "description": "brand global eyeballs",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-02T14:53:48.592660",
+      "amount": 3319.92,
+      "merchant": "Patla LLC",
+      "category": "Health",
+      "description": "unleash clicks-and-mortar communities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-11T14:53:48.592669",
+      "amount": 553.43,
+      "merchant": "Wadhwa-Raghavan",
+      "category": "Transportation",
+      "description": "transition B2B relationships",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-28T14:53:48.592678",
+      "amount": 1475.55,
+      "merchant": "Baria Inc",
+      "category": "Entertainment",
+      "description": "enhance sticky partnerships",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-20T14:53:48.592687",
+      "amount": 1744.47,
+      "merchant": "Saini-Sagar",
+      "category": "Food & Dining",
+      "description": "re-intermediate scalable schemas",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-11T14:53:48.592696",
+      "amount": 2185.81,
+      "merchant": "Balasubramanian, Kata and Zacharia",
+      "category": "Groceries",
+      "description": "synergize visionary web services",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-25T14:53:48.592706",
+      "amount": 914.41,
+      "merchant": "Sastry-Ramaswamy",
+      "category": "Health",
+      "description": "aggregate wireless niches",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-30T14:53:48.592715",
+      "amount": 687.8,
+      "merchant": "Dar, Sankaran and Krish",
+      "category": "Food & Dining",
+      "description": "deliver efficient experiences",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-08T14:53:48.592725",
+      "amount": 1394.66,
+      "merchant": "Shah-Brahmbhatt",
+      "category": "Groceries",
+      "description": "brand e-business markets",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-15T14:53:48.592734",
+      "amount": 2028.91,
+      "merchant": "Hegde, Hayre and Deo",
+      "category": "Groceries",
+      "description": "unleash 24/365 architectures",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-04T14:53:48.592745",
+      "amount": 604.24,
+      "merchant": "Walla PLC",
+      "category": "Groceries",
+      "description": "harness proactive portals",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-23T14:53:48.592753",
+      "amount": 1282.08,
+      "merchant": "Palan-Naidu",
+      "category": "Food & Dining",
+      "description": "monetize transparent systems",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-19T14:53:48.592762",
+      "amount": 1458.52,
+      "merchant": "Wali-Krish",
+      "category": "Shopping",
+      "description": "enable distributed content",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-11T14:53:48.592771",
+      "amount": 666.49,
+      "merchant": "Gill, Barad and Kade",
+      "category": "Transportation",
+      "description": "mesh dot-com action-items",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-18T14:53:48.592781",
+      "amount": 1442.56,
+      "merchant": "Vaidya LLC",
+      "category": "Groceries",
+      "description": "embrace global technologies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-19T14:53:48.592791",
+      "amount": 592.65,
+      "merchant": "Ganesan, Mahajan and Rajagopal",
+      "category": "Food & Dining",
+      "description": "deliver extensible e-markets",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-28T14:53:48.592806",
+      "amount": 998.52,
+      "merchant": "Vala-Choudhury",
+      "category": "Food & Dining",
+      "description": "disintermediate bricks-and-clicks technologies",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-11T14:53:48.592815",
+      "amount": 61.59,
+      "merchant": "Salvi Group",
+      "category": "Transportation",
+      "description": "incubate web-enabled infrastructures",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-29T14:53:48.592824",
+      "amount": 779.91,
+      "merchant": "Balan, Tailor and Sundaram",
+      "category": "Transportation",
+      "description": "re-contextualize world-class technologies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-21T14:53:48.592834",
+      "amount": 1778.55,
+      "merchant": "Uppal, Dey and Deshmukh",
+      "category": "Groceries",
+      "description": "syndicate virtual vortals",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-12T14:53:48.592845",
+      "amount": 1472.17,
+      "merchant": "Narayan-Bhatt",
+      "category": "Groceries",
+      "description": "reinvent compelling e-commerce",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-24T14:53:48.592854",
+      "amount": 326.47,
+      "merchant": "Karpe, Sidhu and Chokshi",
+      "category": "Food & Dining",
+      "description": "facilitate leading-edge vortals",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-17T14:53:48.592865",
+      "amount": 721.57,
+      "merchant": "Sarna, Comar and Thaman",
+      "category": "Food & Dining",
+      "description": "architect bleeding-edge vortals",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-11T14:53:48.592874",
+      "amount": 728.46,
+      "merchant": "Parsa, Mody and Bal",
+      "category": "Transportation",
+      "description": "transition cross-media technologies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-30T14:53:48.592884",
+      "amount": 1967.96,
+      "merchant": "Viswanathan and Sons",
+      "category": "Food & Dining",
+      "description": "transform killer web services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-26T14:53:48.592893",
+      "amount": 1340.37,
+      "merchant": "Sampath LLC",
+      "category": "Food & Dining",
+      "description": "mesh user-centric solutions",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-08T14:53:48.592902",
+      "amount": 607.11,
+      "merchant": "Sunder, Kapadia and Golla",
+      "category": "Food & Dining",
+      "description": "transition world-class ROI",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-10T14:53:48.592913",
+      "amount": 349.77,
+      "merchant": "Joshi-Sarkar",
+      "category": "Food & Dining",
+      "description": "unleash cutting-edge solutions",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-20T14:53:48.592922",
+      "amount": 174.27,
+      "merchant": "Kulkarni-Chakrabarti",
+      "category": "Transportation",
+      "description": "envisioneer web-enabled experiences",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-17T14:53:48.592931",
+      "amount": 826.99,
+      "merchant": "Taneja and Sons",
+      "category": "Food & Dining",
+      "description": "exploit best-of-breed relationships",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-19T14:53:48.592940",
+      "amount": 1063.05,
+      "merchant": "Pandey Inc",
+      "category": "Food & Dining",
+      "description": "strategize real-time schemas",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-09T14:53:48.592949",
+      "amount": 122.97,
+      "merchant": "Zachariah, Mittal and Dugar",
+      "category": "Transportation",
+      "description": "monetize bleeding-edge users",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-05T14:53:48.592959",
+      "amount": 1949.16,
+      "merchant": "Peri, Narain and De",
+      "category": "Food & Dining",
+      "description": "engage plug-and-play convergence",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-10T14:53:48.592969",
+      "amount": 1894.85,
+      "merchant": "Khosla-Bora",
+      "category": "Groceries",
+      "description": "aggregate holistic e-services",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-11T14:53:48.592978",
+      "amount": 255.86,
+      "merchant": "Bhatti, Karnik and Upadhyay",
+      "category": "Transportation",
+      "description": "envisioneer best-of-breed networks",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-20T14:53:48.592989",
+      "amount": 735.82,
+      "merchant": "Dalal Ltd",
+      "category": "Groceries",
+      "description": "grow cutting-edge mindshare",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-24T14:53:48.592998",
+      "amount": 1270.99,
+      "merchant": "Mistry Group",
+      "category": "Groceries",
+      "description": "re-intermediate synergistic models",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-06T14:53:48.593007",
+      "amount": 1566.28,
+      "merchant": "Mann, Bhagat and Vohra",
+      "category": "Groceries",
+      "description": "re-contextualize efficient deliverables",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-23T14:53:48.593017",
+      "amount": 2624.75,
+      "merchant": "Minhas, Suresh and Borde",
+      "category": "Shopping",
+      "description": "orchestrate seamless initiatives",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-17T14:53:48.593027",
+      "amount": 393.68,
+      "merchant": "Mohan LLC",
+      "category": "Transportation",
+      "description": "harness cross-platform partnerships",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-24T14:53:48.593037",
+      "amount": 1054.48,
+      "merchant": "Pal Group",
+      "category": "Food & Dining",
+      "description": "embrace robust mindshare",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-19T14:53:48.593045",
+      "amount": 1426.99,
+      "merchant": "Hora and Sons",
+      "category": "Groceries",
+      "description": "whiteboard magnetic web services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-12T14:53:48.593055",
+      "amount": 372.65,
+      "merchant": "Sem Ltd",
+      "category": "Food & Dining",
+      "description": "productize scalable architectures",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-18T14:53:48.593063",
+      "amount": 508.02,
+      "merchant": "Rao Ltd",
+      "category": "Transportation",
+      "description": "e-enable out-of-the-box models",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-15T14:53:48.593072",
+      "amount": 350.49,
+      "merchant": "Bandi LLC",
+      "category": "Transportation",
+      "description": "harness visionary eyeballs",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-15T14:53:48.593081",
+      "amount": 1454.58,
+      "merchant": "Mukherjee-Lad",
+      "category": "Groceries",
+      "description": "target best-of-breed action-items",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-09T14:53:48.593091",
+      "amount": 7622.29,
+      "merchant": "Chaudhari PLC",
+      "category": "Shopping",
+      "description": "incubate real-time vortals",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-27T14:53:48.593104",
+      "amount": 5651.54,
+      "merchant": "Om, Kala and Golla",
+      "category": "Shopping",
+      "description": "orchestrate impactful systems",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-20T14:53:48.593116",
+      "amount": 2592.46,
+      "merchant": "Shroff Group",
+      "category": "Entertainment",
+      "description": "incubate intuitive e-services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-07T14:53:48.593125",
+      "amount": 1976.85,
+      "merchant": "Chokshi, Sangha and Choudhury",
+      "category": "Food & Dining",
+      "description": "transition world-class users",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-07T14:53:48.593136",
+      "amount": 693.93,
+      "merchant": "Parsa Group",
+      "category": "Food & Dining",
+      "description": "repurpose virtual solutions",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-21T14:53:48.593145",
+      "amount": 905.76,
+      "merchant": "Bajwa Inc",
+      "category": "Food & Dining",
+      "description": "e-enable visionary infrastructures",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-26T14:53:48.593155",
+      "amount": 371.03,
+      "merchant": "Edwin, Verma and Dhawan",
+      "category": "Food & Dining",
+      "description": "disintermediate integrated functionalities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-15T14:53:48.593165",
+      "amount": 58.65,
+      "merchant": "Tandon-Venkataraman",
+      "category": "Transportation",
+      "description": "harness viral solutions",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-24T14:53:48.593174",
+      "amount": 1364.27,
+      "merchant": "Bakshi, Behl and Sundaram",
+      "category": "Food & Dining",
+      "description": "empower e-business platforms",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-26T14:53:48.593185",
+      "amount": 3023.09,
+      "merchant": "Bassi LLC",
+      "category": "Shopping",
+      "description": "grow visionary eyeballs",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-07T14:53:48.593194",
+      "amount": 357.3,
+      "merchant": "Puri, Chawla and Khatri",
+      "category": "Transportation",
+      "description": "transform dot-com channels",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-04T14:53:48.593204",
+      "amount": 2325.92,
+      "merchant": "Tandon-Morar",
+      "category": "Groceries",
+      "description": "evolve end-to-end applications",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-09T14:53:48.593213",
+      "amount": 1969.49,
+      "merchant": "Muni-Ravi",
+      "category": "Groceries",
+      "description": "optimize integrated niches",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-08T14:53:48.593222",
+      "amount": 724.32,
+      "merchant": "Nigam-Sarma",
+      "category": "Transportation",
+      "description": "transform leading-edge action-items",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-23T14:53:48.593231",
+      "amount": 2860.16,
+      "merchant": "Murthy-Bhatt",
+      "category": "Groceries",
+      "description": "harness dynamic networks",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-26T14:53:48.593240",
+      "amount": 6702.03,
+      "merchant": "Peri, Cherian and Bahri",
+      "category": "Shopping",
+      "description": "brand innovative web-readiness",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-09T14:53:48.593253",
+      "amount": 1585.65,
+      "merchant": "Bhatnagar-More",
+      "category": "Food & Dining",
+      "description": "re-intermediate frictionless experiences",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-22T14:53:48.593263",
+      "amount": 896.41,
+      "merchant": "Mani-Zacharia",
+      "category": "Food & Dining",
+      "description": "transform web-enabled info-mediaries",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-06T14:53:48.593273",
+      "amount": 2907.41,
+      "merchant": "Palla-Rout",
+      "category": "Entertainment",
+      "description": "harness impactful web services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-01T14:53:48.593282",
+      "amount": 731.03,
+      "merchant": "Nagarajan, Kadakia and Cherian",
+      "category": "Transportation",
+      "description": "unleash B2B mindshare",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-04T14:53:48.593293",
+      "amount": 1440.15,
+      "merchant": "Bassi-Goel",
+      "category": "Shopping",
+      "description": "target mission-critical convergence",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-27T14:53:48.593302",
+      "amount": 784.2,
+      "merchant": "Pillai-Sachdev",
+      "category": "Transportation",
+      "description": "unleash out-of-the-box bandwidth",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-07T14:53:48.593312",
+      "amount": 702.89,
+      "merchant": "Batta-Parsa",
+      "category": "Food & Dining",
+      "description": "re-intermediate distributed bandwidth",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-16T14:53:48.593321",
+      "amount": 305.74,
+      "merchant": "Bhatt PLC",
+      "category": "Food & Dining",
+      "description": "utilize proactive systems",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-24T14:53:48.593330",
+      "amount": 1083.78,
+      "merchant": "Sundaram Group",
+      "category": "Shopping",
+      "description": "revolutionize cross-media methodologies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-22T14:53:48.593340",
+      "amount": 7632.82,
+      "merchant": "Deep-Chadha",
+      "category": "Shopping",
+      "description": "streamline bricks-and-clicks synergies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-25T14:53:48.593349",
+      "amount": 1890.93,
+      "merchant": "Kade, Salvi and Doctor",
+      "category": "Groceries",
+      "description": "incentivize robust niches",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-06T14:53:48.593360",
+      "amount": 4486.06,
+      "merchant": "Tak Ltd",
+      "category": "Health",
+      "description": "strategize dynamic content",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-02T14:53:48.593370",
+      "amount": 1681.32,
+      "merchant": "Kulkarni Group",
+      "category": "Food & Dining",
+      "description": "grow plug-and-play technologies",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-23T14:53:48.593379",
+      "amount": 446.03,
+      "merchant": "Bhatnagar-Pillay",
+      "category": "Transportation",
+      "description": "cultivate intuitive e-tailers",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-11T14:53:48.593389",
+      "amount": 546.98,
+      "merchant": "Viswanathan Ltd",
+      "category": "Food & Dining",
+      "description": "synergize interactive portals",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-20T14:53:48.593398",
+      "amount": 1601.42,
+      "merchant": "Manne, Raj and Puri",
+      "category": "Health",
+      "description": "seize dot-com technologies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-12T14:53:48.593409",
+      "amount": 255.24,
+      "merchant": "Das PLC",
+      "category": "Food & Dining",
+      "description": "engage collaborative interfaces",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-06T14:53:48.593418",
+      "amount": 2744.21,
+      "merchant": "Hans-Randhawa",
+      "category": "Health",
+      "description": "generate dynamic applications",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-15T14:53:48.593427",
+      "amount": 415.67,
+      "merchant": "Mody Group",
+      "category": "Transportation",
+      "description": "morph global vortals",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-15T14:53:48.593436",
+      "amount": 1680.71,
+      "merchant": "Ahuja, Dar and Choudhury",
+      "category": "Food & Dining",
+      "description": "innovate sticky bandwidth",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-25T14:53:48.593447",
+      "amount": 2778.35,
+      "merchant": "De and Sons",
+      "category": "Groceries",
+      "description": "maximize B2B action-items",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-20T14:53:48.593456",
+      "amount": 1607.15,
+      "merchant": "Sharma-Tank",
+      "category": "Groceries",
+      "description": "scale frictionless interfaces",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-25T14:53:48.593466",
+      "amount": 3049.18,
+      "merchant": "Cherian Ltd",
+      "category": "Shopping",
+      "description": "exploit customized mindshare",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-23T14:53:48.593475",
+      "amount": 1625.59,
+      "merchant": "Jain-Kakar",
+      "category": "Food & Dining",
+      "description": "unleash intuitive applications",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-16T14:53:48.593484",
+      "amount": 186.77,
+      "merchant": "Kari-Soni",
+      "category": "Transportation",
+      "description": "morph extensible channels",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-03T14:53:48.593493",
+      "amount": 1484.19,
+      "merchant": "Mannan, Kaul and Yohannan",
+      "category": "Food & Dining",
+      "description": "benchmark frictionless supply-chains",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-21T14:53:48.593505",
+      "amount": 2673.84,
+      "merchant": "Krish, Oza and Nigam",
+      "category": "Entertainment",
+      "description": "architect global ROI",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-17T14:53:48.593515",
+      "amount": 1446.98,
+      "merchant": "Mahal-Sibal",
+      "category": "Food & Dining",
+      "description": "productize scalable functionalities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-22T14:53:48.593524",
+      "amount": 1824.16,
+      "merchant": "Sem, Rama and Sawhney",
+      "category": "Groceries",
+      "description": "target extensible applications",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-14T14:53:48.593535",
+      "amount": 1514.36,
+      "merchant": "Hegde-Panchal",
+      "category": "Shopping",
+      "description": "iterate distributed supply-chains",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-23T14:53:48.593544",
+      "amount": 358.1,
+      "merchant": "Rout-Ahuja",
+      "category": "Food & Dining",
+      "description": "benchmark collaborative networks",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-22T14:53:48.593552",
+      "amount": 21051.81,
+      "merchant": "Soni, Bahl and Chaudry",
+      "category": "Rent",
+      "description": "deliver one-to-one interfaces",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-14T14:53:48.593563",
+      "amount": 382.61,
+      "merchant": "Choudhury, Goel and Malhotra",
+      "category": "Transportation",
+      "description": "harness value-added deliverables",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-13T14:53:48.593573",
+      "amount": 731.56,
+      "merchant": "Muni, Rama and Amble",
+      "category": "Groceries",
+      "description": "architect clicks-and-mortar web services",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-13T14:53:48.593583",
+      "amount": 202.04,
+      "merchant": "Barman, Dhillon and Prasad",
+      "category": "Transportation",
+      "description": "monetize integrated schemas",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-30T14:53:48.593592",
+      "amount": 577.02,
+      "merchant": "Chander-Om",
+      "category": "Food & Dining",
+      "description": "evolve virtual initiatives",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-04T14:53:48.593601",
+      "amount": 2263.86,
+      "merchant": "Wason, Sibal and Brahmbhatt",
+      "category": "Utilities",
+      "description": "transition synergistic e-tailers",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-24T14:53:48.593611",
+      "amount": 2336.2,
+      "merchant": "Mukhopadhyay, Srivastava and Kothari",
+      "category": "Groceries",
+      "description": "maximize transparent synergies",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-10T14:53:48.593621",
+      "amount": 428.02,
+      "merchant": "Srinivas-Sunder",
+      "category": "Groceries",
+      "description": "deliver compelling technologies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-26T14:53:48.593630",
+      "amount": 1900.3,
+      "merchant": "Srivastava Group",
+      "category": "Utilities",
+      "description": "aggregate 24/365 experiences",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-19T14:53:48.593638",
+      "amount": 2482.68,
+      "merchant": "Prashad PLC",
+      "category": "Groceries",
+      "description": "whiteboard frictionless architectures",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-11T14:53:48.593647",
+      "amount": 1679.21,
+      "merchant": "Garg-Palla",
+      "category": "Health",
+      "description": "synthesize bricks-and-clicks functionalities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-06T14:53:48.593656",
+      "amount": 215.34,
+      "merchant": "Wable, Hegde and Nadig",
+      "category": "Transportation",
+      "description": "extend plug-and-play infrastructures",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-06T14:53:48.593665",
+      "amount": 5558.49,
+      "merchant": "Badal-Ratta",
+      "category": "Shopping",
+      "description": "re-contextualize one-to-one solutions",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-16T14:53:48.593674",
+      "amount": 227.88,
+      "merchant": "Wable-Bath",
+      "category": "Transportation",
+      "description": "target open-source experiences",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-05T14:53:48.593682",
+      "amount": 688.32,
+      "merchant": "Chada, Venkataraman and Wason",
+      "category": "Transportation",
+      "description": "synergize robust architectures",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-01T14:53:48.593692",
+      "amount": 1509.1,
+      "merchant": "Bhatti Inc",
+      "category": "Entertainment",
+      "description": "extend user-centric deliverables",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-10T14:53:48.593700",
+      "amount": 391.27,
+      "merchant": "Contractor-Dara",
+      "category": "Transportation",
+      "description": "exploit seamless relationships",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-21T14:53:48.593709",
+      "amount": 402.98,
+      "merchant": "Rau, Bhalla and Rastogi",
+      "category": "Transportation",
+      "description": "architect wireless web-readiness",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-04T14:53:48.593718",
+      "amount": 1921.86,
+      "merchant": "Saran, Shanker and Balakrishnan",
+      "category": "Groceries",
+      "description": "matrix real-time channels",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-19T14:53:48.593728",
+      "amount": 19986.82,
+      "merchant": "Mannan, Deshmukh and Saini",
+      "category": "Rent",
+      "description": "transform bricks-and-clicks paradigms",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-25T14:53:48.593738",
+      "amount": 642.13,
+      "merchant": "Nayak-Doctor",
+      "category": "Transportation",
+      "description": "facilitate cutting-edge communities",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-10T14:53:48.593747",
+      "amount": 1305.17,
+      "merchant": "Mittal-Deep",
+      "category": "Food & Dining",
+      "description": "matrix compelling e-tailers",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-16T14:53:48.593756",
+      "amount": 2094.21,
+      "merchant": "Dutt and Sons",
+      "category": "Utilities",
+      "description": "aggregate global initiatives",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-12T14:53:48.593764",
+      "amount": 1408.35,
+      "merchant": "Tripathi-Oommen",
+      "category": "Food & Dining",
+      "description": "re-contextualize 24/7 schemas",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-13T14:53:48.593773",
+      "amount": 327.94,
+      "merchant": "Seth, Thakkar and Dutta",
+      "category": "Transportation",
+      "description": "unleash world-class systems",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-16T14:53:48.593782",
+      "amount": 1651.51,
+      "merchant": "Muni Inc",
+      "category": "Food & Dining",
+      "description": "enhance back-end platforms",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-04T14:53:48.593791",
+      "amount": 664.64,
+      "merchant": "Magar-Brahmbhatt",
+      "category": "Transportation",
+      "description": "deliver bricks-and-clicks networks",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-10T14:53:48.593800",
+      "amount": 5190.58,
+      "merchant": "Wable-Date",
+      "category": "Shopping",
+      "description": "leverage cross-media communities",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-03T14:53:48.593808",
+      "amount": 1493.51,
+      "merchant": "Varghese PLC",
+      "category": "Utilities",
+      "description": "cultivate efficient models",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-11T14:53:48.593816",
+      "amount": 102188.2,
+      "merchant": "WIRE TRANSFER OUT",
+      "category": "Shopping",
+      "description": "iterate granular channels",
+      "channel": "UPI",
+      "is_anomaly": true
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-08T14:53:48.593826",
+      "amount": 2021.99,
+      "merchant": "More LLC",
+      "category": "Health",
+      "description": "transform open-source relationships",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-26T14:53:48.593835",
+      "amount": 1611.05,
+      "merchant": "Bhavsar, Ramesh and Sastry",
+      "category": "Food & Dining",
+      "description": "monetize bleeding-edge models",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-13T14:53:48.593845",
+      "amount": 1819.55,
+      "merchant": "Hayre-Saha",
+      "category": "Health",
+      "description": "deliver intuitive architectures",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-11T14:53:48.593854",
+      "amount": 544.34,
+      "merchant": "Saraf, Nagar and Devan",
+      "category": "Entertainment",
+      "description": "streamline efficient experiences",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-25T14:53:48.593863",
+      "amount": 1599.02,
+      "merchant": "Bahri-Magar",
+      "category": "Food & Dining",
+      "description": "synthesize distributed e-commerce",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-23T14:53:48.593872",
+      "amount": 832.67,
+      "merchant": "Chaudhari-Rajan",
+      "category": "Food & Dining",
+      "description": "productize e-business e-services",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-02T14:53:48.593881",
+      "amount": 72.51,
+      "merchant": "Shere, Tailor and Bhagat",
+      "category": "Transportation",
+      "description": "utilize B2C info-mediaries",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-23T14:53:48.593890",
+      "amount": 1325.08,
+      "merchant": "Soman-Dayal",
+      "category": "Entertainment",
+      "description": "e-enable mission-critical e-services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-04T14:53:48.593898",
+      "amount": 358.93,
+      "merchant": "Grover-Tak",
+      "category": "Transportation",
+      "description": "orchestrate distributed e-markets",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-31T14:53:48.593907",
+      "amount": 485.81,
+      "merchant": "Malhotra, Shanker and Minhas",
+      "category": "Groceries",
+      "description": "brand sticky infrastructures",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-11T14:53:48.593917",
+      "amount": 901.25,
+      "merchant": "Mannan, Sheth and Zachariah",
+      "category": "Groceries",
+      "description": "whiteboard granular portals",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-23T14:53:48.593926",
+      "amount": 2399.88,
+      "merchant": "Tak, Pall and Patla",
+      "category": "Entertainment",
+      "description": "deliver out-of-the-box web-readiness",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-23T14:53:48.593936",
+      "amount": 5273.29,
+      "merchant": "CRYPTO EXCHANGE XY",
+      "category": "Groceries",
+      "description": "reinvent vertical platforms",
+      "channel": "netbanking",
+      "is_anomaly": true
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-01T14:53:48.593944",
+      "amount": 296.91,
+      "merchant": "Patil-Kata",
+      "category": "Transportation",
+      "description": "visualize killer architectures",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-31T14:53:48.593953",
+      "amount": 1500.49,
+      "merchant": "Mahajan-Sami",
+      "category": "Shopping",
+      "description": "repurpose cross-platform solutions",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-09T14:53:48.593961",
+      "amount": 715.86,
+      "merchant": "Deep, Sant and Swamy",
+      "category": "Utilities",
+      "description": "synthesize cutting-edge action-items",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-11T14:53:48.593971",
+      "amount": 1347.46,
+      "merchant": "Krishna LLC",
+      "category": "Groceries",
+      "description": "streamline bleeding-edge solutions",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-25T14:53:48.593979",
+      "amount": 524.12,
+      "merchant": "Sarin-Kurian",
+      "category": "Food & Dining",
+      "description": "syndicate visionary web services",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-10T14:53:48.593987",
+      "amount": 5355.97,
+      "merchant": "Lanka-Viswanathan",
+      "category": "Shopping",
+      "description": "optimize turn-key e-tailers",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-11T14:53:48.593996",
+      "amount": 845.89,
+      "merchant": "Lal Group",
+      "category": "Food & Dining",
+      "description": "facilitate global users",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-24T14:53:48.594004",
+      "amount": 785.15,
+      "merchant": "Nath, Mital and Goyal",
+      "category": "Transportation",
+      "description": "expedite user-centric e-markets",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-23T14:53:48.594014",
+      "amount": 1822.48,
+      "merchant": "Ramakrishnan, Chhabra and Aurora",
+      "category": "Food & Dining",
+      "description": "engineer ubiquitous markets",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-14T14:53:48.594024",
+      "amount": 1287.71,
+      "merchant": "Grewal-Vyas",
+      "category": "Food & Dining",
+      "description": "e-enable next-generation communities",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-02T14:53:48.594032",
+      "amount": 657.85,
+      "merchant": "Saraf, Sathe and Nigam",
+      "category": "Transportation",
+      "description": "reinvent robust action-items",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-19T14:53:48.594042",
+      "amount": 678.78,
+      "merchant": "Chakraborty-Khatri",
+      "category": "Transportation",
+      "description": "synthesize proactive methodologies",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-21T14:53:48.594050",
+      "amount": 2148.64,
+      "merchant": "Mistry PLC",
+      "category": "Groceries",
+      "description": "visualize bleeding-edge synergies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-27T14:53:48.594059",
+      "amount": 1892.98,
+      "merchant": "Luthra Group",
+      "category": "Food & Dining",
+      "description": "benchmark synergistic web services",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-20T14:53:48.594067",
+      "amount": 374.26,
+      "merchant": "Konda-Pall",
+      "category": "Food & Dining",
+      "description": "cultivate leading-edge web-readiness",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-04T14:53:48.594076",
+      "amount": 378.93,
+      "merchant": "Raman, Kota and Bakshi",
+      "category": "Food & Dining",
+      "description": "utilize sticky users",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-06T14:53:48.594085",
+      "amount": 976.06,
+      "merchant": "Bhakta PLC",
+      "category": "Groceries",
+      "description": "productize distributed action-items",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-14T14:53:48.594100",
+      "amount": 1233.9,
+      "merchant": "Dave-Prashad",
+      "category": "Health",
+      "description": "streamline out-of-the-box web-readiness",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-03T14:53:48.594109",
+      "amount": 6549.05,
+      "merchant": "Swamy-Master",
+      "category": "Shopping",
+      "description": "grow ubiquitous users",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-04-01T14:53:48.594118",
+      "amount": 395.46,
+      "merchant": "Ramanathan-Joshi",
+      "category": "Transportation",
+      "description": "embrace value-added bandwidth",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-18T14:53:48.594126",
+      "amount": 1539.1,
+      "merchant": "Shankar Ltd",
+      "category": "Food & Dining",
+      "description": "disintermediate best-of-breed schemas",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-22T14:53:48.594135",
+      "amount": 499.53,
+      "merchant": "Kade Group",
+      "category": "Food & Dining",
+      "description": "brand B2B info-mediaries",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-10T14:53:48.594143",
+      "amount": 1527.2,
+      "merchant": "Ratti, Ganguly and Zachariah",
+      "category": "Groceries",
+      "description": "incubate viral synergies",
+      "channel": "card",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-10T14:53:48.594153",
+      "amount": 423.6,
+      "merchant": "Das Ltd",
+      "category": "Groceries",
+      "description": "cultivate mission-critical metrics",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-01-16T14:53:48.594161",
+      "amount": 779.35,
+      "merchant": "Sant Inc",
+      "category": "Food & Dining",
+      "description": "drive distributed mindshare",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-24T14:53:48.594170",
+      "amount": 1397.06,
+      "merchant": "Natarajan-Pradhan",
+      "category": "Food & Dining",
+      "description": "empower mission-critical functionalities",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-18T14:53:48.594178",
+      "amount": 350.15,
+      "merchant": "Ram-Sami",
+      "category": "Transportation",
+      "description": "deploy best-of-breed communities",
+      "channel": "netbanking",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-02-16T14:53:48.594187",
+      "amount": 1469.29,
+      "merchant": "Patla-Ratti",
+      "category": "Entertainment",
+      "description": "engage one-to-one functionalities",
+      "channel": "UPI",
+      "is_anomaly": false
+    },
+    {
+      "user_id": "alex_demo",
+      "date": "2026-03-22T14:53:48.594196",
+      "amount": 1024.81,
+      "merchant": "Mane, Gulati and Vala",
+      "category": "Shopping",
+      "description": "orchestrate virtual metrics",
+      "channel": "UPI",
+      "is_anomaly": false
+    }
+  ]
+}
