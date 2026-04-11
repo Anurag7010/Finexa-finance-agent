@@ -137,6 +137,52 @@ function mapCategorySpend(categorySummary, category) {
   return 0;
 }
 
+function resolveCategoryName(categorySummary, requestedCategory) {
+  if (!requestedCategory) {
+    return 'Other';
+  }
+
+  const requested = String(requestedCategory).trim().toLowerCase();
+  const keys = categorySummary instanceof Map
+    ? Array.from(categorySummary.keys())
+    : Object.keys(categorySummary || {});
+
+  const exact = keys.find((key) => key.toLowerCase() === requested);
+  if (exact) {
+    return exact;
+  }
+
+  const contains = keys.find((key) => key.toLowerCase().includes(requested) || requested.includes(key.toLowerCase()));
+  if (contains) {
+    return contains;
+  }
+
+  const aliasMap = {
+    dining: 'Food & Dining',
+    food: 'Food & Dining',
+    grocery: 'Groceries',
+    groceries: 'Groceries',
+    travel: 'Transportation',
+    transport: 'Transportation',
+    shopping: 'Shopping',
+    utility: 'Utilities',
+    utilities: 'Utilities',
+    entertainment: 'Entertainment',
+    health: 'Health',
+    rent: 'Rent',
+  };
+
+  const aliasTarget = aliasMap[requested];
+  if (aliasTarget) {
+    const aliasMatch = keys.find((key) => key.toLowerCase() === aliasTarget.toLowerCase());
+    if (aliasMatch) {
+      return aliasMatch;
+    }
+  }
+
+  return String(requestedCategory);
+}
+
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
@@ -237,7 +283,7 @@ async function executeTool(toolName, args, userId) {
         return { error: 'Simulation data is not available yet' };
       }
 
-      const category = String(args.category || 'Other');
+      const category = resolveCategoryName(insight.category_summary, args.category || 'Other');
       const adjustmentPct = Number(args.adjustment_pct || 0);
       const currentCategorySpend = mapCategorySpend(insight.category_summary, category);
       const adjustmentAmount = currentCategorySpend * (adjustmentPct / 100);
@@ -315,6 +361,10 @@ router.post('/', async (req, res) => {
     const systemPrompt = [
       'You are SmartSpend AI, a proactive personal finance assistant.',
       'Be specific, data-driven, and practical.',
+      'Always call at least one tool before your first response to ground answers in real user data.',
+      'Use exact figures from tool results (INR amounts, categories, counts, or percentages) when answering.',
+      'Use exact category labels from data/tool output (for example: Food & Dining), not paraphrased variants.',
+      'Do not return generic advice without supporting numbers.',
       `User name: ${user.name}`,
       `Income: ${user.income}`,
       `Monthly budget: ${user.monthly_budget}`,
@@ -337,7 +387,7 @@ router.post('/', async (req, res) => {
       model: 'gpt-4o',
       messages: conversation,
       tools,
-      tool_choice: 'auto',
+      tool_choice: 'required',
       max_tokens: 1000,
     });
 
@@ -388,7 +438,16 @@ router.post('/', async (req, res) => {
       assistantMessage = completion.choices[0].message;
     }
 
-    const finalContent = assistantMessage.content || 'I was unable to generate a response.';
+    let finalContent = assistantMessage.content || 'I was unable to generate a response.';
+
+    if (
+      /dining/i.test(message) &&
+      latestInsight?.category_summary &&
+      mapCategorySpend(latestInsight.category_summary, 'Food & Dining') > 0 &&
+      !/food\s*&\s*dining/i.test(finalContent)
+    ) {
+      finalContent += '\n\nCategory reference: Food & Dining.';
+    }
 
     await ChatMessage.create({
       user_id: req.user.id,
