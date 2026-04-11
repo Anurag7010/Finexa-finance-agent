@@ -64,7 +64,7 @@ export default function ScenarioSimulator() {
   const { insight } = useStore();
   const [open, setOpen] = useState(false);
   const [category, setCategory] = useState("");
-  const [pct, setPct] = useState(30);
+  const [pct, setPct] = useState(-30);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<SimulationResult | null>(null);
 
@@ -79,7 +79,6 @@ export default function ScenarioSimulator() {
     setLoading(true);
     setResult(null);
     try {
-      let data: SimulationResult;
       try {
         await sendChatMessage(
           `What would happen if I cut my ${selectedCategory} budget by ${pct}%?`,
@@ -87,7 +86,7 @@ export default function ScenarioSimulator() {
       } catch {
         // Ignore chat errors and still provide an on-device what-if estimate.
       }
-      data = computeMockResult(
+      const data = computeMockResult(
         selectedCategory,
         pct,
         insight as Parameters<typeof computeMockResult>[2],
@@ -99,46 +98,46 @@ export default function ScenarioSimulator() {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="overflow-hidden rounded-2xl border border-[var(--fingaurd-border)] bg-[var(--fingaurd-surface)] shadow-sm">
       {/* Collapsible header */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-5 py-4 hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center justify-between px-5 py-4 transition-colors hover:bg-[rgba(255,255,255,0.04)]"
       >
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
-            <TrendingDown className="w-4 h-4 text-purple-600" />
+          <div className="w-8 h-8 rounded-lg border border-[rgba(13,158,138,0.35)] bg-[rgba(13,158,138,0.14)] flex items-center justify-center">
+            <TrendingDown className="w-4 h-4 text-[var(--fingaurd-brand)]" />
           </div>
           <div className="text-left">
-            <h3 className="text-sm font-bold text-gray-900">
+            <h3 className="text-sm font-bold text-[var(--fingaurd-text)]">
               What-if Simulator
             </h3>
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-[var(--fingaurd-text-muted)]">
               Explore how budget cuts change your finances
             </p>
           </div>
         </div>
         {open ? (
-          <ChevronUp className="w-4 h-4 text-gray-400" />
+          <ChevronUp className="w-4 h-4 text-[var(--fingaurd-text-muted)]" />
         ) : (
-          <ChevronDown className="w-4 h-4 text-gray-400" />
+          <ChevronDown className="w-4 h-4 text-[var(--fingaurd-text-muted)]" />
         )}
       </button>
 
       {/* Expanded content */}
       {open && (
-        <div className="border-t border-gray-100 px-5 py-4 space-y-5">
+        <div className="space-y-5 border-t border-white/10 px-5 py-4">
           {/* Controls */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Category dropdown */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+              <label className="text-xs font-semibold uppercase tracking-wide text-[var(--fingaurd-text-muted)]">
                 Category
               </label>
               <select
                 value={selectedCategory}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-400 transition-all"
+                className="w-full rounded-lg border border-white/15 bg-[rgba(255,255,255,0.03)] px-3 py-2 text-sm text-[var(--fingaurd-text)] focus:border-[var(--fingaurd-brand)] focus:outline-none focus:ring-2 focus:ring-[rgba(13,158,138,0.25)] transition-all"
               >
                 {categories.map((cat) => (
                   <option key={cat} value={cat}>
@@ -150,21 +149,24 @@ export default function ScenarioSimulator() {
 
             {/* Percentage slider */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
-                Cut by <span className="text-purple-600 font-bold">{pct}%</span>
+              <label className="text-xs font-semibold uppercase tracking-wide text-[var(--fingaurd-text-muted)]">
+                Budget adjustment{" "}
+                <span className="font-bold text-[var(--fingaurd-brand)]">
+                  {pct}%
+                </span>
               </label>
               <input
                 type="range"
-                min={5}
-                max={50}
+                min={-50}
+                max={-5}
                 step={5}
                 value={pct}
                 onChange={(e) => setPct(Number(e.target.value))}
-                className="w-full accent-purple-500"
+                className="w-full accent-[var(--fingaurd-brand)]"
               />
-              <div className="flex justify-between text-[10px] text-gray-300">
-                <span>5%</span>
-                <span>50%</span>
+              <div className="flex justify-between text-[10px] text-[var(--fingaurd-text-muted)]">
+                <span>-50%</span>
+                <span>-5%</span>
               </div>
             </div>
           </div>
@@ -172,7 +174,7 @@ export default function ScenarioSimulator() {
           <Button
             onClick={handleRun}
             disabled={loading}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold text-sm h-10 rounded-lg flex items-center gap-2 justify-center"
+            className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[var(--fingaurd-brand)] text-sm font-semibold text-white hover:bg-[var(--fingaurd-brand-strong)]"
           >
             {loading ? (
               <>
@@ -189,10 +191,10 @@ export default function ScenarioSimulator() {
 
           {/* Results card */}
           {result && (
-            <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl border border-purple-100 p-4 space-y-4">
+            <div className="space-y-4 rounded-xl border border-white/12 bg-[rgba(7,13,15,0.42)] p-4">
               <div className="flex items-center gap-2">
-                <DollarSign className="w-4 h-4 text-purple-600" />
-                <h4 className="text-sm font-bold text-purple-900">
+                <DollarSign className="w-4 h-4 text-[var(--fingaurd-brand)]" />
+                <h4 className="text-sm font-bold text-[var(--fingaurd-text)]">
                   If you cut {result.category} by {result.cutPct}%
                 </h4>
               </div>
@@ -200,19 +202,19 @@ export default function ScenarioSimulator() {
               {/* Before / After */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-white rounded-lg p-3 border border-red-100">
-                  <p className="text-[10px] font-semibold uppercase text-red-400 mb-1">
+                  <p className="text-[10px] font-semibold uppercase text-[var(--fingaurd-coral)] mb-1">
                     Current
                   </p>
-                  <p className="text-sm font-bold text-gray-900">
+                  <p className="text-sm font-bold text-[#111b1f]">
                     {formatCurrency(result.currentMonthlySpend)}
                   </p>
                   <p className="text-[10px] text-gray-400">monthly spend</p>
                 </div>
                 <div className="bg-white rounded-lg p-3 border border-green-100">
-                  <p className="text-[10px] font-semibold uppercase text-green-500 mb-1">
+                  <p className="text-[10px] font-semibold uppercase text-[var(--fingaurd-success)] mb-1">
                     Projected
                   </p>
-                  <p className="text-sm font-bold text-gray-900">
+                  <p className="text-sm font-bold text-[#111b1f]">
                     {formatCurrency(result.newProjectedSpend)}
                   </p>
                   <p className="text-[10px] text-gray-400">monthly spend</p>
@@ -223,19 +225,19 @@ export default function ScenarioSimulator() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-green-100">
                   <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                    <TrendingDown className="w-3.5 h-3.5 text-green-500" />
+                    <TrendingDown className="w-3.5 h-3.5 text-[var(--fingaurd-success)]" />
                     Monthly saving
                   </div>
-                  <span className="font-bold text-green-600">
+                  <span className="font-bold text-[var(--fingaurd-success)]">
                     {formatCurrency(result.monthlySaving)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-green-100">
                   <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                    <TrendingDown className="w-3.5 h-3.5 text-green-500" />
+                    <TrendingDown className="w-3.5 h-3.5 text-[var(--fingaurd-success)]" />
                     Annual saving
                   </div>
-                  <span className="font-bold text-green-600">
+                  <span className="font-bold text-[var(--fingaurd-success)]">
                     {formatCurrency(result.annualSaving)}
                   </span>
                 </div>
@@ -257,7 +259,7 @@ export default function ScenarioSimulator() {
                     className={cn(
                       "font-bold",
                       result.healthScoreChange > 0
-                        ? "text-green-600"
+                        ? "text-[var(--fingaurd-success)]"
                         : "text-gray-600",
                     )}
                   >

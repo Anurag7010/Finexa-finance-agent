@@ -23,19 +23,19 @@ function timeAgo(dateStr: string): string {
 
 const severityConfig = {
   high: {
-    borderClass: "border-l-4 border-red-500",
-    bgClass: "bg-red-50",
-    dotClass: "bg-red-500",
+    borderClass: "border-l-[3px] border-[var(--fingaurd-coral)]",
+    bgClass: "bg-[rgba(227,107,99,0.13)]",
+    dotClass: "bg-[var(--fingaurd-coral)]",
   },
   medium: {
-    borderClass: "border-l-4 border-amber-500",
-    bgClass: "bg-amber-50",
-    dotClass: "bg-amber-500",
+    borderClass: "border-l-[3px] border-[var(--fingaurd-amber)]",
+    bgClass: "bg-[rgba(207,164,74,0.13)]",
+    dotClass: "bg-[var(--fingaurd-amber)]",
   },
   low: {
-    borderClass: "border-l-4 border-blue-500",
-    bgClass: "bg-blue-50",
-    dotClass: "bg-blue-500",
+    borderClass: "border-l-[3px] border-[var(--fingaurd-brand)]",
+    bgClass: "bg-[rgba(13,158,138,0.12)]",
+    dotClass: "bg-[var(--fingaurd-brand)]",
   },
 } as const;
 
@@ -86,12 +86,14 @@ export default function AlertsPanel({ compact = false }: AlertsPanelProps) {
   if (sorted.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center space-y-3">
-        <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center">
-          <BellOff className="w-7 h-7 text-green-500" />
+        <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[rgba(13,158,138,0.34)] bg-[rgba(13,158,138,0.14)]">
+          <BellOff className="h-7 w-7 text-[var(--fingaurd-brand)]" />
         </div>
-        <p className="text-base font-medium text-gray-700">No alerts</p>
-        <p className="text-sm text-gray-400">
-          Your finances look quiet. Keep it up.
+        <p className="text-base font-medium text-[var(--fingaurd-text)]">
+          No alerts
+        </p>
+        <p className="text-sm text-[var(--fingaurd-text-muted)]">
+          Your finances are looking healthy.
         </p>
       </div>
     );
@@ -99,12 +101,14 @@ export default function AlertsPanel({ compact = false }: AlertsPanelProps) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+      <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
         <div className="flex items-center gap-2">
-          <Bell className="w-4 h-4 text-gray-500" />
-          <span className="text-sm font-semibold text-gray-700">Alerts</span>
+          <Bell className="h-4 w-4 text-[var(--fingaurd-text-muted)]" />
+          <span className="text-sm font-semibold text-[var(--fingaurd-text)]">
+            Alerts
+          </span>
           {unreadCount > 0 && (
-            <Badge className="px-2 py-0 text-xs bg-red-500 text-white rounded-full">
+            <Badge className="rounded-full bg-[var(--fingaurd-coral)] px-2 py-0 text-xs text-white">
               {unreadCount}
             </Badge>
           )}
@@ -114,7 +118,7 @@ export default function AlertsPanel({ compact = false }: AlertsPanelProps) {
             variant="ghost"
             size="sm"
             onClick={handleMarkAllRead}
-            className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1 h-7 px-2"
+            className="flex h-7 items-center gap-1 px-2 text-xs text-[var(--fingaurd-brand)] hover:bg-[rgba(13,158,138,0.12)] hover:text-[var(--fingaurd-brand)]"
           >
             <CheckCheck className="w-3.5 h-3.5" />
             Mark all read
@@ -124,7 +128,7 @@ export default function AlertsPanel({ compact = false }: AlertsPanelProps) {
 
       <div
         className={cn(
-          "divide-y divide-gray-100",
+          "divide-y divide-white/10",
           compact && "max-h-72 overflow-y-auto",
         )}
       >
@@ -139,8 +143,9 @@ export default function AlertsPanel({ compact = false }: AlertsPanelProps) {
               className={cn(
                 "flex gap-3 px-4 py-3 cursor-pointer transition-all duration-200",
                 cfg.borderClass,
-                isUnread ? cfg.bgClass : "bg-white hover:bg-gray-50",
-                isUnread && "hover:brightness-95",
+                isUnread
+                  ? `${cfg.bgClass} hover:brightness-95`
+                  : "bg-[rgba(255,255,255,0.01)] hover:bg-[rgba(255,255,255,0.05)]",
               )}
             >
               <div className="flex-shrink-0 mt-1.5">
@@ -157,7 +162,7 @@ export default function AlertsPanel({ compact = false }: AlertsPanelProps) {
                   <div className="flex items-center gap-1.5">
                     <span
                       className={cn(
-                        "text-gray-500",
+                        "text-[var(--fingaurd-text-muted)]",
                         cfg.dotClass.replace("bg-", "text-"),
                       )}
                     >
@@ -167,27 +172,27 @@ export default function AlertsPanel({ compact = false }: AlertsPanelProps) {
                       className={cn(
                         "text-sm leading-tight",
                         isUnread
-                          ? "font-bold text-gray-900"
-                          : "font-semibold text-gray-600",
+                          ? "font-bold text-[var(--fingaurd-text)]"
+                          : "font-semibold text-[var(--fingaurd-text-muted)]",
                       )}
                     >
                       {alert.title}
                     </p>
                   </div>
-                  <span className="flex-shrink-0 text-xs text-gray-400 whitespace-nowrap">
+                  <span className="flex-shrink-0 whitespace-nowrap text-xs text-[var(--fingaurd-text-muted)]">
                     {timeAgo(alert.triggered_at)}
                   </span>
                 </div>
-                <p className="mt-0.5 text-xs text-gray-500 leading-relaxed">
+                <p className="mt-0.5 text-xs leading-relaxed text-[var(--fingaurd-text-muted)]">
                   {alert.message}
                 </p>
                 {typeof alert.amount === "number" && (
-                  <p className="mt-1 text-xs font-medium text-gray-600">
+                  <p className="mt-1 text-xs font-medium text-[var(--fingaurd-text)]">
                     Amount: {formatCurrency(alert.amount)}
                   </p>
                 )}
                 {!alert.read && (
-                  <span className="inline-block mt-1.5 text-xs font-medium text-blue-500">
+                  <span className="mt-1.5 inline-block text-xs font-medium text-[var(--fingaurd-brand)]">
                     Click to mark as read
                   </span>
                 )}

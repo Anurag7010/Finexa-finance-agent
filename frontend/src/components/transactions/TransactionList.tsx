@@ -108,14 +108,14 @@ export default function TransactionList() {
   const displayed = transactions;
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+    <div className="overflow-hidden rounded-2xl border border-[var(--fingaurd-border)] bg-[var(--fingaurd-surface)] shadow-sm">
       {/* Filter bar */}
-      <div className="p-4 border-b border-slate-100 flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3 border-b border-white/10 p-4">
         {/* Search */}
         <div className="relative flex-1 min-w-[200px]">
           <Search
             size={14}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--fingaurd-text-muted)]"
           />
           <input
             id="txn-search"
@@ -123,7 +123,7 @@ export default function TransactionList() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search merchant or description…"
-            className="w-full border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
+            className="w-full rounded-lg border border-white/15 bg-[rgba(255,255,255,0.03)] py-2 pl-8 pr-3 text-sm text-[var(--fingaurd-text)] placeholder:text-[var(--fingaurd-text-muted)] focus:border-[var(--fingaurd-brand)] focus:outline-none focus:ring-1 focus:ring-[var(--fingaurd-brand)]"
           />
         </div>
 
@@ -133,7 +133,7 @@ export default function TransactionList() {
             id="txn-category-filter"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="appearance-none border border-slate-200 rounded-lg px-3 py-2 pr-8 text-sm text-slate-700 focus:outline-none focus:border-indigo-400 bg-white"
+            className="appearance-none rounded-lg border border-white/15 bg-[rgba(255,255,255,0.03)] px-3 py-2 pr-8 text-sm text-[var(--fingaurd-text)] focus:border-[var(--fingaurd-brand)] focus:outline-none"
           >
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
@@ -143,7 +143,7 @@ export default function TransactionList() {
           </select>
           <ChevronDown
             size={13}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+            className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[var(--fingaurd-text-muted)]"
           />
         </div>
 
@@ -152,12 +152,21 @@ export default function TransactionList() {
           value={tab}
           onValueChange={(v) => setTab(v as "all" | "anomalies")}
         >
-          <TabsList className="h-9">
-            <TabsTrigger value="all" className="text-xs px-3">
+          <TabsList className="h-9 border border-white/10 bg-[rgba(255,255,255,0.03)]">
+            <TabsTrigger
+              value="all"
+              className="px-3 text-xs data-[state=active]:bg-[var(--fingaurd-brand)] data-[state=active]:text-white"
+            >
               All ({total})
             </TabsTrigger>
-            <TabsTrigger value="anomalies" className="text-xs px-3 gap-1.5">
-              <AlertTriangle size={11} className="text-red-500" />
+            <TabsTrigger
+              value="anomalies"
+              className="gap-1.5 px-3 text-xs data-[state=active]:bg-[var(--fingaurd-coral)] data-[state=active]:text-white"
+            >
+              <AlertTriangle
+                size={11}
+                className="text-[var(--fingaurd-coral)]"
+              />
               Anomalies ({anomalyTotal})
             </TabsTrigger>
           </TabsList>
@@ -173,13 +182,13 @@ export default function TransactionList() {
             ))}
           </div>
         ) : error ? (
-          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-6 text-center">
-            <AlertCircle className="mx-auto mb-2 h-5 w-5 text-red-600" />
-            <p className="text-sm font-medium text-red-700">{error}</p>
+          <div className="rounded-xl border border-[rgba(227,107,99,0.45)] bg-[rgba(227,107,99,0.12)] px-4 py-6 text-center">
+            <AlertCircle className="mx-auto mb-2 h-5 w-5 text-[var(--fingaurd-coral)]" />
+            <p className="text-sm font-medium text-[#ffbeb8]">{error}</p>
             <Button
               variant="outline"
               size="sm"
-              className="mt-3"
+              className="mt-3 border-white/15 bg-[rgba(255,255,255,0.04)] text-[var(--fingaurd-text)] hover:bg-[rgba(255,255,255,0.1)]"
               onClick={() => fetchTransactions(true)}
             >
               Retry
@@ -188,16 +197,16 @@ export default function TransactionList() {
         ) : displayed.length === 0 ? (
           <div className="flex flex-col items-center py-12 text-center">
             {tab === "anomalies" ? (
-              <ShieldCheck className="mb-3 h-8 w-8 text-emerald-500" />
+              <ShieldCheck className="mb-3 h-8 w-8 text-[var(--fingaurd-success)]" />
             ) : (
-              <Receipt className="mb-3 h-8 w-8 text-slate-400" />
+              <Receipt className="mb-3 h-8 w-8 text-[var(--fingaurd-text-muted)]" />
             )}
-            <p className="text-sm font-semibold text-slate-700">
+            <p className="text-sm font-semibold text-[var(--fingaurd-text)]">
               {tab === "anomalies"
                 ? "No anomalies detected"
                 : "No transactions found"}
             </p>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs text-[var(--fingaurd-text-muted)]">
               {tab === "anomalies"
                 ? "Your recent transactions all look normal"
                 : "Try adjusting your filters or date range"}
@@ -220,7 +229,7 @@ export default function TransactionList() {
                     fetchTransactions(false, skip);
                   }}
                   disabled={loadingMore}
-                  className="gap-2 text-xs"
+                  className="gap-2 border-white/15 bg-[rgba(255,255,255,0.03)] text-xs text-[var(--fingaurd-text)] hover:bg-[rgba(255,255,255,0.08)]"
                 >
                   {loadingMore ? (
                     <Loader2 size={12} className="animate-spin" />

@@ -18,7 +18,7 @@ interface StatCardProps {
   label: string;
   value: string;
   icon: React.ElementType;
-  iconBg: string;
+  iconWrapClass: string;
   iconColor: string;
   trend?: "up" | "down" | "neutral";
   trendLabel?: string;
@@ -29,7 +29,7 @@ function StatCard({
   label,
   value,
   icon: Icon,
-  iconBg,
+  iconWrapClass,
   iconColor,
   trend,
   trendLabel,
@@ -37,22 +37,24 @@ function StatCard({
 }: StatCardProps) {
   return (
     <div
-      className={`bg-white rounded-2xl border shadow-sm p-5 flex flex-col gap-3 ${
-        highlight ? "border-red-200 bg-red-50/30" : "border-slate-100"
+      className={`rounded-2xl border p-5 flex flex-col gap-3 bg-[var(--fingaurd-surface)] ${
+        highlight
+          ? "border-[rgba(227,107,99,0.35)] bg-[rgba(227,107,99,0.08)]"
+          : "border-[var(--fingaurd-border)]"
       }`}
     >
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--fingaurd-text-muted)]">
           {label}
         </p>
         <div
-          className={`w-9 h-9 rounded-xl flex items-center justify-center ${iconBg}`}
+          className={`w-9 h-9 rounded-xl flex items-center justify-center border ${iconWrapClass}`}
         >
           <Icon size={16} className={iconColor} />
         </div>
       </div>
       <p
-        className={`text-2xl font-extrabold tracking-tight ${highlight ? "text-red-600" : "text-slate-800"}`}
+        className={`text-2xl font-extrabold tracking-tight ${highlight ? "text-[var(--fingaurd-coral)]" : "text-[var(--fingaurd-text)]"}`}
       >
         {value}
       </p>
@@ -60,10 +62,10 @@ function StatCard({
         <div
           className={`flex items-center gap-1 text-xs font-medium ${
             trend === "up"
-              ? "text-red-500"
+              ? "text-[var(--fingaurd-coral)]"
               : trend === "down"
-                ? "text-emerald-500"
-                : "text-slate-500"
+                ? "text-[var(--fingaurd-success)]"
+                : "text-[var(--fingaurd-text-muted)]"
           }`}
         >
           {trend === "up" ? (
@@ -86,13 +88,13 @@ export default function StatsRow({ user, insight }: Props) {
   ).toFixed(1);
 
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
       <StatCard
         label="Monthly Income"
         value={formatCurrency(user.income)}
         icon={DollarSign}
-        iconBg="bg-blue-50"
-        iconColor="text-blue-600"
+        iconWrapClass="border-[rgba(13,158,138,0.35)] bg-[rgba(13,158,138,0.14)]"
+        iconColor="text-[var(--fingaurd-brand)]"
         trend="neutral"
         trendLabel="Gross monthly salary"
       />
@@ -100,8 +102,8 @@ export default function StatsRow({ user, insight }: Props) {
         label="Monthly Budget"
         value={formatCurrency(insight.monthly_budget)}
         icon={Target}
-        iconBg="bg-indigo-50"
-        iconColor="text-indigo-600"
+        iconWrapClass="border-[rgba(125,183,207,0.35)] bg-[rgba(125,183,207,0.14)]"
+        iconColor="text-[#7db7cf]"
         trend="neutral"
         trendLabel={`${Object.keys(user.category_budgets).length} categories`}
       />
@@ -109,18 +111,26 @@ export default function StatsRow({ user, insight }: Props) {
         label="Spent This Month"
         value={formatCurrency(insight.monthly_spend)}
         icon={Wallet}
-        iconBg="bg-amber-50"
-        iconColor="text-amber-600"
+        iconWrapClass="border-[rgba(207,164,74,0.35)] bg-[rgba(207,164,74,0.14)]"
+        iconColor="text-[var(--fingaurd-amber)]"
         trend="up"
         trendLabel={`${spentPct}% of budget used`}
         highlight={Number(spentPct) >= 90}
       />
       <StatCard
         label="Remaining Budget"
-        value={formatCurrency(Math.max(0, remaining))}
+        value={formatCurrency(remaining)}
         icon={PiggyBank}
-        iconBg={remaining < 5000 ? "bg-red-50" : "bg-emerald-50"}
-        iconColor={remaining < 5000 ? "text-red-600" : "text-emerald-600"}
+        iconWrapClass={
+          remaining < 5000
+            ? "border-[rgba(227,107,99,0.38)] bg-[rgba(227,107,99,0.14)]"
+            : "border-[rgba(67,181,129,0.34)] bg-[rgba(67,181,129,0.14)]"
+        }
+        iconColor={
+          remaining < 5000
+            ? "text-[var(--fingaurd-coral)]"
+            : "text-[var(--fingaurd-success)]"
+        }
         trend={remaining < 5000 ? "up" : "down"}
         trendLabel={
           remaining < 5000
