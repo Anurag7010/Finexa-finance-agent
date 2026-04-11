@@ -1,0 +1,620 @@
+const express = require('express');
+const OpenAI = require('openai');
+const mongoose = require('mongoose');
+const User = require('../models/User');
+const Transaction = require('../models/Transaction');
+const Insight = require('../models/Insight');
+const ChatMessage = require('../models/ChatMessage');
+const aiService = require('../services/aiService');
+const authMiddleware = require('../middleware/auth');
+
+const router = express.Router();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+router.use(authMiddleware);
+
+const tools = [
+  {
+    type: 'function',
+    function: {
+      name: 'get_spending_summary',
+      description: 'Get spending summary grouped by category for a selected time period.',
+      parameters: {
+        type: 'object',
+        properties: {
+          period: {
+            type: 'string',
+            enum: ['this_month', 'last_month', 'last_30_days', 'last_90_days'],
+          },
+        },
+        required: ['period'],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_balance_forecast',
+      description: 'Get projected balance forecast for the next N days.',
+      parameters: {
+        type: 'object',
+        properties: {
+          days: {
+            type: 'number',
+            minimum: 1,
+            maximum: 30,
+          },
+        },
+        required: ['days'],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_risk_score',
+      description: 'Get latest risk score and key risk indicators.',
+      parameters: {
+        type: 'object',
+        properties: {},
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_anomalies',
+      description: 'Get the latest unusual transactions flagged as anomalies.',
+      parameters: {
+        type: 'object',
+        properties: {},
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'simulate_scenario',
+      description: 'Simulate the impact of increasing or decreasing spending in a category.',
+      parameters: {
+        type: 'object',
+        properties: {
+          category: {
+            type: 'string',
+          },
+          adjustment_pct: {
+            type: 'number',
+          },
+        },
+        required: ['category', 'adjustment_pct'],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_monthly_comparison',
+      description: "Compare this month's spending vs last month by category. Use when user asks about trends, changes, or 'compared to last month'.",
+      parameters: {
+        type: 'object',
+        properties: {},
+        required: [],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_top_merchants',
+      description: 'Get the top merchants by spend this month. Use when user asks where their money is going at a merchant level.',
+      parameters: {
+        type: 'object',
+        properties: {
+          limit: { type: 'number', description: 'Number of merchants to return (default 8)' },
+        },
+        required: [],
+      },
+    },
+  },
+];
+
+function getDateRange(period) {
+  const now = new Date();
+
+  if (period === 'this_month') {
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    return { start, end: null };
+  }
+
+  if (period === 'last_month') {
+    const start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const end = new Date(now.getFullYear(), now.getMonth(), 1);
+    return { start, end };
+  }
+
+  if (period === 'last_90_days') {
+    const start = new Date();
+    start.setDate(start.getDate() - 90);
+    return { start, end: null };
+  }
+
+  const start = new Date();
+  start.setDate(start.getDate() - 30);
+  return { start, end: null };
+}
+
+function mapCategorySpend(categorySummary, category) {
+  if (!categorySummary) {
+    return 0;
+  }
+
+  if (categorySummary instanceof Map) {
+    return Number(categorySummary.get(category) || 0);
+  }
+
+  if (typeof categorySummary === 'object') {
+    return Number(categorySummary[category] || 0);
+  }
+
+  return 0;
+}
+
+function resolveCategoryName(categorySummary, requestedCategory) {
+  if (!requestedCategory) {
+    return 'Other';
+  }
+
+  const requested = String(requestedCategory).trim().toLowerCase();
+  const keys = categorySummary instanceof Map
+    ? Array.from(categorySummary.keys())
+    : Object.keys(categorySummary || {});
+
+  const exact = keys.find((key) => key.toLowerCase() === requested);
+  if (exact) {
+    return exact;
+  }
+
+  const contains = keys.find((key) => key.toLowerCase().includes(requested) || requested.includes(key.toLowerCase()));
+  if (contains) {
+    return contains;
+  }
+
+  const aliasMap = {
+    dining: 'Food & Dining',
+    food: 'Food & Dining',
+    grocery: 'Groceries',
+    groceries: 'Groceries',
+    travel: 'Transportation',
+    transport: 'Transportation',
+    shopping: 'Shopping',
+    utility: 'Utilities',
+    utilities: 'Utilities',
+    entertainment: 'Entertainment',
+    health: 'Health',
+    rent: 'Rent',
+  };
+
+  const aliasTarget = aliasMap[requested];
+  if (aliasTarget) {
+    const aliasMatch = keys.find((key) => key.toLowerCase() === aliasTarget.toLowerCase());
+    if (aliasMatch) {
+      return aliasMatch;
+    }
+  }
+
+  return String(requestedCategory);
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+async function executeTool(toolName, args, userId) {
+  const userObjectId = mongoose.Types.ObjectId.createFromHexString(String(userId));
+
+  switch (toolName) {
+    case 'get_spending_summary': {
+      const period = args.period || 'this_month';
+      const { start, end } = getDateRange(period);
+      const dateMatch = end ? { $gte: start, $lt: end } : { $gte: start };
+
+      const summary = await Transaction.aggregate([
+        {
+          $match: {
+            user_id: userObjectId,
+            date: dateMatch,
+          },
+        },
+        {
+          $group: {
+            _id: '$category',
+            amount: { $sum: '$amount' },
+            transactions: { $sum: 1 },
+          },
+        },
+        { $sort: { amount: -1 } },
+      ]);
+
+      const breakdown = summary.map((item) => ({
+        category: item._id,
+        amount: Number(item.amount || 0),
+        transactions: item.transactions,
+      }));
+
+      const total_spend = breakdown.reduce((acc, item) => acc + item.amount, 0);
+
+      return { period, total_spend, breakdown, currency: 'INR' };
+    }
+
+    case 'get_balance_forecast': {
+      const days = clamp(Number(args.days) || 30, 1, 30);
+      const insight = await Insight.findOne({ user_id: userId }).sort({ generated_at: -1 });
+
+      if (!insight) {
+        return { forecast: [], currency: 'INR' };
+      }
+
+      return {
+        days,
+        forecast: (insight.forecast || []).slice(0, days),
+        currency: 'INR',
+      };
+    }
+
+    case 'get_risk_score': {
+      const insight = await Insight.findOne({ user_id: userId }).sort({ generated_at: -1 });
+
+      if (!insight) {
+        return { error: 'No insight available yet' };
+      }
+
+      const savingsRate = Number(insight.savings_rate || 0);
+
+      return {
+        health_score: insight.health_score,
+        risk_level: insight.risk_level,
+        risk_factors: insight.risk_factors || [],
+        monthly_spend: insight.monthly_spend || 0,
+        monthly_budget: insight.monthly_budget || 0,
+        overspend_amount: insight.overspend_amount || 0,
+        savings_rate: `${(savingsRate * 100).toFixed(1)}%`,
+      };
+    }
+
+    case 'get_anomalies': {
+      const anomalies = await Transaction.find({ user_id: userId, is_anomaly: true })
+        .sort({ date: -1 })
+        .limit(10);
+
+      return {
+        count: anomalies.length,
+        anomalies: anomalies.map((tx) => ({
+          merchant: tx.merchant,
+          amount: tx.amount,
+          category: tx.category,
+          date: tx.date,
+          channel: tx.channel,
+        })),
+      };
+    }
+
+    case 'simulate_scenario': {
+      const insight = await Insight.findOne({ user_id: userId }).sort({ generated_at: -1 });
+      const user = await User.findById(userId);
+
+      if (!insight || !user) {
+        return { error: 'Simulation data is not available yet' };
+      }
+
+      const category = resolveCategoryName(insight.category_summary, args.category || 'Other');
+      const adjustmentPct = Number(args.adjustment_pct || 0);
+      const currentCategorySpend = mapCategorySpend(insight.category_summary, category);
+      const adjustmentAmount = currentCategorySpend * (adjustmentPct / 100);
+      const newCategorySpend = Math.max(currentCategorySpend + adjustmentAmount, 0);
+      const newMonthlySpend = Math.max((insight.monthly_spend || 0) + adjustmentAmount, 0);
+      const monthlySaving = (insight.monthly_spend || 0) - newMonthlySpend;
+      const annualSaving = monthlySaving * 12;
+      const newProjectedBalance = (user.income || 0) - newMonthlySpend;
+
+      const scoreDelta = clamp(Math.round((monthlySaving / Math.max(user.monthly_budget || 1, 1)) * 40), -20, 20);
+      const estimatedHealthScore = clamp((insight.health_score || 0) + scoreDelta, 0, 100);
+
+      return {
+        category,
+        adjustment_pct: adjustmentPct,
+        before: {
+          monthly_spend: insight.monthly_spend || 0,
+          category_spend: currentCategorySpend,
+          health_score: insight.health_score || 0,
+          projected_balance: (user.income || 0) - (insight.monthly_spend || 0),
+        },
+        after: {
+          monthly_spend: newMonthlySpend,
+          category_spend: newCategorySpend,
+          health_score: estimatedHealthScore,
+          projected_balance: newProjectedBalance,
+        },
+        impact: {
+          monthly_saving: monthlySaving,
+          annual_saving: annualSaving,
+          change_in_spend: adjustmentAmount,
+        },
+        currency: 'INR',
+      };
+    }
+
+    case 'get_monthly_comparison': {
+      const now = new Date();
+      const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+
+      const [thisMonth, lastMonth] = await Promise.all([
+        Transaction.aggregate([
+          { $match: { user_id: userObjectId, date: { $gte: thisMonthStart } } },
+          { $group: { _id: '$category', total: { $sum: '$amount' } } },
+        ]),
+        Transaction.aggregate([
+          { $match: { user_id: userObjectId, date: { $gte: lastMonthStart, $lte: lastMonthEnd } } },
+          { $group: { _id: '$category', total: { $sum: '$amount' } } },
+        ]),
+      ]);
+
+      const thisMap = Object.fromEntries(thisMonth.map((x) => [x._id, Math.round(x.total)]));
+      const lastMap = Object.fromEntries(lastMonth.map((x) => [x._id, Math.round(x.total)]));
+      const allCats = [...new Set([...Object.keys(thisMap), ...Object.keys(lastMap)])];
+
+      const comparison = allCats.map((cat) => ({
+        category: cat,
+        this_month: thisMap[cat] ?? 0,
+        last_month: lastMap[cat] ?? 0,
+        change: (thisMap[cat] ?? 0) - (lastMap[cat] ?? 0),
+        change_pct: lastMap[cat] ? Math.round((((thisMap[cat] ?? 0) - lastMap[cat]) / lastMap[cat]) * 100) : null,
+      })).sort((a, b) => Math.abs(b.change) - Math.abs(a.change));
+
+      return {
+        this_month_total: Math.round(Object.values(thisMap).reduce((a, b) => a + b, 0)),
+        last_month_total: Math.round(Object.values(lastMap).reduce((a, b) => a + b, 0)),
+        comparison,
+      };
+    }
+
+    case 'get_top_merchants': {
+      const now = new Date();
+      const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      const limit = Math.min(Number(args.limit) || 8, 15);
+
+      const merchants = await Transaction.aggregate([
+        { $match: { user_id: userObjectId, date: { $gte: thisMonthStart } } },
+        {
+          $group: {
+            _id: '$merchant',
+            total: { $sum: '$amount' },
+            count: { $sum: 1 },
+            category: { $first: '$category' },
+          },
+        },
+        { $sort: { total: -1 } },
+        { $limit: limit },
+      ]);
+
+      return {
+        merchants: merchants.map((m) => ({
+          merchant: m._id,
+          total: Math.round(m.total),
+          transactions: m.count,
+          category: m.category,
+        })),
+        period: 'this month',
+      };
+    }
+
+    default:
+      return { error: `Unknown tool ${toolName}` };
+  }
+}
+
+router.post('/', async (req, res) => {
+  try {
+    const { message } = req.body;
+
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({ error: 'Message is required' });
+    }
+
+    await ChatMessage.create({
+      user_id: req.user.id,
+      role: 'user',
+      content: message,
+      timestamp: new Date(),
+    });
+
+    const [rawHistory, user, latestInsight] = await Promise.all([
+      ChatMessage.find({ user_id: req.user.id })
+        .sort({ timestamp: -1 })
+        .limit(12),
+      User.findById(req.user.id).select('-password'),
+      Insight.findOne({ user_id: req.user.id }).sort({ generated_at: -1 }),
+    ]);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const conversationHistory = rawHistory
+      .reverse()
+      .map((m) => ({ role: m.role, content: m.content }))
+      .map((m) => ({
+        ...m,
+        content: m.role === 'assistant' && m.content.length > 600
+          ? `${m.content.slice(0, 600)}...`
+          : m.content,
+      }));
+
+    let financialSummary = '';
+    try {
+      const summaryRes = await aiService.getFinancialSummary({
+        user_name: user.name,
+        health_score: latestInsight?.health_score ?? 50,
+        risk_level: latestInsight?.risk_level ?? 'medium',
+        monthly_spend: latestInsight?.monthly_spend ?? 0,
+        monthly_budget: user.monthly_budget,
+        overspend_amount: latestInsight?.overspend_amount ?? 0,
+        savings_rate: latestInsight?.savings_rate ?? 0,
+        top_category: latestInsight?.top_category ?? 'Unknown',
+        risk_factors: latestInsight?.risk_factors ?? [],
+      });
+      financialSummary = summaryRes.summary;
+    } catch (e) {
+      financialSummary = `${user.name} has a health score of ${latestInsight?.health_score ?? 'N/A'}/100.`;
+    }
+
+    const systemPrompt = `You are SmartSpend AI, an expert personal finance assistant for ${user.name}.
+
+CURRENT FINANCIAL SNAPSHOT:
+${financialSummary}
+
+RAW DATA:
+- Monthly income: ₹${user.income?.toLocaleString('en-IN')}
+- Monthly budget: ₹${user.monthly_budget?.toLocaleString('en-IN')}
+- Health score: ${latestInsight?.health_score ?? 'N/A'}/100
+- Risk level: ${latestInsight?.risk_level ?? 'Unknown'}
+- This month's spend: ₹${Math.round(latestInsight?.monthly_spend ?? 0).toLocaleString('en-IN')}
+- Projected overspend: ₹${Math.round(latestInsight?.overspend_amount ?? 0).toLocaleString('en-IN')}
+- Top category: ${latestInsight?.top_category ?? 'Unknown'}
+- Savings rate: ${((latestInsight?.savings_rate ?? 0) * 100).toFixed(1)}%
+
+BEHAVIOR RULES:
+- Always call a tool before answering data questions. Never invent numbers.
+- Use ₹ for all amounts. Format large numbers with Indian comma notation (e.g. ₹1,23,456).
+- Be specific, not generic. Reference the user's actual category names and real amounts.
+- Keep responses under 200 words unless the user asks for detail.
+- If the user asks what to do, give 1-2 concrete actionable steps, not a list of 7 generic tips.
+- Sound like a knowledgeable friend who happens to be a CFP, not a bank chatbot.
+- If health score is below 60, acknowledge the situation is serious but keep the tone constructive.`;
+
+    const dataKeywords = [
+      'spend', 'spent', 'spending', 'budget', 'balance', 'forecast',
+      'risk', 'score', 'anomal', 'suspicious', 'unusual', 'category',
+      'merchant', 'this month', 'last month', 'much', 'compare', 'trend',
+      'saving', 'overspend', 'cut', 'reduce', 'simulate', 'what if', 'if i',
+    ];
+
+    const messageLower = message.toLowerCase();
+    const isDataQuestion = dataKeywords.some((kw) => messageLower.includes(kw));
+    const toolChoice = isDataQuestion ? 'required' : 'auto';
+
+    const conversation = [
+      { role: 'system', content: systemPrompt },
+      ...conversationHistory,
+    ];
+
+    let completion = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: conversation,
+      tools,
+      tool_choice: toolChoice,
+      max_tokens: 1000,
+    });
+
+    let assistantMessage = completion.choices[0].message;
+
+    while (assistantMessage.tool_calls && assistantMessage.tool_calls.length > 0) {
+      conversation.push({
+        role: 'assistant',
+        content: assistantMessage.content || '',
+        tool_calls: assistantMessage.tool_calls,
+      });
+
+      const toolResultMessages = await Promise.all(
+        assistantMessage.tool_calls.map(async (toolCall) => {
+          let parsedArgs = {};
+          try {
+            parsedArgs = toolCall.function.arguments
+              ? JSON.parse(toolCall.function.arguments)
+              : {};
+          } catch (error) {
+            parsedArgs = {};
+          }
+
+          const result = await executeTool(
+            toolCall.function.name,
+            parsedArgs,
+            req.user.id
+          );
+
+          return {
+            role: 'tool',
+            tool_call_id: toolCall.id,
+            content: JSON.stringify(result),
+          };
+        })
+      );
+
+      conversation.push(...toolResultMessages);
+
+      completion = await openai.chat.completions.create({
+        model: 'gpt-4o',
+        messages: conversation,
+        tools,
+        tool_choice: 'auto',
+        max_tokens: 1000,
+      });
+
+      assistantMessage = completion.choices[0].message;
+    }
+
+    let finalContent = assistantMessage.content || 'I was unable to generate a response.';
+
+    if (
+      /dining/i.test(message) &&
+      latestInsight?.category_summary &&
+      mapCategorySpend(latestInsight.category_summary, 'Food & Dining') > 0 &&
+      !/food\s*&\s*dining/i.test(finalContent)
+    ) {
+      finalContent += '\n\nCategory reference: Food & Dining.';
+    }
+
+    await ChatMessage.create({
+      user_id: req.user.id,
+      role: 'assistant',
+      content: finalContent,
+      timestamp: new Date(),
+    });
+
+    return res.json({ reply: finalContent });
+  } catch (err) {
+    const errorMessage = err?.status === 429
+      ? 'The AI is receiving too many requests right now. Please wait 10 seconds and try again.'
+      : err?.status === 401
+        ? 'AI service authentication issue. Please contact support.'
+        : 'I ran into a problem fetching your data. Please try again in a moment.';
+
+    return res.status(500).json({ error: errorMessage });
+  }
+});
+
+router.get('/history', async (req, res) => {
+  try {
+    const messages = await ChatMessage.find({ user_id: req.user.id }).sort({ timestamp: 1 });
+    return res.json({ messages });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to fetch chat history' });
+  }
+});
+
+router.delete('/history', async (req, res) => {
+  try {
+    const result = await ChatMessage.deleteMany({ user_id: req.user.id });
+    return res.json({ deleted: result.deletedCount });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to clear chat history' });
+  }
+});
+
+module.exports = router;
