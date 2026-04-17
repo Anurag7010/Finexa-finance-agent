@@ -37,14 +37,14 @@ function StatCard({
 }: StatCardProps) {
   return (
     <div
-      className={`rounded-2xl border p-5 flex flex-col gap-3 bg-[var(--fingaurd-surface)] ${
+      className={`rounded-2xl border p-5 flex flex-col gap-3 bg-(--fingaurd-surface) ${
         highlight
           ? "border-[rgba(227,107,99,0.35)] bg-[rgba(227,107,99,0.08)]"
-          : "border-[var(--fingaurd-border)]"
+          : "border-(--fingaurd-border)"
       }`}
     >
       <div className="flex items-center justify-between">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--fingaurd-text-muted)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-(--fingaurd-text-muted)">
           {label}
         </p>
         <div
@@ -54,7 +54,7 @@ function StatCard({
         </div>
       </div>
       <p
-        className={`text-2xl font-extrabold tracking-tight ${highlight ? "text-[var(--fingaurd-coral)]" : "text-[var(--fingaurd-text)]"}`}
+        className={`text-2xl font-extrabold tracking-tight ${highlight ? "text-(--fingaurd-coral)" : "text-(--fingaurd-text)"}`}
       >
         {value}
       </p>
@@ -62,10 +62,10 @@ function StatCard({
         <div
           className={`flex items-center gap-1 text-xs font-medium ${
             trend === "up"
-              ? "text-[var(--fingaurd-coral)]"
+              ? "text-(--fingaurd-coral)"
               : trend === "down"
-                ? "text-[var(--fingaurd-success)]"
-                : "text-[var(--fingaurd-text-muted)]"
+                ? "text-(--fingaurd-success)"
+                : "text-(--fingaurd-text-muted)"
           }`}
         >
           {trend === "up" ? (
@@ -94,7 +94,7 @@ export default function StatsRow({ user, insight }: Props) {
         value={formatCurrency(user.income)}
         icon={DollarSign}
         iconWrapClass="border-[rgba(13,158,138,0.35)] bg-[rgba(13,158,138,0.14)]"
-        iconColor="text-[var(--fingaurd-brand)]"
+        iconColor="text-(--fingaurd-brand)"
         trend="neutral"
         trendLabel="Gross monthly salary"
       />
@@ -112,7 +112,7 @@ export default function StatsRow({ user, insight }: Props) {
         value={formatCurrency(insight.monthly_spend)}
         icon={Wallet}
         iconWrapClass="border-[rgba(207,164,74,0.35)] bg-[rgba(207,164,74,0.14)]"
-        iconColor="text-[var(--fingaurd-amber)]"
+        iconColor="text-(--fingaurd-amber)"
         trend="up"
         trendLabel={`${spentPct}% of budget used`}
         highlight={Number(spentPct) >= 90}
@@ -129,7 +129,7 @@ export default function StatsRow({ user, insight }: Props) {
         iconColor={
           remaining < 5000
             ? "text-[var(--fingaurd-coral)]"
-            : "text-[var(--fingaurd-success)]"
+            : "text-(--fingaurd-success)"
         }
         trend={remaining < 5000 ? "up" : "down"}
         trendLabel={
