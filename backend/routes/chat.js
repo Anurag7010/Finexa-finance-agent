@@ -9,7 +9,9 @@ const aiService = require('../services/aiService');
 const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = process.env.OPENAI_API_KEY
+  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  : null;
 
 router.use(authMiddleware);
 
@@ -212,6 +214,162 @@ function resolveCategoryName(categorySummary, requestedCategory) {
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
+}
+
+function formatInr(value) {
+  const amount = Number(value || 0);
+  return `₹${Math.round(amount).toLocaleString('en-IN')}`;
+}
+
+function formatDate(value) {
+  const dt = new Date(value);
+  if (Number.isNaN(dt.getTime())) {
+    return 'Unknown date';
+  }
+  return dt.toLocaleDateString('en-IN', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+}
+
+function titleCase(value) {
+  const text = String(value || 'unknown');
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function topRiskFactors(latestInsight, limit = 3) {
+  if (!latestInsight || !Array.isArray(latestInsight.risk_factors)) {
+    return [];
+  }
+  return latestInsight.risk_factors
+    .filter((factor) => typeof factor === 'string' && factor.trim())
+    .slice(0, limit);
+}
+
+async function buildFallbackReply(message, userId, latestInsight) {
+  const text = String(message || '').toLowerCase();
+  const asksAnomalies = /anomal|suspicious|suspect|fraud|unusual|flagged/.test(text);
+  const asksForecast = /forecast|balance|projection|next\s+\d+\s*days?/.test(text);
+  const asksRisk = /risk|score|health|danger/.test(text);
+  const asksSummary = /spend|spent|summary|this month|category|merchant|breakdown/.test(text);
+
+  try {
+    if (asksAnomalies) {
+      const anomalyData = await executeTool('get_anomalies', {}, userId);
+      if (anomalyData?.count > 0) {
+        const topItems = anomalyData.anomalies.slice(0, 4);
+        const detailLines = topItems.map((item, idx) => (
+          `${idx + 1}. ${item.merchant} - ${formatInr(item.amount)} (${item.category || 'Other'}, ${formatDate(item.date)})`
+        ));
+
+        return [
+          `I identified ${anomalyData.count} potentially suspicious transaction${anomalyData.count > 1 ? 's' : ''} to review.`,
+          '',
+          'Top flagged items:',
+          ...detailLines,
+          '',
+          'Recommended next steps:',
+          '1. Verify these transactions in your banking app and card statement.',
+          '2. If any are unauthorized, immediately raise a dispute and block the payment instrument.',
+        ].join('\n');
+      }
+
+      return [
+        'No suspicious transactions are currently flagged in your recent data.',
+        'If you still suspect an issue, I can help you review high-value or unusual-timing transactions next.',
+      ].join('\n');
+    }
+
+    if (asksForecast) {
+      const forecastData = await executeTool('get_balance_forecast', { days: 7 }, userId);
+      const points = Array.isArray(forecastData?.forecast) ? forecastData.forecast : [];
+      if (points.length > 0) {
+        const start = points[0];
+        const end = points[points.length - 1];
+
+        return [
+          '7-day balance outlook:',
+          `- Current projected balance: ${formatInr(start.projected_balance)}`,
+          `- End-of-window projected balance: ${formatInr(end.projected_balance)}`,
+          `- Net change over 7 days: ${formatInr(end.projected_balance - start.projected_balance)}`,
+          '',
+          'Interpretation: spending is currently trending downward on available balance. I recommend tightening discretionary spend this week.',
+        ].join('\n');
+      }
+
+      return 'I could not find a recent forecast yet. Please refresh insights and try again.';
+    }
+
+    if (asksRisk) {
+      const risk = await executeTool('get_risk_score', {}, userId);
+      if (!risk?.error) {
+        const factors = Array.isArray(risk.risk_factors) ? risk.risk_factors.slice(0, 3) : [];
+        const factorLines = factors.length > 0
+          ? factors.map((factor, idx) => `${idx + 1}. ${factor}`)
+          : ['1. No major risk factors were detected in the latest cycle.'];
+
+        return [
+          `Financial health score: ${risk.health_score}/100`,
+          `Current risk level: ${titleCase(risk.risk_level)}`,
+          '',
+          'Primary risk drivers:',
+          ...factorLines,
+          '',
+          `Context: monthly spend ${formatInr(risk.monthly_spend)} vs budget ${formatInr(risk.monthly_budget)}.`,
+        ].join('\n');
+      }
+    }
+
+    if (asksSummary) {
+      const summary = await executeTool('get_spending_summary', { period: 'this_month' }, userId);
+      const breakdown = Array.isArray(summary?.breakdown) ? summary.breakdown.slice(0, 3) : [];
+
+      if (breakdown.length > 0) {
+        const total = Number(summary.total_spend || 0);
+        const lines = breakdown.map((item, idx) => {
+          const pct = total > 0 ? ((Number(item.amount || 0) / total) * 100).toFixed(1) : '0.0';
+          return `${idx + 1}. ${item.category}: ${formatInr(item.amount)} (${pct}% of spend)`;
+        });
+
+        const overspend = Number(latestInsight?.overspend_amount || 0);
+        const health = latestInsight?.health_score;
+        const risk = latestInsight?.risk_level;
+
+        return [
+          'Monthly spending analysis:',
+          `- Total spend so far: ${formatInr(total)}`,
+          '- Top categories:',
+          ...lines,
+          '',
+          `Portfolio health: ${health != null ? `${health}/100` : 'N/A'}${risk ? ` (${titleCase(risk)} risk)` : ''}.`,
+          overspend > 0
+            ? `Projected month-end overspend: ${formatInr(overspend)} at current pace.`
+            : 'You are currently within projected monthly budget at this pace.',
+        ].join('\n');
+      }
+    }
+  } catch (error) {
+    // Fall through to generic fallback.
+  }
+
+  if (latestInsight) {
+    const factors = topRiskFactors(latestInsight, 2);
+    const factorsText = factors.length > 0 ? ` Key drivers: ${factors.join(' | ')}` : '';
+    return [
+      `Current snapshot: spend ${formatInr(latestInsight.monthly_spend)} this month, health score ${latestInsight.health_score}/100, risk ${titleCase(latestInsight.risk_level)}.`,
+      `Projected overspend: ${formatInr(latestInsight.overspend_amount)}.${factorsText}`,
+      'Ask me for a focused analysis: spending by category, suspicious transactions, risk breakdown, or 7-day forecast.',
+    ].join('\n');
+  }
+
+  return [
+    'I can provide a professional financial analysis from your live data.',
+    'Try one of these prompts:',
+    '1. "Show my top suspicious transactions this month."',
+    '2. "Give me a risk breakdown with key drivers."',
+    '3. "Summarize spend by category and tell me where to cut first."',
+  ].join('\n');
 }
 
 async function executeTool(toolName, args, userId) {
@@ -496,80 +654,95 @@ BEHAVIOR RULES:
 - Keep responses under 200 words unless the user asks for detail.
 - If the user asks what to do, give 1-2 concrete actionable steps, not a list of 7 generic tips.
 - Sound like a knowledgeable friend who happens to be a CFP, not a bank chatbot.
+- Write with a professional analyst tone: crisp, precise, and decision-oriented.
+- Prefer structured responses with clear sections when useful (e.g., Snapshot, Key Drivers, Recommended Actions).
+- For anomaly or suspicious-transaction questions, include a short ranked list with merchant, amount, category, and date when available.
+- For spend-summary questions, include total spend, top categories with percentages, and one-line interpretation.
+- Avoid vague phrases like "you should be careful" without data-backed context.
 - If health score is below 60, acknowledge the situation is serious but keep the tone constructive.`;
 
-    const dataKeywords = [
-      'spend', 'spent', 'spending', 'budget', 'balance', 'forecast',
-      'risk', 'score', 'anomal', 'suspicious', 'unusual', 'category',
-      'merchant', 'this month', 'last month', 'much', 'compare', 'trend',
-      'saving', 'overspend', 'cut', 'reduce', 'simulate', 'what if', 'if i',
-    ];
+    let finalContent = '';
 
-    const messageLower = message.toLowerCase();
-    const isDataQuestion = dataKeywords.some((kw) => messageLower.includes(kw));
-    const toolChoice = isDataQuestion ? 'required' : 'auto';
+    try {
+      if (!openai) {
+        throw new Error('OpenAI API key is not configured');
+      }
 
-    const conversation = [
-      { role: 'system', content: systemPrompt },
-      ...conversationHistory,
-    ];
+      const dataKeywords = [
+        'spend', 'spent', 'spending', 'budget', 'balance', 'forecast',
+        'risk', 'score', 'anomal', 'suspicious', 'unusual', 'category',
+        'merchant', 'this month', 'last month', 'much', 'compare', 'trend',
+        'saving', 'overspend', 'cut', 'reduce', 'simulate', 'what if', 'if i',
+      ];
 
-    let completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: conversation,
-      tools,
-      tool_choice: toolChoice,
-      max_tokens: 1000,
-    });
+      const messageLower = message.toLowerCase();
+      const isDataQuestion = dataKeywords.some((kw) => messageLower.includes(kw));
+      const toolChoice = isDataQuestion ? 'required' : 'auto';
 
-    let assistantMessage = completion.choices[0].message;
+      const conversation = [
+        { role: 'system', content: systemPrompt },
+        ...conversationHistory,
+      ];
 
-    while (assistantMessage.tool_calls && assistantMessage.tool_calls.length > 0) {
-      conversation.push({
-        role: 'assistant',
-        content: assistantMessage.content || '',
-        tool_calls: assistantMessage.tool_calls,
-      });
-
-      const toolResultMessages = await Promise.all(
-        assistantMessage.tool_calls.map(async (toolCall) => {
-          let parsedArgs = {};
-          try {
-            parsedArgs = toolCall.function.arguments
-              ? JSON.parse(toolCall.function.arguments)
-              : {};
-          } catch (error) {
-            parsedArgs = {};
-          }
-
-          const result = await executeTool(
-            toolCall.function.name,
-            parsedArgs,
-            req.user.id
-          );
-
-          return {
-            role: 'tool',
-            tool_call_id: toolCall.id,
-            content: JSON.stringify(result),
-          };
-        })
-      );
-
-      conversation.push(...toolResultMessages);
-
-      completion = await openai.chat.completions.create({
+      let completion = await openai.chat.completions.create({
         model: 'gpt-4o',
         messages: conversation,
         tools,
-        tool_choice: 'auto',
+        tool_choice: toolChoice,
         max_tokens: 1000,
       });
 
-      assistantMessage = completion.choices[0].message;
-    }
+      let assistantMessage = completion.choices[0].message;
 
-    let finalContent = assistantMessage.content || 'I was unable to generate a response.';
+      while (assistantMessage.tool_calls && assistantMessage.tool_calls.length > 0) {
+        conversation.push({
+          role: 'assistant',
+          content: assistantMessage.content || '',
+          tool_calls: assistantMessage.tool_calls,
+        });
+
+        const toolResultMessages = await Promise.all(
+          assistantMessage.tool_calls.map(async (toolCall) => {
+            let parsedArgs = {};
+            try {
+              parsedArgs = toolCall.function.arguments
+                ? JSON.parse(toolCall.function.arguments)
+                : {};
+            } catch (error) {
+              parsedArgs = {};
+            }
+
+            const result = await executeTool(
+              toolCall.function.name,
+              parsedArgs,
+              req.user.id
+            );
+
+            return {
+              role: 'tool',
+              tool_call_id: toolCall.id,
+              content: JSON.stringify(result),
+            };
+          })
+        );
+
+        conversation.push(...toolResultMessages);
+
+        completion = await openai.chat.completions.create({
+          model: 'gpt-4o',
+          messages: conversation,
+          tools,
+          tool_choice: 'auto',
+          max_tokens: 1000,
+        });
+
+        assistantMessage = completion.choices[0].message;
+      }
+
+      finalContent = assistantMessage.content || 'I was unable to generate a response.';
+    } catch (openAiError) {
+      finalContent = await buildFallbackReply(message, req.user.id, latestInsight);
+    }
 
     if (
       /dining/i.test(message) &&

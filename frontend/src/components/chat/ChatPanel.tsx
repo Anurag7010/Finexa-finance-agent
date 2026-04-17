@@ -21,7 +21,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const SUGGESTED_PROMPTS = [
   "Why am I spending so much this month?",
-  "What if I cut my dining budget by 30%?",
+  "What if I cut my grocery budget by 30%?",
   "Show me my most suspicious transactions",
 ];
 
@@ -41,16 +41,14 @@ function TypingIndicator() {
   return (
     <div className="mb-3 flex items-start gap-2.5">
       <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[rgba(13,158,138,0.35)] bg-[rgba(13,158,138,0.2)]">
-        <span className="text-[10px] font-bold text-[var(--fingaurd-text)]">
-          FG
-        </span>
+        <span className="text-[10px] font-bold text-(--fingaurd-text)">FG</span>
       </div>
       <div className="rounded-[18px] rounded-tl-sm border border-white/10 bg-[rgba(255,255,255,0.04)] px-4 py-3">
         <div className="flex items-center gap-1.5">
           {[0, 1, 2].map((dot) => (
             <motion.span
               key={dot}
-              className="h-1.5 w-1.5 rounded-full bg-[var(--fingaurd-brand)]"
+              className="h-1.5 w-1.5 rounded-full bg-(--fingaurd-brand)"
               animate={{ opacity: [0.35, 1, 0.35], y: [0, -1.5, 0] }}
               transition={{ duration: 1, repeat: Infinity, delay: dot * 0.12 }}
             />
@@ -192,7 +190,7 @@ export default function ChatPanel() {
 
   if (!historyLoaded) {
     return (
-      <div className="flex h-full flex-col bg-[var(--fingaurd-surface)] p-4">
+      <div className="flex h-full flex-col bg-(--fingaurd-surface) p-4">
         <div className="space-y-3">
           <div className="flex justify-start">
             <Skeleton className="h-12 w-2/3 rounded-2xl rounded-tl-sm" />
@@ -210,15 +208,15 @@ export default function ChatPanel() {
 
   if (historyError) {
     return (
-      <div className="flex h-full items-center justify-center bg-[var(--fingaurd-surface)] p-6">
+      <div className="flex h-full items-center justify-center bg-(--fingaurd-surface) p-6">
         <div className="w-full max-w-md rounded-xl border border-[rgba(227,107,99,0.45)] bg-[rgba(227,107,99,0.12)] p-6 text-center">
-          <AlertCircle className="mx-auto mb-3 h-6 w-6 text-[var(--fingaurd-coral)]" />
+          <AlertCircle className="mx-auto mb-3 h-6 w-6 text-(--fingaurd-coral)" />
           <p className="font-medium text-[#ffbeb8]">
             Failed to load chat history. Please try again.
           </p>
           <Button
             variant="outline"
-            className="mt-4 border-white/15 bg-[rgba(255,255,255,0.04)] text-[var(--fingaurd-text)] hover:bg-[rgba(255,255,255,0.1)]"
+            className="mt-4 border-white/15 bg-[rgba(255,255,255,0.04)] text-(--fingaurd-text) hover:bg-[rgba(255,255,255,0.1)]"
             onClick={() => void loadHistory()}
           >
             Retry
@@ -238,16 +236,16 @@ export default function ChatPanel() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="leading-tight text-sm font-bold text-[var(--fingaurd-text)]">
+              <h2 className="leading-tight text-sm font-bold text-(--fingaurd-text)">
                 Fin Guardian
               </h2>
               <motion.span
-                className="h-2 w-2 rounded-full bg-[var(--fingaurd-brand)]"
+                className="h-2 w-2 rounded-full bg-(--fingaurd-brand)"
                 animate={{ opacity: [0.5, 1, 0.5], scale: [0.9, 1.08, 0.9] }}
                 transition={{ duration: 1.3, repeat: Infinity }}
               />
             </div>
-            <Badge className="border border-white/15 bg-[rgba(255,255,255,0.03)] px-1.5 py-0 text-[10px] font-normal text-[var(--fingaurd-text-muted)]">
+            <Badge className="border border-white/15 bg-[rgba(255,255,255,0.03)] px-1.5 py-0 text-[10px] font-normal text-(--fingaurd-text-muted)">
               Powered by GPT-4o
             </Badge>
           </div>
@@ -256,7 +254,7 @@ export default function ChatPanel() {
           variant="ghost"
           size="sm"
           onClick={handleClear}
-          className="flex h-8 items-center gap-1.5 px-2 text-xs text-[var(--fingaurd-text-muted)] hover:bg-[rgba(255,255,255,0.07)] hover:text-[var(--fingaurd-coral)]"
+          className="flex h-8 items-center gap-1.5 px-2 text-xs text-(--fingaurd-text-muted) hover:bg-[rgba(255,255,255,0.07)] hover:text-(--fingaurd-coral)"
         >
           <Trash2 className="w-3.5 h-3.5" />
           Clear conversation
@@ -276,10 +274,10 @@ export default function ChatPanel() {
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-[rgba(13,158,138,0.35)] bg-[rgba(13,158,138,0.2)] shadow-lg">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-base font-semibold text-[var(--fingaurd-text)]">
+              <h3 className="text-base font-semibold text-(--fingaurd-text)">
                 Ask me anything about your finances
               </h3>
-              <p className="text-sm text-[var(--fingaurd-text-muted)]">
+              <p className="text-sm text-(--fingaurd-text-muted)">
                 Try one of these to get started:
               </p>
             </div>
@@ -294,11 +292,11 @@ export default function ChatPanel() {
                     transition={{ delay: idx * 0.08 }}
                     onClick={() => sendMessage(prompt)}
                     className={cn(
-                      "rounded-full border border-white/15 bg-[rgba(255,255,255,0.03)] px-4 py-2 text-sm text-[var(--fingaurd-text)]",
+                      "rounded-full border border-white/15 bg-[rgba(255,255,255,0.03)] px-4 py-2 text-sm text-(--fingaurd-text)",
                       "hover:border-[rgba(13,158,138,0.42)] hover:bg-[rgba(13,158,138,0.15)] hover:text-white transition-all duration-150",
                     )}
                   >
-                    <PromptIcon className="mr-2 inline-flex h-3.5 w-3.5 text-[var(--fingaurd-brand)]" />
+                    <PromptIcon className="mr-2 inline-flex h-3.5 w-3.5 text-(--fingaurd-brand)" />
                     {prompt}
                   </motion.button>
                 );
@@ -331,7 +329,7 @@ export default function ChatPanel() {
 
       {/* ── Input bar ── */}
       <div className="flex-none border-t border-white/10 bg-[rgba(9,16,19,0.72)] px-4 py-3 backdrop-blur-lg">
-        <div className="flex items-center gap-2 rounded-xl border border-white/15 bg-[rgba(255,255,255,0.03)] px-3 py-1.5 transition-all focus-within:border-[var(--fingaurd-brand)] focus-within:ring-2 focus-within:ring-[rgba(13,158,138,0.2)]">
+        <div className="flex items-center gap-2 rounded-xl border border-white/15 bg-[rgba(255,255,255,0.03)] px-3 py-1.5 transition-all focus-within:border-(--fingaurd-brand) focus-within:ring-2 focus-within:ring-[rgba(13,158,138,0.2)]">
           <input
             ref={inputRef}
             type="text"
@@ -340,13 +338,13 @@ export default function ChatPanel() {
             onKeyDown={handleKeyDown}
             placeholder="Press Enter to send"
             disabled={isLoading}
-            className="flex-1 bg-transparent py-2 text-sm text-[var(--fingaurd-text)] placeholder:text-[var(--fingaurd-text-muted)] outline-none disabled:opacity-50"
+            className="flex-1 bg-transparent py-2 text-sm text-(--fingaurd-text) placeholder:text-(--fingaurd-text-muted) outline-none disabled:opacity-50"
           />
           <Button
             onClick={() => sendMessage(input)}
             disabled={!input.trim() || isLoading}
             size="sm"
-            className="h-9 w-9 flex-shrink-0 rounded-lg bg-[var(--fingaurd-brand)] p-0 text-white hover:bg-[var(--fingaurd-brand-strong)] disabled:opacity-40"
+            className="h-9 w-9 shrink-0 rounded-lg bg-(--fingaurd-brand) p-0 text-white hover:bg-(--fingaurd-brand-strong) disabled:opacity-40"
           >
             {isLoading ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -355,7 +353,7 @@ export default function ChatPanel() {
             )}
           </Button>
         </div>
-        <p className="mt-1.5 text-center text-[10px] text-[var(--fingaurd-text-muted)]">
+        <p className="mt-1.5 text-center text-[10px] text-(--fingaurd-text-muted)">
           AI can make mistakes. Verify important financial decisions
           independently.
         </p>
@@ -367,7 +365,7 @@ export default function ChatPanel() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
-            className="pointer-events-none absolute bottom-16 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-[rgba(9,16,19,0.8)] px-3 py-1 text-xs text-[var(--fingaurd-text-muted)]"
+            className="pointer-events-none absolute bottom-16 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-[rgba(9,16,19,0.8)] px-3 py-1 text-xs text-(--fingaurd-text-muted)"
           >
             Fin Guardian is thinking...
           </motion.div>
