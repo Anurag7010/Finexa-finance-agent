@@ -15,6 +15,26 @@ function signToken(user) {
   );
 }
 
+function normalizeCategoryBudgets(categoryBudgets) {
+  if (!categoryBudgets) {
+    return {};
+  }
+
+  if (categoryBudgets instanceof Map) {
+    return Object.fromEntries(categoryBudgets);
+  }
+
+  if (Array.isArray(categoryBudgets)) {
+    return Object.fromEntries(categoryBudgets);
+  }
+
+  if (typeof categoryBudgets === 'object') {
+    return categoryBudgets;
+  }
+
+  return {};
+}
+
 function serializeUser(userDoc) {
   return {
     id: userDoc._id,
@@ -22,7 +42,7 @@ function serializeUser(userDoc) {
     email: userDoc.email,
     income: userDoc.income,
     monthly_budget: userDoc.monthly_budget,
-    category_budgets: Object.fromEntries(userDoc.category_budgets || new Map()),
+    category_budgets: normalizeCategoryBudgets(userDoc.category_budgets),
     currency: userDoc.currency,
     last_login_at: userDoc.last_login_at,
     createdAt: userDoc.createdAt,

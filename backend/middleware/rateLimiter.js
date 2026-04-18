@@ -29,9 +29,10 @@ function jsonRateLimitHandler(_req, res, _next, options) {
 /**
  * Creates a Redis-backed store used by express-rate-limit.
  */
-function createRedisStore() {
+function createRedisStore(prefix) {
   return new RedisStore({
     sendCommand: (...args) => redisClient.call(...args),
+    prefix,
   });
 }
 
@@ -46,7 +47,7 @@ const authRateLimiter = rateLimit({
   legacyHeaders: true,
   handler: jsonRateLimitHandler,
   message: 'Too many authentication attempts, please try again in 15 minutes.',
-  store: createRedisStore(),
+  store: createRedisStore('rl:auth:'),
   skip: () => isRedisUnhealthy(),
 });
 
@@ -62,7 +63,7 @@ const chatRateLimiter = rateLimit({
   handler: jsonRateLimitHandler,
   message: 'Chat rate limit exceeded, please wait a minute and try again.',
   keyGenerator: (req) => req.user?.id || ipKeyGenerator(req.ip),
-  store: createRedisStore(),
+  store: createRedisStore('rl:chat:'),
   skip: () => isRedisUnhealthy(),
 });
 
@@ -78,7 +79,7 @@ const insightsRefreshRateLimiter = rateLimit({
   handler: jsonRateLimitHandler,
   message: 'Insight refresh rate limit exceeded, please wait a minute and try again.',
   keyGenerator: (req) => req.user?.id || ipKeyGenerator(req.ip),
-  store: createRedisStore(),
+  store: createRedisStore('rl:insights:'),
   skip: () => isRedisUnhealthy(),
 });
 
@@ -93,7 +94,7 @@ const generalApiRateLimiter = rateLimit({
   legacyHeaders: true,
   handler: jsonRateLimitHandler,
   message: 'API rate limit exceeded, please try again shortly.',
-  store: createRedisStore(),
+  store: createRedisStore('rl:api:'),
   skip: () => isRedisUnhealthy(),
 });
 

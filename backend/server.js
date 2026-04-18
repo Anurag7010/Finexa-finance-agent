@@ -16,8 +16,6 @@ const { checkAiHealth } = require('./services/aiService');
 
 // Security middleware (Stage 4)
 const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
 const hpp = require('hpp');
 
 const authRoutes = require('./routes/auth');
@@ -77,10 +75,40 @@ app.use(
 );
 app.use(express.json({ limit: '1mb' }));
 
-// Prevent MongoDB operator injection
-app.use(mongoSanitize());
-// Sanitize XSS in request bodies
-app.use(xss());
+// Express 5-safe request sanitizer to strip dangerous keys recursively.
+function sanitizePayload(input) {
+  if (Array.isArray(input)) {
+    return input.map(sanitizePayload);
+  }
+
+  if (!input || typeof input !== 'object') {
+    return input;
+  }
+
+  const sanitized = {};
+  for (const [key, value] of Object.entries(input)) {
+    if (key.startsWith('$') || key.includes('.')) {
+      continue;
+    }
+    sanitized[key] = sanitizePayload(value);
+  }
+
+  return sanitized;
+}
+
+app.use((req, _res, next) => {
+  if (req.body && typeof req.body === 'object') {
+    req.body = sanitizePayload(req.body);
+  }
+  if (req.query && typeof req.query === 'object') {
+    req.query = sanitizePayload(req.query);
+  }
+  if (req.params && typeof req.params === 'object') {
+    req.params = sanitizePayload(req.params);
+  }
+  next();
+});
+
 // Prevent HTTP parameter pollution
 app.use(hpp());
 
@@ -124,7 +152,7 @@ app.use((req, res) => {
 });
 
 app.use((error, req, res, next) => {
-  logger.error({ error, path: req.path }, 'Unhandled route error');
+  logger.error({ err: error, path: req.path }, 'Unhandled route error');
   if (res.headersSent) {
     next(error);
     return;

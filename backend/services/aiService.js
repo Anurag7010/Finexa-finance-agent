@@ -61,9 +61,10 @@ async function postAi(path, payload) {
 }
 
 async function analyze(userId, transactions, user) {
-  const categoryBudgets = user?.category_budgets
-    ? Object.fromEntries(user.category_budgets)
-    : {};
+  const rawBudgets = user?.category_budgets;
+  const categoryBudgets = rawBudgets instanceof Map
+    ? Object.fromEntries(rawBudgets)
+    : (rawBudgets && typeof rawBudgets === 'object' ? rawBudgets : {});
 
   const payload = {
     user_id: String(userId),

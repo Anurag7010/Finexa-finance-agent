@@ -96,6 +96,30 @@ describe('POST /api/auth/login', () => {
     expect(res.body.token).toBeDefined();
   });
 
+  it('serializes legacy object category_budgets without crashing', async () => {
+    const app = buildApp();
+
+    await User.updateOne(
+      { email: 'login@example.com' },
+      {
+        $set: {
+          category_budgets: { groceries: 500, transport: 200 },
+        },
+      }
+    );
+
+    const res = await request(app).post('/api/auth/login').send({
+      email: 'login@example.com',
+      password: 'correctpass',
+    });
+
+    expect(res.status).toBe(200);
+    expect(res.body.user.category_budgets).toEqual({
+      groceries: 500,
+      transport: 200,
+    });
+  });
+
   it('returns 401 on wrong password', async () => {
     const app = buildApp();
     const res = await request(app).post('/api/auth/login').send({
