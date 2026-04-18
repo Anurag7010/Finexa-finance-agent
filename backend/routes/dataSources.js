@@ -1,6 +1,7 @@
 const express = require('express');
 const authMiddleware = require('../middleware/auth');
 const DataSource = require('../models/DataSource');
+const BankAccount = require('../models/BankAccount');
 const SyncJob = require('../models/SyncJob');
 const { initiateConsent, getConsentStatus, fetchAaData, transformAaTransaction } = require('../services/connectors/accountAggregator');
 const { connectProvider } = require('../services/connectors/upiConnector');
@@ -11,20 +12,35 @@ const router = express.Router();
 
 /**
  * GET /api/datasources
- * Returns all connected data sources for the authenticated user.
+ * Returns all connected data sources for the authenticated user,
+ * including linked BankAccount metadata per source.
  */
 router.get('/', authMiddleware, async (req, res) => {
   try {
-    const sources = await DataSource.find({ user_id: req.user.id })
-      .sort({ createdAt: 1 })
-      .lean();
+    const [sources, bankAccounts] = await Promise.all([
+      DataSource.find({ user_id: req.user.id }).sort({ createdAt: 1 }).lean(),
+      BankAccount.find({ user_id: req.user.id }).lean(),
+    ]);
 
-    return res.json({ sources });
+    // Index bank accounts by data_source_id string for O(1) lookup.
+    const accountsBySource = {};
+    for (const account of bankAccounts) {
+      const key = String(account.data_source_id);
+      accountsBySource[key] = account;
+    }
+
+    const enrichedSources = sources.map((source) => ({
+      ...source,
+      bank_account: accountsBySource[String(source._id)] || null,
+    }));
+
+    return res.json({ sources: enrichedSources });
   } catch (err) {
     logger.error({ err: err.message, userId: req.user.id }, 'Failed to list data sources');
     return res.status(500).json({ error: 'Failed to list data sources' });
   }
 });
+
 
 /**
  * POST /api/datasources/connect

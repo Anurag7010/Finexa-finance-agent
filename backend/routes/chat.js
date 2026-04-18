@@ -488,6 +488,7 @@ async function executeTool(toolName, args, userId) {
             _id: '$category',
             amount: { $sum: '$amount' },
             transactions: { $sum: 1 },
+            sources: { $addToSet: '$source' }, // which connectors contributed to this category
           },
         },
         { $sort: { amount: -1 } },
@@ -497,11 +498,35 @@ async function executeTool(toolName, args, userId) {
         category: item._id,
         amount: Number(item.amount || 0),
         transactions: item.transactions,
+        sources: item.sources || [],
       }));
 
       const total_spend = breakdown.reduce((acc, item) => acc + item.amount, 0);
 
-      return { period, total_spend, breakdown, currency: 'INR' };
+      // Compute per-connector source breakdown totals.
+      const sourceBreakdownMap = {};
+      for (const item of summary) {
+        const srcs = item.sources || [];
+        for (const src of srcs) {
+          if (!src) continue;
+          const key = String(src).startsWith('upi') ? 'upi'
+            : src === 'account_aggregator' ? 'account_aggregator'
+            : 'seed';
+          sourceBreakdownMap[key] = (sourceBreakdownMap[key] || 0) + Number(item.amount || 0);
+        }
+      }
+
+      return {
+        period,
+        total_spend,
+        breakdown,
+        source_breakdown: {
+          seed: Math.round(sourceBreakdownMap.seed || 0),
+          account_aggregator: Math.round(sourceBreakdownMap.account_aggregator || 0),
+          upi: Math.round(sourceBreakdownMap.upi || 0),
+        },
+        currency: 'INR',
+      };
     }
 
     case 'get_balance_forecast': {

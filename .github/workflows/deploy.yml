@@ -1,0 +1,57 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  deploy-backend:
+    name: Deploy Backend to Railway
+    # Only deploy when triggered by push to main OR when CI passed on main.
+    if: |
+      github.event_name == 'push' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Railway backend deploy
+        run: |
+          curl -s -X POST "${{ secrets.RAILWAY_DEPLOY_WEBHOOK_BACKEND }}" \
+            -H "Content-Type: application/json" \
+            --fail --show-error
+        # Set RAILWAY_DEPLOY_WEBHOOK_BACKEND in GitHub repo Secrets.
+        # Get the URL from: Railway dashboard → service → Settings → Deploy Hooks.
+
+  deploy-ai-service:
+    name: Deploy AI Service to Railway
+    if: |
+      github.event_name == 'push' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    needs: deploy-backend
+    steps:
+      - name: Trigger Railway AI service deploy
+        run: |
+          curl -s -X POST "${{ secrets.RAILWAY_DEPLOY_WEBHOOK_AI }}" \
+            -H "Content-Type: application/json" \
+            --fail --show-error
+        # Set RAILWAY_DEPLOY_WEBHOOK_AI in GitHub repo Secrets.
+
+  deploy-frontend:
+    name: Deploy Frontend to Vercel
+    if: |
+      github.event_name == 'push' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel frontend deploy
+        run: |
+          curl -s -X POST "${{ secrets.VERCEL_DEPLOY_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            --fail --show-error
+        # Set VERCEL_DEPLOY_WEBHOOK in GitHub repo Secrets.
+        # Get the URL from: Vercel dashboard → project → Settings → Git → Deploy Hooks.
+

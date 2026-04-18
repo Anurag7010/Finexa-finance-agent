@@ -52,10 +52,21 @@ const config = {
   logLevel: data.LOG_LEVEL || defaultLogLevel,
   serviceName: data.SERVICE_NAME,
   appVersion: data.APP_VERSION,
-  corsOrigins: (data.CORS_ORIGINS || data.CLIENT_URL)
-    .split(',')
-    .map((origin) => origin.trim())
-    .filter(Boolean),
+  corsOrigins: (() => {
+    const fromEnv = (data.CORS_ORIGINS || data.CLIENT_URL)
+      .split(',')
+      .map((origin) => origin.trim())
+      .filter(Boolean);
+    // Always include both localhost variants in development to prevent
+    // origin-mismatch CORS failures when browser uses 127.0.0.1 vs localhost.
+    if (data.NODE_ENV !== 'production') {
+      const devOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
+      for (const o of devOrigins) {
+        if (!fromEnv.includes(o)) fromEnv.push(o);
+      }
+    }
+    return fromEnv;
+  })(),
   openAiApiKey: data.OPENAI_API_KEY,
   otelEnabled: data.OTEL_ENABLED || false,
 };

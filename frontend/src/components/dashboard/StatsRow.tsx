@@ -7,11 +7,14 @@ import {
   Target,
   PiggyBank,
   DollarSign,
+  Link2,
 } from "lucide-react";
 
 interface Props {
   user: User;
   insight: Insight;
+  connectedSources?: number;
+  lastSyncedAt?: string | null;
 }
 
 interface StatCardProps {
@@ -80,15 +83,33 @@ function StatCard({
   );
 }
 
-export default function StatsRow({ user, insight }: Props) {
+export default function StatsRow({ user, insight, connectedSources, lastSyncedAt }: Props) {
   const remaining = insight.monthly_budget - insight.monthly_spend;
   const spentPct =
     insight.monthly_budget > 0
       ? ((insight.monthly_spend / insight.monthly_budget) * 100).toFixed(1)
       : "0.0";
 
+  const showSourcesTile = connectedSources !== undefined;
+
+  /** Format last sync as "X min ago" / "X h ago" / ISO fallback. */
+  function formatLastSync(iso: string | null | undefined): string {
+    if (!iso) return "Never synced";
+    const diff = Date.now() - new Date(iso).getTime();
+    const mins = Math.floor(diff / 60_000);
+    if (mins < 1) return "Just now";
+    if (mins < 60) return `${mins} min ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    return new Date(iso).toLocaleDateString("en-IN");
+  }
+
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div
+      className={`grid grid-cols-1 gap-4 md:grid-cols-2 ${
+        showSourcesTile ? "xl:grid-cols-5" : "xl:grid-cols-4"
+      }`}
+    >
       <StatCard
         label="Monthly Income"
         value={formatCurrency(user.income)}
@@ -139,6 +160,17 @@ export default function StatsRow({ user, insight }: Props) {
         }
         highlight={remaining < 0}
       />
+      {showSourcesTile && (
+        <StatCard
+          label="Connected Sources"
+          value={String(connectedSources)}
+          icon={Link2}
+          iconWrapClass="border-[rgba(125,183,207,0.35)] bg-[rgba(125,183,207,0.14)]"
+          iconColor="text-[#7db7cf]"
+          trend="neutral"
+          trendLabel={`Last synced ${formatLastSync(lastSyncedAt)}`}
+        />
+      )}
     </div>
   );
 }

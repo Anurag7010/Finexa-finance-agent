@@ -268,7 +268,12 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats row */}
-      <StatsRow user={user} insight={insight} />
+      <StatsRow
+        user={user}
+        insight={insight}
+        connectedSources={dataSourceCount}
+        lastSyncedAt={lastSyncedAt}
+      />
 
       {/* Main 3/5 + 2/5 layout */}
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-5">

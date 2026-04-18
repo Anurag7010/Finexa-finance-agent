@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login, refreshInsights } from "../lib/api";
+import { login } from "../lib/api";
 import { useStore } from "../store/useStore";
 import { Button } from "../components/ui/button";
 import {
@@ -17,7 +17,7 @@ import CinematicVideoBackground from "@/components/ui/CinematicVideoBackground";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { setUser, setToken, setInsight } = useStore();
+  const { setUser, setToken } = useStore();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,18 +34,19 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const { token, user } = await login(email, password);
+      // Store credentials immediately — do NOT await insight refresh here.
+      // DashboardPage triggers refresh on mount via its own useEffect.
       setToken(token);
       setUser(user);
-      // Pre-load insights
-      const data = await refreshInsights();
-      setInsight(data.insight);
       navigate("/home", { replace: true });
       toast.success(`Welcome back, ${user.name}!`);
     } catch (err: unknown) {
+      // Backend returns { error: string }; fallback to .message for legacy shapes.
       const msg =
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (err as any)?.response?.data?.error ??
         (err as any)?.response?.data?.message ??
-        "Login failed. Please try again.";
+        "Login failed. Please check your credentials.";
       setError(msg);
     } finally {
       setLoading(false);
@@ -68,8 +69,7 @@ export default function LoginPage() {
       const { token, user } = await login(e, p);
       setToken(token);
       setUser(user);
-      const data = await refreshInsights();
-      setInsight(data.insight);
+      // Navigate immediately — dashboard loads insights on mount.
       navigate("/home", { replace: true });
       toast.success(`Welcome back, ${user.name}!`);
     } catch {
