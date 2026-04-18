@@ -7,13 +7,16 @@ const Insight = require('../models/Insight');
 const ChatMessage = require('../models/ChatMessage');
 const aiService = require('../services/aiService');
 const authMiddleware = require('../middleware/auth');
+const config = require('../config/env');
+const { chatRateLimiter } = require('../middleware/rateLimiter');
 
 const router = express.Router();
-const openai = process.env.OPENAI_API_KEY
-  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+const openai = config.openAiApiKey
+  ? new OpenAI({ apiKey: config.openAiApiKey })
   : null;
 
 router.use(authMiddleware);
+router.use(chatRateLimiter);
 
 const tools = [
   {

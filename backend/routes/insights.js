@@ -1,63 +1,26 @@
 const express = require('express');
 const User = require('../models/User');
-const Transaction = require('../models/Transaction');
 const Insight = require('../models/Insight');
-const Alert = require('../models/Alert');
 const authMiddleware = require('../middleware/auth');
-const { analyze } = require('../services/aiService');
-const { pushAlertToUser, pushInsightUpdate } = require('../services/socketService');
+const logger = require('../lib/logger');
+const { insightsRefreshRateLimiter } = require('../middleware/rateLimiter');
+const { enqueueInsightRefreshJob, insightQueueEvents } = require('../queues/insightQueue');
+const { refreshUserInsight } = require('../workers/insightJobProcessor');
 
 const router = express.Router();
 
 router.use(authMiddleware);
 
-function buildAlerts(userId, analysis, user) {
-  const alerts = [];
-  const now = new Date();
-  const dayOfMonth = now.getDate();
-  const expectedPace = ((dayOfMonth / 30) * user.monthly_budget) * 1.15;
-
-  if ((analysis.monthly_spend || 0) > expectedPace) {
-    alerts.push({
-      user_id: userId,
-      type: 'overspend_pace',
-      severity: 'high',
-      title: 'Overspending pace detected',
-      message: `Your current spend is ahead of safe pacing for this month.`,
-      amount: analysis.monthly_spend,
-      triggered_at: now,
-    });
+/**
+ * Waits briefly for worker completion and returns null when still processing.
+ */
+async function waitForJobResult(job, timeoutMs) {
+  try {
+    return await job.waitUntilFinished(insightQueueEvents, timeoutMs);
+  } catch (error) {
+    logger.info({ jobId: job.id, timeoutMs }, 'Insight job still processing');
+    return null;
   }
-
-  if (analysis.risk_level === 'high') {
-    alerts.push({
-      user_id: userId,
-      type: 'risk_level',
-      severity: 'high',
-      title: 'High financial risk',
-      message: `Your current financial risk level is high. Consider corrective actions now.`,
-      triggered_at: now,
-    });
-  }
-
-  const breaches = Array.isArray(analysis.category_breaches)
-    ? analysis.category_breaches
-    : [];
-
-  for (const breach of breaches.slice(0, 2)) {
-    alerts.push({
-      user_id: userId,
-      type: 'category_breach',
-      severity: 'medium',
-      title: `${breach.category} budget near limit`,
-      message: `You have used ${Number(breach.percentage || 0).toFixed(1)}% of your ${breach.category} budget.`,
-      category: breach.category,
-      amount: breach.spent,
-      triggered_at: now,
-    });
-  }
-
-  return alerts;
 }
 
 router.get('/', async (req, res) => {
@@ -74,43 +37,50 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/refresh', async (req, res) => {
+router.post('/refresh', insightsRefreshRateLimiter, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id).select('_id');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const since = new Date();
-    since.setDate(since.getDate() - 90);
-
-    const transactions = await Transaction.find({
-      user_id: req.user.id,
-      date: { $gte: since },
-    }).sort({ date: 1 });
-
-    const analysis = await analyze(req.user.id, transactions, user);
-
-    const insight = await Insight.create({
-      user_id: req.user.id,
-      ...analysis,
-      generated_at: new Date(),
+    const job = await enqueueInsightRefreshJob({
+      userId: String(req.user.id),
+      triggeredBy: 'manual',
     });
 
-    const alertsToCreate = buildAlerts(req.user.id, analysis, user);
-    let savedAlerts = [];
+    const completedResult = await waitForJobResult(job, 5000);
 
-    if (alertsToCreate.length > 0) {
-      savedAlerts = await Alert.insertMany(alertsToCreate);
-      for (const alert of savedAlerts) {
-        pushAlertToUser(req.user.id, alert);
-      }
+    if (completedResult?.insight) {
+      return res.status(202).json({
+        insight: completedResult.insight,
+        alerts_generated: Number(completedResult.alertsGenerated || 0),
+        queued: true,
+        jobId: job.id,
+      });
     }
 
-    pushInsightUpdate(req.user.id, insight);
+    const latestInsight = await Insight.findOne({ user_id: req.user.id }).sort({ generated_at: -1 });
 
-    return res.json({ insight, alerts_generated: savedAlerts.length });
+    if (!latestInsight) {
+      const bootstrapResult = await refreshUserInsight(String(req.user.id), 'bootstrap-fallback');
+      return res.status(202).json({
+        insight: bootstrapResult.insight,
+        alerts_generated: Number(bootstrapResult.alertsGenerated || 0),
+        queued: true,
+        jobId: job.id,
+        bootstrapFallback: true,
+      });
+    }
+
+    return res.status(202).json({
+      insight: latestInsight,
+      alerts_generated: 0,
+      queued: true,
+      jobId: job.id,
+    });
   } catch (error) {
+    logger.error({ error }, 'Failed to enqueue insight refresh');
     return res.status(500).json({ error: 'Failed to refresh insights' });
   }
 });

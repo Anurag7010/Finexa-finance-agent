@@ -159,22 +159,16 @@ source .venv/bin/activate
 uvicorn main:app --reload --port 8000
 ```
 
-If this exits with code 137 on macOS, use one of these stable options:
-
-```bash
+````bash
 # Option 1: run without reload (most stable)
 uvicorn main:app --port 8000
-
-# Option 2: keep reload but limit watched files
-uvicorn main:app --reload --reload-dir ai-service --port 8000
-```
 
 Terminal 2:
 
 ```bash
 cd backend
 npm run dev
-```
+````
 
 If you see `EADDRINUSE: address already in use :::5000`, another backend process is already running.
 Stop it first:

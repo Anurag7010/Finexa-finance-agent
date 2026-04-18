@@ -4,15 +4,38 @@ const mongoose = require('mongoose');
 
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
+const config = require('../config/env');
+const logger = require('../lib/logger');
 const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 
+function resolveSeedPath() {
+  const candidates = [
+    process.env.SEED_DATA_PATH,
+    path.join(__dirname, '../../ai-service/seed_data.json'),
+    path.join(__dirname, '../../seed_data.json'),
+    '/app/seed_data.json',
+    '/ai-service/seed_data.json',
+  ].filter(Boolean);
+
+  const resolved = candidates.find((candidate) => fs.existsSync(candidate));
+  if (!resolved) {
+    throw new Error(
+      `Unable to locate seed_data.json. Checked: ${candidates.join(', ')}`
+    );
+  }
+
+  return resolved;
+}
+
 async function runSeed() {
-  const seedPath = path.join(__dirname, '../../ai-service/seed_data.json');
+  const seedPath = resolveSeedPath();
   const raw = fs.readFileSync(seedPath, 'utf-8');
   const data = JSON.parse(raw);
 
-  await mongoose.connect(process.env.MONGODB_URI);
+  logger.info({ seedPath }, 'Using seed data file');
+
+  await mongoose.connect(config.mongodbUri);
 
   const userMap = new Map();
 
@@ -38,7 +61,7 @@ async function runSeed() {
       });
 
       userMap.set(userData.id, createdUser);
-      console.log(`Created user: ${createdUser.email}`);
+      logger.info({ email: createdUser.email }, 'Created user during seed');
     }
 
     for (const userData of data.users) {
@@ -65,18 +88,21 @@ async function runSeed() {
 
       if (userTransactions.length > 0) {
         await Transaction.insertMany(userTransactions);
-        console.log(`Inserted ${userTransactions.length} transactions for ${user.email}`);
+        logger.info(
+          { count: userTransactions.length, email: user.email },
+          'Inserted transactions during seed'
+        );
       }
     }
 
-    console.log('Seed completed successfully.');
-    console.log('Demo login: demo@smartspend.ai / demo1234');
+    logger.info('Seed completed successfully');
+    logger.info('Demo login: demo@smartspend.ai / demo1234');
   } finally {
     await mongoose.connection.close();
   }
 }
 
 runSeed().catch((error) => {
-  console.error('Seed failed', error);
+  logger.error({ error }, 'Seed failed');
   mongoose.connection.close().finally(() => process.exit(1));
 });

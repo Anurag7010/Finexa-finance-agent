@@ -36,6 +36,7 @@ frontend/.env
 frontend/.env.local
 backend/.env
 ai-service/.env
+.env.test
 
 # ========================
 # Build output

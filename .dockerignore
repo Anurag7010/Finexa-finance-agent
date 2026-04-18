@@ -1,0 +1,16 @@
+node_modules
+backend/node_modules
+frontend/node_modules
+ai-service/__pycache__
+ai-service/*.pyc
+frontend/dist
+backend/logs
+.env
+.env.local
+.env.development
+.env.production
+backend/.env
+ai-service/.env
+.git
+.gitignore
+.vscode
