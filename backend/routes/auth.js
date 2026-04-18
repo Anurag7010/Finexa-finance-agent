@@ -2,13 +2,14 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const authMiddleware = require('../middleware/auth');
+const config = require('../config/env');
 
 const router = express.Router();
 
 function signToken(user) {
   return jwt.sign(
     { id: user._id, email: user.email },
-    process.env.JWT_SECRET,
+    config.jwtSecret,
     { expiresIn: '7d' }
   );
 }
