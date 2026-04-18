@@ -1,150 +1,109 @@
 # Finexa
 
-AI-powered personal finance safety platform for proactive budgeting, anomaly detection, and real-time coaching.
+Finexa is an AI-powered personal finance safety platform focused on one core outcome: helping users avoid month-end financial surprises.
 
-## Overview
+It combines a modern React client, a Node.js API, a Python AI service, Redis/BullMQ workers, and MongoDB persistence into a single full-stack system that supports:
 
-Finexa helps users avoid month-end money surprises by combining transaction intelligence, risk scoring, anomaly detection, and a conversational financial assistant (`fingaurdian` / Fin Guardian).
+- risk-aware spending analysis
+- anomaly detection
+- proactive alerts
+- savings goal planning
+- subscription intelligence
+- conversational financial coaching (Fin Guardian)
 
-This project was built for fast iteration and demo impact, while keeping a realistic full-stack architecture:
+## Who This Is For
 
-- Frontend dashboard for live financial visibility
-- Backend APIs for auth, transactions, insights, alerts, and chat orchestration
-- Dedicated AI service for categorization, scoring, forecasting, anomaly detection, and nudge generation
-- Socket.IO for real-time alert and insight pushes
+- Recruiters and hiring managers: this repository demonstrates production-style architecture decisions across frontend, backend, ML service, async workers, and CI/CD.
+- Developers: this repository is runnable locally and in Docker with clear service boundaries and realistic domain modeling.
+- Judges and demo evaluators: this repository has end-to-end user journeys, visible AI value, and real-time behaviors.
+- Investors and product stakeholders: this repository demonstrates a strong foundation for a consumer fintech intelligence product.
 
-## Key Features
+## What Is Implemented Today
 
-- JWT-based authentication with demo-friendly seeded user
-- AI-powered monthly insight generation (`/api/insights/refresh`)
-- Financial health score and risk level classification
-- Category budget breach detection and recommendation generation
-- 30-day projected balance forecast
-- Anomaly detection pipeline for suspicious transactions
-- Real-time alerts + insight updates over Socket.IO
-- Tool-augmented chat assistant (Fin Guardian / `fingaurdian`)
-- What-if scenario simulation in the frontend
-- Mock mode fallback for frontend development (`USE_MOCK`)
+- JWT auth and profile updates
+- transaction ingestion, summary, and anomaly surfacing
+- AI insight generation with health score, risk factors, category breaches, and forecast
+- alert management (read/unread, mark all)
+- tool-enabled chat assistant (Fin Guardian) with deterministic fallback paths
+- goals engine with feasibility scoring, contributions, and projections
+- subscription detection and management (confirm/dismiss/manual add)
+- mock Account Aggregator and UPI connector flows
+- asynchronous sync/insight/alert/monthly-plan workers via BullMQ
+- Socket.IO realtime updates for alerts and insights
 
-## Demo Flow
+## Architecture At A Glance
 
-1. Login
-   - Use `demo@smartspend.ai / demo1234` after seeding.
-2. Landing (`/home`)
-   - Choose Dashboard or Fin Guardian Chat.
-3. Dashboard
-   - Review health score, risk factors, forecast, category breakdown, and simulator.
-4. Transactions
-   - Inspect spend summary, anomalies, and filtered transaction list.
-5. Alerts
-   - View severity-based alerts and mark as read.
-6. Chat
-   - Ask Fin Guardian questions; backend executes data tools before answering.
+```mermaid
+flowchart LR
+  UI[Frontend: React + Vite + TypeScript]
+  API[Backend API: Express + Socket.IO]
+  AI[AI Service: FastAPI + scikit-learn + optional OpenAI]
+  DB[(MongoDB)]
+  REDIS[(Redis)]
+  W[Workers: BullMQ processors]
 
-## Tech Stack
+  UI -->|REST| API
+  UI -->|WebSocket register + events| API
+  API --> DB
+  API --> AI
+  API --> REDIS
 
-### Frontend
-
-- React 19 + TypeScript
-- Vite + Tailwind CSS
-- Zustand (state)
-- Recharts (visualization)
-- Socket.IO client
-- Framer Motion (chat interactions)
-
-### Backend
-
-- Node.js + Express
-- MongoDB + Mongoose
-- JWT auth
-- Socket.IO server
-
-### AI Service
-
-- FastAPI (Python)
-- OpenAI API integration (optional with fallback behavior)
-- scikit-learn (IsolationForest for anomaly detection)
-
-## Architecture Overview
-
-```text
-Browser (React)
-	|
-	| REST (auth, tx, insights, alerts, chat)
-	v
-Backend API (Express)
-	|\
-	| \__ MongoDB (users, tx, insights, alerts, chat history)
-	|
-	\____ AI Service (FastAPI) for analyze/categorize/forecast/anomalies/nudges
-
-Socket.IO:
-Backend --> Frontend events: new_alert, insight_update
+  W --> REDIS
+  W --> DB
+  W --> AI
+  W -->|publish events| REDIS
+  REDIS --> API
 ```
 
-## Folder Structure
+## Quick Start (Local Development)
 
-```text
-.
-├── ai-service/
-│   ├── main.py
-│   ├── generate_seed.py
-│   ├── seed_data.json
-│   └── requirements.txt
-├── backend/
-│   ├── server.js
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── scripts/
-│   └── services/
-├── frontend/
-│   ├── index.html
-│   ├── public/
-│   └── src/
-│       ├── components/
-│       ├── lib/
-│       ├── pages/
-│       ├── store/
-│       ├── App.tsx
-│       └── main.tsx
-├── PROJECT_DOCUMENTATION.md
-└── test_connections.py
-```
+### Prerequisites
 
-## Local Setup
+- Node.js 20+
+- Python 3.11+
+- MongoDB
+- Redis
 
-### 1. Clone and install
+### 1) Install dependencies
 
 ```bash
-git clone <your-repo-url>
-cd smartspend-ai
-
-cd backend && npm install && cd ..
-cd frontend && npm install && cd ..
-cd ai-service && python -m venv venv && source venv/bin/activate && pip install -r requirements.txt && cd ..
+cd backend && npm install
+cd ../frontend && npm install
+cd ../ai-service && python -m venv venv && source venv/bin/activate && pip install -r requirements.txt
+cd ..
 ```
 
-### 2. Configure environment variables
+### 2) Configure environment files
 
-Create these files:
+- backend API: create `backend/.env` (can be based on root `.env.development` values)
+- frontend: create `frontend/.env` from `frontend/.env.example`
+- AI service: create `ai-service/.env` with optional `OPENAI_API_KEY`
 
-- `backend/.env`
-- `frontend/.env`
-- `ai-service/.env`
+Minimum backend variables required by schema validation:
 
-You can copy from the included `.env.example` files.
+- `NODE_ENV`
+- `PORT`
+- `MONGODB_URI`
+- `REDIS_URL`
+- `JWT_SECRET` (minimum 64 chars)
+- `AI_SERVICE_URL`
+- `CLIENT_URL`
 
-### 3. Seed demo data
+### 3) Seed demo data
 
 ```bash
 cd backend
 npm run seed
 ```
 
-### 4. Run services
+Default seeded login:
 
-Terminal 1:
+- `demo@smartspend.ai`
+- `demo1234`
+
+### 4) Run services
+
+Terminal 1 (AI service):
 
 ```bash
 cd ai-service
@@ -152,111 +111,170 @@ source venv/bin/activate
 uvicorn main:app --reload --port 8000
 ```
 
-Alternative (from project root):
-
-```bash
-source .venv/bin/activate
-uvicorn main:app --reload --port 8000
-```
-
-````bash
-# Option 1: run without reload (most stable)
-uvicorn main:app --port 8000
-
-Terminal 2:
+Terminal 2 (backend API):
 
 ```bash
 cd backend
 npm run dev
-````
-
-If you see `EADDRINUSE: address already in use :::5000`, another backend process is already running.
-Stop it first:
-
-```bash
-lsof -ti tcp:5000 | xargs kill -9
 ```
 
-Terminal 3:
+Terminal 3 (frontend):
 
 ```bash
 cd frontend
 npm run dev
 ```
 
-## Environment Variables
+Terminal 4 (recommended for async features):
 
-### backend/.env
+```bash
+cd backend
+npm run workers
+```
 
-| Variable         | Required | Description                                        |
-| ---------------- | -------- | -------------------------------------------------- |
-| `PORT`           | No       | Backend port (default `5000`)                      |
-| `CLIENT_URL`     | Yes      | Frontend origin for CORS and Socket.IO             |
-| `MONGODB_URI`    | Yes      | MongoDB connection string                          |
-| `JWT_SECRET`     | Yes      | JWT signing secret                                 |
-| `AI_SERVICE_URL` | Yes      | AI service base URL (e.g. `http://127.0.0.1:8000`) |
-| `OPENAI_API_KEY` | Optional | Needed for backend chat LLM calls                  |
+Without workers, core API flows still run, but queued sync jobs and scheduled proactive tasks will be limited.
 
-### frontend/.env
+## Quick Start (Docker Compose)
 
-| Variable       | Required | Description           |
-| -------------- | -------- | --------------------- |
-| `VITE_API_URL` | Yes      | Backend base URL      |
-| `VITE_WS_URL`  | Yes      | Backend Socket.IO URL |
+From repository root:
 
-### ai-service/.env
+```bash
+docker compose -f docker/docker-compose.yml up --build
+```
 
-| Variable         | Required | Description                                          |
-| ---------------- | -------- | ---------------------------------------------------- |
-| `OPENAI_API_KEY` | Optional | Enables OpenAI-powered categorization/nudges/summary |
+Optional reseed inside containers:
 
-## API Overview
+```bash
+docker exec finexa-backend node scripts/seedDB.js
+```
 
-### Auth
+Services:
+
+- frontend: http://localhost:5173
+- backend: http://localhost:5000
+- ai-service: http://localhost:8000
+
+## Demo Journey
+
+1. Login with demo credentials.
+2. Open Dashboard and run Refresh Analysis.
+3. Review health score, risk factors, forecast, category breakdown, and simulator.
+4. Visit Transactions and inspect anomaly-tab behavior.
+5. Visit Accounts and run Account Aggregator or UPI simulation flow.
+6. Visit Subscriptions and Goals for actionable planning surfaces.
+7. Open Fin Guardian chat and ask data-driven questions.
+
+## API Surface (High-Level)
+
+Auth:
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
 - `GET /api/auth/me`
+- `PATCH /api/auth/me`
 
-### Transactions
+Transactions:
 
 - `GET /api/transactions`
 - `GET /api/transactions/summary`
 - `GET /api/transactions/anomalies`
 - `POST /api/transactions`
 
-### Insights
+Insights:
 
 - `GET /api/insights`
 - `POST /api/insights/refresh`
 - `GET /api/insights/forecast`
+- `GET /api/insights/monthly-plan`
 
-### Alerts
+Alerts:
 
 - `GET /api/alerts`
 - `PATCH /api/alerts/read-all`
 - `PATCH /api/alerts/:id/read`
 
-### Chat
+Chat:
 
 - `POST /api/chat`
 - `GET /api/chat/history`
 - `DELETE /api/chat/history`
 
-### Service Health
+Goals:
+
+- `GET /api/goals`
+- `POST /api/goals`
+- `PATCH /api/goals/:id`
+- `DELETE /api/goals/:id`
+- `GET /api/goals/:id/projection`
+- `POST /api/goals/:id/contribute`
+
+Subscriptions:
+
+- `GET /api/subscriptions`
+- `GET /api/subscriptions/total`
+- `POST /api/subscriptions`
+- `POST /api/subscriptions/:id/confirm`
+- `POST /api/subscriptions/:id/dismiss`
+
+Data sources + sync:
+
+- `GET /api/datasources`
+- `POST /api/datasources/connect`
+- `DELETE /api/datasources/:id`
+- `POST /api/datasources/aa/initiate-consent`
+- `GET /api/datasources/aa/consent-status/:id`
+- `POST /api/datasources/aa/fetch-data`
+- `GET /api/datasources/upi/connect`
+- `POST /api/datasources/upi/webhook`
+- `POST /api/sync/trigger/:sourceId`
+- `GET /api/sync/status/:jobId`
+- `GET /api/sync/history`
+
+Health:
 
 - `GET /health` (backend)
 - `GET /health` (ai-service)
 
-## Future Improvements
+## Testing And CI
 
-- Introduce background jobs for insight generation and alert fanout
-- Add refresh token flow and session management
-- Add integration tests for all critical API flows
-- Improve Socket.IO multi-device support (user -> multiple socket IDs)
-- Add role-based telemetry, monitoring, and audit trails
-- Add CI pipeline for lint/build/test/docs checks
+Run tests locally:
+
+```bash
+cd backend && npm test
+cd ../frontend && npm run test
+cd ../ai-service && source venv/bin/activate && pytest
+```
+
+GitHub Actions workflows in `.github/workflows` run:
+
+- backend tests
+- frontend tests
+- ai-service tests
+- webhook-based deploy triggers for Railway (backend/ai-service) and Vercel (frontend)
+
+## Deployment Notes
+
+- `railway.toml` defines backend and ai-service service roots/start commands.
+- `vercel.json` builds frontend via Vite output at `frontend/dist`.
+- Root `main.py` is an ASGI shim so `uvicorn main:app` from repo root maps to `ai-service/main.py`.
+
+## Honest Gaps And Risks
+
+- Account Aggregator and UPI connectors are currently simulated connectors, not production bank integrations.
+- Socket user mapping currently tracks one socket id per user id in memory; multi-tab/device fanout semantics are basic.
+- AI service CORS is currently permissive (`allow_origins=["*"]`) and should be restricted before production.
+- Test coverage is meaningful but not full-system; end-to-end and load tests are still needed.
+- Secrets hygiene remains critical: ensure no real credentials are committed, and rotate any key ever exposed outside a secure secret manager.
+
+## Repository Map
+
+- `frontend/`: React app, UI components, pages, state, API client
+- `backend/`: Express API, domain models, middleware, services, workers, queues
+- `ai-service/`: FastAPI ML/AI endpoints
+- `docker/`: compose and container definitions
+- `docs/`: architecture, API, deployment, contributing, security
+- `docs/PROJECT_MASTER_DOCUMENTATION.md`: deep technical source-of-truth handbook
 
 ## License
 
-MIT — see `LICENSE`.
+MIT. See `LICENSE`.
