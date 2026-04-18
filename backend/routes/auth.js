@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const authMiddleware = require('../middleware/auth');
+const { authRateLimiter } = require('../middleware/rateLimiter');
 const config = require('../config/env');
 
 const router = express.Router();
@@ -23,12 +24,13 @@ function serializeUser(userDoc) {
     monthly_budget: userDoc.monthly_budget,
     category_budgets: Object.fromEntries(userDoc.category_budgets || new Map()),
     currency: userDoc.currency,
+    last_login_at: userDoc.last_login_at,
     createdAt: userDoc.createdAt,
     updatedAt: userDoc.updatedAt,
   };
 }
 
-router.post('/register', async (req, res) => {
+router.post('/register', authRateLimiter, async (req, res) => {
   try {
     const { name, email, password, income, monthly_budget } = req.body;
 
@@ -47,6 +49,7 @@ router.post('/register', async (req, res) => {
       password,
       income,
       monthly_budget,
+      last_login_at: new Date(),
     });
 
     const token = signToken(user);
@@ -56,7 +59,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', authRateLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -73,6 +76,9 @@ router.post('/login', async (req, res) => {
     if (!validPassword) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
+
+    user.last_login_at = new Date();
+    await user.save();
 
     const token = signToken(user);
     return res.json({ token, user: serializeUser(user) });
@@ -92,6 +98,48 @@ router.get('/me', authMiddleware, async (req, res) => {
     return res.json({ user: serializeUser(user) });
   } catch (error) {
     return res.status(500).json({ error: 'Failed to fetch user' });
+  }
+});
+
+router.patch('/me', authMiddleware, async (req, res) => {
+  try {
+    const { income, monthly_budget } = req.body;
+
+    const updates = {};
+
+    if (income != null) {
+      const numericIncome = Number(income);
+      if (Number.isNaN(numericIncome) || numericIncome < 0) {
+        return res.status(400).json({ error: 'income must be a non-negative number' });
+      }
+      updates.income = numericIncome;
+    }
+
+    if (monthly_budget != null) {
+      const numericBudget = Number(monthly_budget);
+      if (Number.isNaN(numericBudget) || numericBudget < 0) {
+        return res.status(400).json({ error: 'monthly_budget must be a non-negative number' });
+      }
+      updates.monthly_budget = numericBudget;
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ error: 'At least one field must be provided' });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { $set: updates },
+      { new: true }
+    ).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    return res.json({ user: serializeUser(user) });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to update profile' });
   }
 });
 

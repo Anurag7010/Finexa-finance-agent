@@ -11,6 +11,8 @@ import DashboardPage from "./pages/DashboardPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import AlertsPage from "./pages/AlertsPage";
 import ChatPage from "./pages/ChatPage";
+import GoalsPage from "./pages/GoalsPage";
+import SubscriptionsPage from "./pages/SubscriptionsPage";
 
 import Sidebar from "./components/layout/Sidebar";
 import TopBar from "./components/layout/TopBar";
@@ -146,6 +148,26 @@ export default function App() {
               <ProtectedRoute>
                 <AppShell>
                   <ChatPage />
+                </AppShell>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/goals"
+            element={
+              <ProtectedRoute>
+                <AppShell>
+                  <GoalsPage />
+                </AppShell>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/subscriptions"
+            element={
+              <ProtectedRoute>
+                <AppShell>
+                  <SubscriptionsPage />
                 </AppShell>
               </ProtectedRoute>
             }

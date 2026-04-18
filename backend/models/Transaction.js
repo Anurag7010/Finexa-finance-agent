@@ -46,6 +46,17 @@ const transactionSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    is_recurring: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    subscription_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Subscription',
+      default: null,
+      index: true,
+    },
   },
   {
     timestamps: true,

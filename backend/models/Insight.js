@@ -88,6 +88,16 @@ const insightSchema = new mongoose.Schema(
       type: String,
       default: 'Other',
     },
+    insight_type: {
+      type: String,
+      enum: ['analysis', 'monthly_plan'],
+      default: 'analysis',
+      index: true,
+    },
+    monthly_plan: {
+      type: mongoose.Schema.Types.Mixed,
+      default: null,
+    },
     generated_at: {
       type: Date,
       default: Date.now,
@@ -100,5 +110,6 @@ const insightSchema = new mongoose.Schema(
 );
 
 insightSchema.index({ user_id: 1, generated_at: -1 });
+insightSchema.index({ user_id: 1, insight_type: 1, generated_at: -1 });
 
 module.exports = mongoose.model('Insight', insightSchema);

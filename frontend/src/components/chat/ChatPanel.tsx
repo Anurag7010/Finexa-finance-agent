@@ -9,6 +9,8 @@ import {
   Search,
   Scissors,
   Wallet,
+  Target,
+  Repeat2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,9 +25,17 @@ const SUGGESTED_PROMPTS = [
   "Why am I spending so much this month?",
   "What if I cut my grocery budget by 30%?",
   "Show me my most suspicious transactions",
+  "Am I on track for my savings goals?",
+  "What subscriptions am I wasting money on?",
 ];
 
-const SUGGESTED_PROMPT_ICONS = [Wallet, Scissors, Search] as const;
+const SUGGESTED_PROMPT_ICONS = [
+  Wallet,
+  Scissors,
+  Search,
+  Target,
+  Repeat2,
+] as const;
 
 interface LocalMessage {
   id: string;

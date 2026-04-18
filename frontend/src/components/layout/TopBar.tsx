@@ -9,6 +9,8 @@ import { toast } from "sonner";
 const PAGE_TITLES: Record<string, string> = {
   "/home": "Finexa",
   "/dashboard": "Dashboard",
+  "/goals": "Goals",
+  "/subscriptions": "Subscriptions",
   "/transactions": "Transactions",
   "/alerts": "Alerts",
   "/chat": "Fin Guardian",

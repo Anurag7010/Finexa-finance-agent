@@ -177,6 +177,48 @@ class FinancialSummaryResponse(BaseModel):
     summary: str
 
 
+class EmbedRequest(BaseModel):
+    text: str
+
+
+class EmbedResponse(BaseModel):
+    embedding: List[float]
+
+
+class GoalPlanGoal(BaseModel):
+    name: str
+    target_amount: float
+    current_amount: float = 0
+    deadline: datetime
+    category: str = "custom"
+
+
+class GoalPlanUser(BaseModel):
+    income: float = 0
+    monthly_budget: float = 0
+    monthly_spend: float = 0
+    risk_level: str = "medium"
+
+
+class GoalPlanRequest(BaseModel):
+    goal: GoalPlanGoal
+    user: GoalPlanUser
+
+
+class GoalPlanResponse(BaseModel):
+    plan: str
+    monthly_contribution: float
+
+
+class CFOAnalysisRequest(BaseModel):
+    message: str
+    financial_context: Dict[str, Any] = Field(default_factory=dict)
+
+
+class CFOAnalysisResponse(BaseModel):
+    answer: str
+
+
 def _round2(value: float) -> float:
     return round(float(value), 2)
 
@@ -384,6 +426,131 @@ def _build_nudge_prompt(trigger_type: str, context: Dict[str, Any]) -> str:
 
     spike = context.get("spike_pct", "30")
     return f"Weekly spending spiked by {spike}%. Write 1 practical coaching sentence."
+
+
+def _hash_embed(text: str, dim: int = 64) -> List[float]:
+    vec = np.zeros(dim, dtype=float)
+    if not text:
+        return vec.tolist()
+
+    lowered = text.lower().strip()
+    for idx, ch in enumerate(lowered):
+        slot = (ord(ch) * (idx + 1)) % dim
+        vec[slot] += 1.0
+
+    norm = float(np.linalg.norm(vec))
+    if norm > 0:
+        vec = vec / norm
+    return vec.tolist()
+
+
+def _fallback_goal_plan(payload: GoalPlanRequest) -> GoalPlanResponse:
+    target = max(float(payload.goal.target_amount), 0.0)
+    current = max(float(payload.goal.current_amount), 0.0)
+    remaining = max(target - current, 0.0)
+
+    now = datetime.utcnow()
+    months_left = max(((payload.goal.deadline.year - now.year) * 12 + (payload.goal.deadline.month - now.month)), 1)
+    monthly_contribution = _round2(remaining / months_left) if months_left > 0 else _round2(remaining)
+
+    plan = (
+        f"To hit {payload.goal.name}, set aside about ₹{round(monthly_contribution):,} per month for the next "
+        f"{months_left} month(s). Prioritize one spending category to trim by 10-15% and automate this transfer right"
+        " after salary credit."
+    )
+
+    return GoalPlanResponse(plan=plan, monthly_contribution=monthly_contribution)
+
+
+def _fallback_cfo_answer(message: str, context: Dict[str, Any]) -> str:
+    text = (message or "").lower()
+    monthly_spend = float(context.get("monthly_spend", 0) or 0)
+    monthly_budget = float(context.get("monthly_budget", 0) or 0)
+    health_score = int(context.get("health_score", 0) or 0)
+    risk_level = str(context.get("risk_level", "unknown") or "unknown").lower()
+    top_category = str(context.get("top_category", "Other") or "Other")
+
+    goals_context = context.get("goals") if isinstance(context.get("goals"), dict) else {}
+    subscriptions_context = context.get("subscriptions") if isinstance(context.get("subscriptions"), dict) else {}
+    anomalies_context = context.get("anomalies") if isinstance(context.get("anomalies"), dict) else {}
+    spending_summary = context.get("spending_summary") if isinstance(context.get("spending_summary"), dict) else {}
+
+    asks_goals = any(token in text for token in ["goal", "goals", "save", "savings", "on track"])
+    asks_subscriptions = any(token in text for token in ["subscription", "recurring", "waste"])
+    asks_anomalies = any(token in text for token in ["anomal", "suspicious", "fraud", "unusual"])
+
+    if asks_goals and goals_context:
+        goals = goals_context.get("goals") if isinstance(goals_context.get("goals"), list) else []
+        at_risk_count = int(goals_context.get("at_risk_count", 0) or 0)
+        if goals:
+            top = goals[:3]
+            detail = []
+            for item in top:
+                name = str(item.get("name", "Goal"))
+                progress = int(item.get("progress_pct", 0) or 0)
+                monthly_needed = float(item.get("monthly_contribution_needed", 0) or 0)
+                detail.append(f"{name}: {progress}% complete, needs about ₹{round(monthly_needed):,}/month")
+
+            return (
+                f"You have {len(goals)} active goal(s), with {at_risk_count} currently at risk. "
+                f"Top goals: {'; '.join(detail)}. "
+                "Action: prioritize the highest monthly requirement first and automate that transfer right after salary credit."
+            )
+
+    if asks_subscriptions and subscriptions_context:
+        monthly_total = float(subscriptions_context.get("monthly_total", 0) or 0)
+        annual_total = float(subscriptions_context.get("annual_total", 0) or 0)
+        count = int(subscriptions_context.get("count", 0) or 0)
+        likely_waste = int(subscriptions_context.get("likely_waste_count", 0) or 0)
+        return (
+            f"You currently have {count} recurring subscription(s), costing about ₹{round(monthly_total):,}/month "
+            f"(₹{round(annual_total):,}/year). {likely_waste} look unconfirmed and may be candidates to review. "
+            "Action: cancel or downgrade one low-value recurring charge this week."
+        )
+
+    if asks_anomalies and anomalies_context:
+        count = int(anomalies_context.get("count", 0) or 0)
+        anomalies = anomalies_context.get("anomalies") if isinstance(anomalies_context.get("anomalies"), list) else []
+        if count > 0 and anomalies:
+            top = anomalies[:3]
+            detail = []
+            for item in top:
+                merchant = str(item.get("merchant", "Unknown merchant"))
+                amount = float(item.get("amount", 0) or 0)
+                detail.append(f"{merchant} (₹{round(amount):,})")
+            return (
+                f"I found {count} flagged transaction(s): {', '.join(detail)}. "
+                "Action: verify these in your banking app immediately and dispute any unknown charge."
+            )
+
+    budget_line = ""
+    if monthly_budget > 0:
+        delta = monthly_spend - monthly_budget
+        if delta > 0:
+            budget_line = f"You are currently about ₹{round(delta):,} above your monthly budget. "
+        else:
+            budget_line = f"You are currently about ₹{round(abs(delta)):,} under your monthly budget. "
+
+    score_line = ""
+    if health_score > 0:
+        score_line = f"Your health score is {health_score}/100 ({risk_level} risk), with {top_category} as the biggest spend driver. "
+
+    spend_line = ""
+    if spending_summary:
+        total_spend = float(spending_summary.get("total_spend", 0) or 0)
+        breakdown = spending_summary.get("breakdown") if isinstance(spending_summary.get("breakdown"), list) else []
+        if breakdown:
+            top = breakdown[0]
+            top_name = str(top.get("category", "Other"))
+            top_amount = float(top.get("amount", 0) or 0)
+            spend_line = (
+                f"This month spend is ₹{round(total_spend):,}, led by {top_name} at about ₹{round(top_amount):,}. "
+            )
+
+    return (
+        f"{budget_line}{score_line}{spend_line}"
+        "Action: set a strict 2-week cap on discretionary categories and review progress at week-end."
+    ).strip()
 
 
 def _generate_nudge_message(trigger_type: str, context: Dict[str, Any]) -> str:
@@ -762,3 +929,106 @@ def financial_summary(payload: FinancialSummaryRequest) -> FinancialSummaryRespo
         return FinancialSummaryResponse(summary=summary or fallback)
     except Exception:
         return FinancialSummaryResponse(summary=fallback)
+
+
+@app.post("/embed", response_model=EmbedResponse)
+def embed(payload: EmbedRequest) -> EmbedResponse:
+    text = (payload.text or "").strip()
+
+    if not text:
+        return EmbedResponse(embedding=_hash_embed(""))
+
+    if not _can_call_openai():
+        return EmbedResponse(embedding=_hash_embed(text))
+
+    try:
+        response = openai_client.embeddings.create(
+            model="text-embedding-3-small",
+            input=text,
+        )
+        embedding = response.data[0].embedding if response.data else _hash_embed(text)
+        return EmbedResponse(embedding=embedding)
+    except Exception:
+        return EmbedResponse(embedding=_hash_embed(text))
+
+
+@app.post("/goal-plan", response_model=GoalPlanResponse)
+def goal_plan(payload: GoalPlanRequest) -> GoalPlanResponse:
+    fallback = _fallback_goal_plan(payload)
+
+    if not _can_call_openai():
+        return fallback
+
+    try:
+        now = datetime.utcnow()
+        months_left = max(((payload.goal.deadline.year - now.year) * 12 + (payload.goal.deadline.month - now.month)), 1)
+        remaining = max(payload.goal.target_amount - payload.goal.current_amount, 0)
+
+        prompt = (
+            f"Goal: {payload.goal.name}\n"
+            f"Target: ₹{round(payload.goal.target_amount):,}\n"
+            f"Current saved: ₹{round(payload.goal.current_amount):,}\n"
+            f"Months left: {months_left}\n"
+            f"Monthly income: ₹{round(payload.user.income):,}\n"
+            f"Monthly budget: ₹{round(payload.user.monthly_budget):,}\n"
+            f"Monthly spend: ₹{round(payload.user.monthly_spend):,}\n"
+            f"Risk level: {payload.user.risk_level}\n"
+            f"Remaining amount: ₹{round(remaining):,}\n"
+            "Return a concise 2-sentence actionable plan with one monthly contribution number."
+        )
+
+        completion = openai_client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a pragmatic personal finance coach. Keep advice concrete and numeric.",
+                },
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.4,
+            max_tokens=140,
+        )
+        plan = (completion.choices[0].message.content or "").strip()
+        if not plan:
+            return fallback
+
+        return GoalPlanResponse(
+            plan=plan,
+            monthly_contribution=fallback.monthly_contribution,
+        )
+    except Exception:
+        return fallback
+
+
+@app.post("/cfo-analysis", response_model=CFOAnalysisResponse)
+def cfo_analysis(payload: CFOAnalysisRequest) -> CFOAnalysisResponse:
+    fallback_answer = _fallback_cfo_answer(payload.message, payload.financial_context)
+
+    if not _can_call_openai():
+        return CFOAnalysisResponse(answer=fallback_answer)
+
+    try:
+        prompt = (
+            f"User question: {payload.message}\n"
+            f"Financial context: {payload.financial_context}\n"
+            "Give a concise, practical answer in 3 sentences max with numbers where available."
+        )
+
+        completion = openai_client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a clear, practical virtual CFO for personal finance. Avoid fluff.",
+                },
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.5,
+            max_tokens=180,
+        )
+
+        answer = (completion.choices[0].message.content or "").strip()
+        return CFOAnalysisResponse(answer=answer or fallback_answer)
+    except Exception:
+        return CFOAnalysisResponse(answer=fallback_answer)

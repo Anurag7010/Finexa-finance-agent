@@ -11,6 +11,16 @@ const router = express.Router();
 
 router.use(authMiddleware);
 
+function analysisInsightFilter(userId) {
+  return {
+    user_id: userId,
+    $or: [
+      { insight_type: 'analysis' },
+      { insight_type: { $exists: false } },
+    ],
+  };
+}
+
 /**
  * Waits briefly for worker completion and returns null when still processing.
  */
@@ -25,7 +35,7 @@ async function waitForJobResult(job, timeoutMs) {
 
 router.get('/', async (req, res) => {
   try {
-    const insight = await Insight.findOne({ user_id: req.user.id }).sort({ generated_at: -1 });
+    const insight = await Insight.findOne(analysisInsightFilter(req.user.id)).sort({ generated_at: -1 });
 
     if (!insight) {
       return res.status(404).json({ error: 'No insights found' });
@@ -44,6 +54,18 @@ router.post('/refresh', insightsRefreshRateLimiter, async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
+    const forceRefresh = String(req.query.force || req.body?.force || '').toLowerCase() === 'true';
+
+    if (forceRefresh) {
+      const forcedResult = await refreshUserInsight(String(req.user.id), 'manual-force');
+      return res.json({
+        insight: forcedResult.insight,
+        alerts_generated: Number(forcedResult.alertsGenerated || 0),
+        queued: false,
+        forced: true,
+      });
+    }
+
     const job = await enqueueInsightRefreshJob({
       userId: String(req.user.id),
       triggeredBy: 'manual',
@@ -60,7 +82,7 @@ router.post('/refresh', insightsRefreshRateLimiter, async (req, res) => {
       });
     }
 
-    const latestInsight = await Insight.findOne({ user_id: req.user.id }).sort({ generated_at: -1 });
+    const latestInsight = await Insight.findOne(analysisInsightFilter(req.user.id)).sort({ generated_at: -1 });
 
     if (!latestInsight) {
       const bootstrapResult = await refreshUserInsight(String(req.user.id), 'bootstrap-fallback');
@@ -87,7 +109,7 @@ router.post('/refresh', insightsRefreshRateLimiter, async (req, res) => {
 
 router.get('/forecast', async (req, res) => {
   try {
-    const insight = await Insight.findOne({ user_id: req.user.id }).sort({ generated_at: -1 });
+    const insight = await Insight.findOne(analysisInsightFilter(req.user.id)).sort({ generated_at: -1 });
 
     if (!insight) {
       return res.status(404).json({ error: 'No insights found' });
@@ -96,6 +118,23 @@ router.get('/forecast', async (req, res) => {
     return res.json({ forecast: insight.forecast || [] });
   } catch (error) {
     return res.status(500).json({ error: 'Failed to fetch forecast' });
+  }
+});
+
+router.get('/monthly-plan', async (req, res) => {
+  try {
+    const monthlyPlan = await Insight.findOne({
+      user_id: req.user.id,
+      insight_type: 'monthly_plan',
+    }).sort({ generated_at: -1 });
+
+    if (!monthlyPlan) {
+      return res.status(404).json({ error: 'No monthly plan available' });
+    }
+
+    return res.json({ monthly_plan: monthlyPlan.monthly_plan, insight: monthlyPlan });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to fetch monthly plan' });
   }
 });
 

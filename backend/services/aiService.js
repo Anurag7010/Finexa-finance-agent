@@ -121,6 +121,18 @@ async function checkAiHealth() {
   }
 }
 
+async function goalPlan(payload) {
+  return postAi('/goal-plan', payload);
+}
+
+async function cfoAnalysis(payload) {
+  return postAi('/cfo-analysis', payload);
+}
+
+async function embedText(text) {
+  return postAi('/embed', { text: String(text || '') });
+}
+
 module.exports = {
   analyze,
   categorize,
@@ -129,4 +141,7 @@ module.exports = {
   generateNudge,
   getFinancialSummary,
   checkAiHealth,
+  goalPlan,
+  cfoAnalysis,
+  embedText,
 };

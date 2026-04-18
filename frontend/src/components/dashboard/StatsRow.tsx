@@ -82,10 +82,10 @@ function StatCard({
 
 export default function StatsRow({ user, insight }: Props) {
   const remaining = insight.monthly_budget - insight.monthly_spend;
-  const spentPct = (
-    (insight.monthly_spend / insight.monthly_budget) *
-    100
-  ).toFixed(1);
+  const spentPct =
+    insight.monthly_budget > 0
+      ? ((insight.monthly_spend / insight.monthly_budget) * 100).toFixed(1)
+      : "0.0";
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
