@@ -121,7 +121,7 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className="animate-in fade-in duration-200">
+      <div className="animate-in fade-in duration-200" role="alert">
         <div className="mx-auto max-w-xl rounded-xl border border-[rgba(227,107,99,0.45)] bg-[rgba(227,107,99,0.12)] p-6 text-center">
           <AlertCircle className="mx-auto mb-3 h-6 w-6 text-[var(--fingaurd-coral)]" />
           <p className="font-medium text-[#ffbeb8]">

@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const Transaction = require('../models/Transaction');
 const authMiddleware = require('../middleware/auth');
 const { categorize } = require('../services/aiService');
+const { redisClient } = require('../lib/redis');
+const logger = require('../lib/logger');
 
 const router = express.Router();
 
@@ -48,6 +50,17 @@ router.get('/', async (req, res) => {
 
 router.get('/summary', async (req, res) => {
   try {
+    const cacheKey = `txn_summary:${req.user.id}`;
+    try {
+      const cached = await redisClient.get(cacheKey);
+      if (cached) {
+        logger.info({ userId: req.user.id }, 'Transaction summary served from cache');
+        return res.json(JSON.parse(cached));
+      }
+    } catch (cacheErr) {
+      logger.warn({ err: cacheErr.message }, 'Redis cache read failed for summary');
+    }
+
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     startOfMonth.setHours(0, 0, 0, 0);
@@ -75,7 +88,7 @@ router.get('/summary', async (req, res) => {
     const totalSpend = summary.reduce((acc, item) => acc + item.total, 0);
     const monthLabel = `${startOfMonth.getFullYear()}-${String(startOfMonth.getMonth() + 1).padStart(2, '0')}`;
 
-    return res.json({
+    const result = {
       summary: summary.map((item) => ({
         category: item._id,
         total: item.total,
@@ -84,7 +97,16 @@ router.get('/summary', async (req, res) => {
       })),
       totalSpend,
       month: monthLabel,
-    });
+    };
+
+    // Cache for 2 minutes
+    try {
+      await redisClient.setex(cacheKey, 120, JSON.stringify(result));
+    } catch (cacheErr) {
+      logger.warn({ err: cacheErr.message }, 'Redis cache write failed for summary');
+    }
+
+    return res.json(result);
   } catch (error) {
     return res.status(500).json({ error: 'Failed to fetch transaction summary' });
   }
@@ -132,6 +154,13 @@ router.post('/', async (req, res) => {
       category,
       date: date ? new Date(date) : new Date(),
     });
+
+    // Invalidate summary cache so next GET sees the new transaction
+    try {
+      await redisClient.del(`txn_summary:${req.user.id}`);
+    } catch (cacheErr) {
+      logger.warn({ err: cacheErr.message }, 'Failed to invalidate summary cache');
+    }
 
     return res.status(201).json({ transaction });
   } catch (error) {

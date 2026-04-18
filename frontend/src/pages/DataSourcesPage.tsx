@@ -5,12 +5,10 @@ import {
   Smartphone,
   Zap,
   Link2,
-  ChevronRight,
   Loader2,
   CheckCircle2,
   AlertCircle,
   RefreshCw,
-  Clock,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import ConnectorCard from "../components/datasources/ConnectorCard";
@@ -56,7 +54,7 @@ export default function DataSourcesPage() {
 
   // AA consent flow state
   const [aaStep, setAaStep] = useState<AaStep>("idle");
-  const [aaConsent, setAaConsent] = useState<AaConsentResult | null>(null);
+  const [, setAaConsent] = useState<AaConsentResult | null>(null);
   const [aaResult, setAaResult] = useState<{ imported: number; skipped: number } | null>(null);
   const aaPollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -287,7 +285,7 @@ export default function DataSourcesPage() {
           {/* AA step progress */}
           <div className="space-y-2 mb-4">
             {(["initiating", "pending", "approved", "fetching", "done"] as AaStep[]).map(
-              (step, idx) => {
+              (step) => {
                 const stepOrder: AaStep[] = ["initiating", "pending", "approved", "fetching", "done"];
                 const currentIdx = stepOrder.indexOf(aaStep);
                 const isActive = step === aaStep;

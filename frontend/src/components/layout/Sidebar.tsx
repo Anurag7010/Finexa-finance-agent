@@ -23,7 +23,7 @@ const NAV_ITEMS = [
   { to: "/chat", icon: MessageSquare, label: "Fin Guardian" },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ open, setOpen }: { open?: boolean; setOpen?: (val: boolean) => void }) {
   const { user, unreadCount, logout } = useStore();
 
   const initials = user?.name
@@ -42,10 +42,19 @@ export default function Sidebar() {
   }
 
   return (
-    <aside
-      className="w-60 flex-shrink-0 flex flex-col h-full border-r"
-      style={{ background: "var(--sidebar)" }}
-    >
+    <>
+      {open && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
+          onClick={() => setOpen?.(false)}
+        />
+      )}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-60 flex-shrink-0 flex flex-col h-full border-r transition-transform duration-300 md:static md:translate-x-0 ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
+        style={{ background: "var(--sidebar)" }}
+      >
       {/* Logo */}
       <div className="px-5 py-5 border-b border-[var(--sidebar-border)]">
         <Link to="/home" className="flex items-center gap-2.5">
@@ -79,6 +88,7 @@ export default function Sidebar() {
                   : "text-[var(--fingaurd-text-muted)] hover:text-[var(--sidebar-foreground)] hover:bg-[rgba(255,255,255,0.05)]"
               }`
             }
+            onClick={() => setOpen?.(false)}
           >
             <Icon size={17} className="shrink-0" />
             <span>{label}</span>
@@ -119,5 +129,6 @@ export default function Sidebar() {
         </div>
       </div>
     </aside>
+    </>
   );
 }

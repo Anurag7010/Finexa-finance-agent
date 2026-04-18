@@ -14,6 +14,12 @@ const { isRedisHealthy } = require('./lib/redis');
 const { initTracing, shutdownTracing } = require('./lib/tracing');
 const { checkAiHealth } = require('./services/aiService');
 
+// Security middleware (Stage 4)
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
+
 const authRoutes = require('./routes/auth');
 const transactionRoutes = require('./routes/transactions');
 const insightRoutes = require('./routes/insights');
@@ -42,6 +48,20 @@ initSocket(io);
 
 app.use(requestLogger);
 
+// Security headers
+app.use(helmet({
+  crossOriginEmbedderPolicy: false, // Allow Socket.io cross-origin
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      connectSrc: ["'self'", ...config.corsOrigins],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:', 'blob:'],
+    },
+  },
+}));
+
 app.use(
   cors({
     origin(origin, callback) {
@@ -55,7 +75,14 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
+
+// Prevent MongoDB operator injection
+app.use(mongoSanitize());
+// Sanitize XSS in request bodies
+app.use(xss());
+// Prevent HTTP parameter pollution
+app.use(hpp());
 
 app.get('/health', async (req, res) => {
   const mongodbConnected = mongoose.connection.readyState === 1;

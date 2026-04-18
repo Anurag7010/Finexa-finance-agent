@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useStore } from "../../store/useStore";
 import { refreshInsights } from "../../lib/api";
-import { Bell, Loader2, RefreshCw } from "lucide-react";
+import { Bell, Loader2, RefreshCw, Menu } from "lucide-react";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { toast } from "sonner";
@@ -16,7 +16,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/chat": "Fin Guardian",
 };
 
-export default function TopBar() {
+export default function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
   const location = useLocation();
   const { unreadCount, setInsight, isRefreshing, setIsRefreshing } = useStore();
 
@@ -39,14 +39,23 @@ export default function TopBar() {
   }
 
   return (
-    <header className="h-16 flex-shrink-0 border-b border-[var(--fingaurd-border)] bg-[rgba(10,18,21,0.9)] backdrop-blur-sm flex items-center justify-between px-6">
-      <div>
-        <h1 className="text-lg font-semibold text-[var(--fingaurd-text)]">
-          {title}
-        </h1>
-        <p className="text-[11px] text-[var(--fingaurd-text-muted)]">
-          Financial safety workspace
-        </p>
+    <header className="h-16 flex-shrink-0 border-b border-[var(--fingaurd-border)] bg-[rgba(10,18,21,0.9)] backdrop-blur-sm flex items-center justify-between px-4 lg:px-6">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onMenuClick}
+          className="md:hidden text-[var(--fingaurd-text)] hover:bg-[rgba(255,255,255,0.05)] p-2 rounded-md"
+          aria-label="Open menu"
+        >
+          <Menu size={20} />
+        </button>
+        <div>
+          <h1 className="text-lg font-semibold text-[var(--fingaurd-text)]">
+            {title}
+          </h1>
+          <p className="text-[11px] text-[var(--fingaurd-text-muted)]">
+            Financial safety workspace
+          </p>
+        </div>
       </div>
 
       <div className="flex items-center gap-3">

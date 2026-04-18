@@ -6,6 +6,7 @@ const logger = require('../lib/logger');
 const { insightsRefreshRateLimiter } = require('../middleware/rateLimiter');
 const { enqueueInsightRefreshJob, insightQueueEvents } = require('../queues/insightQueue');
 const { refreshUserInsight } = require('../workers/insightJobProcessor');
+const { redisClient } = require('../lib/redis');
 
 const router = express.Router();
 
@@ -35,10 +36,29 @@ async function waitForJobResult(job, timeoutMs) {
 
 router.get('/', async (req, res) => {
   try {
+    // Check Redis cache first (5-minute TTL)
+    const cacheKey = `insights:${req.user.id}`;
+    try {
+      const cached = await redisClient.get(cacheKey);
+      if (cached) {
+        logger.info({ userId: req.user.id }, 'Insights served from cache');
+        return res.json({ insight: JSON.parse(cached), cached: true });
+      }
+    } catch (cacheErr) {
+      logger.warn({ err: cacheErr.message }, 'Redis cache read failed — falling through to DB');
+    }
+
     const insight = await Insight.findOne(analysisInsightFilter(req.user.id)).sort({ generated_at: -1 });
 
     if (!insight) {
       return res.status(404).json({ error: 'No insights found' });
+    }
+
+    // Store in cache
+    try {
+      await redisClient.setex(cacheKey, 300, JSON.stringify(insight));
+    } catch (cacheErr) {
+      logger.warn({ err: cacheErr.message }, 'Redis cache write failed — continuing without cache');
     }
 
     return res.json({ insight });
@@ -55,6 +75,13 @@ router.post('/refresh', insightsRefreshRateLimiter, async (req, res) => {
     }
 
     const forceRefresh = String(req.query.force || req.body?.force || '').toLowerCase() === 'true';
+
+    // Invalidate insight cache so next GET returns fresh data
+    try {
+      await redisClient.del(`insights:${req.user.id}`);
+    } catch (cacheErr) {
+      logger.warn({ err: cacheErr.message }, 'Failed to invalidate insight cache');
+    }
 
     if (forceRefresh) {
       const forcedResult = await refreshUserInsight(String(req.user.id), 'manual-force');

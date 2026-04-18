@@ -31,7 +31,7 @@ export default function TransactionRow({ transaction: t }: Props) {
 
   return (
     <div
-      className={`flex items-center gap-4 px-4 py-3.5 rounded-xl border transition-all hover:shadow-sm hover:-translate-y-px ${
+      className={`flex flex-wrap sm:flex-nowrap items-center gap-3 sm:gap-4 px-4 py-3.5 rounded-xl border transition-all hover:shadow-sm hover:-translate-y-px ${
         t.is_anomaly
           ? "border-[rgba(227,107,99,0.45)] border-l-4 border-l-[var(--fingaurd-coral)] bg-[rgba(227,107,99,0.08)]"
           : "border-white/10 bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.05)]"
@@ -55,7 +55,7 @@ export default function TransactionRow({ transaction: t }: Props) {
       </div>
 
       {/* Main info */}
-      <div className="flex-1 min-w-0">
+      <div className="w-full sm:w-auto sm:flex-1 min-w-0 order-first sm:order-none flex sm:block items-center gap-2">
         <div className="flex items-center gap-2">
           <p className="truncate text-sm font-semibold text-[var(--fingaurd-text)]">
             {t.merchant}
@@ -63,7 +63,7 @@ export default function TransactionRow({ transaction: t }: Props) {
           {t.is_anomaly && (
             <span
               title="Flagged as unusual by AI"
-              className="flex shrink-0 items-center gap-1 text-[var(--fingaurd-coral)]"
+              className="flex shrink-0 items-center gap-1 text-[var(--fingaurd-coral)] ml-auto sm:ml-0"
             >
               <AlertTriangle
                 size={13}
@@ -75,7 +75,7 @@ export default function TransactionRow({ transaction: t }: Props) {
             </span>
           )}
         </div>
-        <p className="mt-0.5 truncate text-xs text-[var(--fingaurd-text-muted)]">
+        <p className="mt-0.5 truncate text-xs text-[var(--fingaurd-text-muted)] w-full sm:w-auto">
           {t.description}
         </p>
       </div>

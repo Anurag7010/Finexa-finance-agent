@@ -61,7 +61,7 @@ Do not start implementing until you have read all 5 documents. Confirm you have 
 These must never be broken at any stage:
 
 - `demo@smartspend.ai / demo1234` login must work
-- Health score for Priya must remain in 42-65 range
+- Health score for Rohan must remain in 42-65 range
 - Chat must return data-grounded responses with real ₹ amounts
 - Socket.io alerts must push to browser within 3 seconds of refresh
 - All 3 suggested chat prompts must return specific, non-generic responses
