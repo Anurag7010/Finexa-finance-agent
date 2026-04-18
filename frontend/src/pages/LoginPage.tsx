@@ -40,7 +40,7 @@ export default function LoginPage() {
       const data = await refreshInsights();
       setInsight(data.insight);
       navigate("/home", { replace: true });
-      toast.success("Welcome back, Rohan!");
+      toast.success(`Welcome back, ${user.name}!`);
     } catch (err: unknown) {
       const msg =
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -71,7 +71,7 @@ export default function LoginPage() {
       const data = await refreshInsights();
       setInsight(data.insight);
       navigate("/home", { replace: true });
-      toast.success("Welcome back, Rohan!");
+      toast.success(`Welcome back, ${user.name}!`);
     } catch {
       setError("Demo login failed. Please try again.");
     } finally {

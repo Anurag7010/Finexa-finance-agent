@@ -31,6 +31,8 @@ services:
       dockerfile: docker/Dockerfile.ai-service
     container_name: finexa-ai-service
     restart: unless-stopped
+    env_file:
+      - ../ai-service/.env
     ports:
       - "8000:8000"
     healthcheck:

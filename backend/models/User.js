@@ -52,6 +52,11 @@ const userSchema = new mongoose.Schema(
       default: 'INR',
       trim: true,
     },
+    last_login_at: {
+      type: Date,
+      default: Date.now,
+      index: true,
+    },
   },
   {
     timestamps: true,

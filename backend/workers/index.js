@@ -5,8 +5,12 @@ const User = require('../models/User');
 const logger = require('../lib/logger');
 const config = require('../config/env');
 const { insightQueue } = require('../queues/insightQueue');
+const { proactiveAlertQueue } = require('../queues/proactiveAlertQueue');
+const { monthlyPlanQueue } = require('../queues/monthlyPlanQueue');
 const { insightWorker } = require('./insightWorker');
 const { alertWorker } = require('./alertWorker');
+const { proactiveAlertWorker } = require('./proactiveAlertWorker');
+const { monthlyPlanWorker } = require('./monthlyPlanWorker');
 
 /**
  * Schedules recurring insight refresh jobs for all users every 6 hours.
@@ -36,6 +40,43 @@ async function scheduleRecurringInsightJobs() {
 }
 
 /**
+ * Schedules proactive alert scans for active users.
+ */
+async function scheduleProactiveAlertJobs() {
+  await proactiveAlertQueue.add(
+    'proactive-scan-all-users',
+    {},
+    {
+      jobId: 'proactive:global',
+      repeat: {
+        every: 6 * 60 * 60 * 1000,
+      },
+    }
+  );
+
+  logger.info('Scheduled recurring proactive alert jobs');
+}
+
+/**
+ * Schedules monthly planning jobs on first day of month at 9:00 AM IST.
+ */
+async function scheduleMonthlyPlanJobs() {
+  await monthlyPlanQueue.add(
+    'monthly-plan-all-users',
+    {},
+    {
+      jobId: 'monthly-plan:global',
+      repeat: {
+        pattern: '0 9 1 * *',
+        tz: 'Asia/Kolkata',
+      },
+    }
+  );
+
+  logger.info('Scheduled recurring monthly plan jobs');
+}
+
+/**
  * Starts workers and wiring required resources.
  */
 async function startWorkers() {
@@ -43,8 +84,10 @@ async function startWorkers() {
   logger.info('Workers connected to MongoDB');
 
   await scheduleRecurringInsightJobs();
+  await scheduleProactiveAlertJobs();
+  await scheduleMonthlyPlanJobs();
 
-  logger.info('Insight and alert workers are running');
+  logger.info('Insight, alert, proactive, and monthly-plan workers are running');
 }
 
 /**
@@ -52,7 +95,15 @@ async function startWorkers() {
  */
 async function shutdown() {
   logger.info('Shutting down workers');
-  await Promise.all([insightWorker.close(), alertWorker.close()]);
+  await Promise.all([
+    insightWorker.close(),
+    alertWorker.close(),
+    proactiveAlertWorker.close(),
+    monthlyPlanWorker.close(),
+    insightQueue.close(),
+    proactiveAlertQueue.close(),
+    monthlyPlanQueue.close(),
+  ]);
   await mongoose.connection.close();
   process.exit(0);
 }

@@ -79,6 +79,58 @@ export interface Alert {
   triggered_at: string;
 }
 
+export interface Goal {
+  _id: string;
+  name: string;
+  target_amount: number;
+  current_amount: number;
+  deadline: string;
+  category: "emergency" | "vacation" | "device" | "custom";
+  monthly_contribution_needed: number;
+  feasibility_score: number;
+  status: "active" | "achieved" | "at_risk" | "paused";
+  ai_plan?: string;
+  progress_pct: number;
+  remaining_amount: number;
+}
+
+export interface GoalProjection {
+  labels: string[];
+  projected_amounts: number[];
+  projected_completion_date: string | null;
+}
+
+export interface SubscriptionItem {
+  _id: string;
+  merchant: string;
+  amount: number;
+  frequency: "weekly" | "monthly" | "annual";
+  category: string;
+  confidence_score: number;
+  last_charge_date: string;
+  next_predicted_date: string;
+  annual_cost: number;
+  is_confirmed: boolean;
+  is_dismissed: boolean;
+}
+
+export interface SubscriptionSummaryResponse {
+  subscriptions: SubscriptionItem[];
+  detected: number;
+  totals: {
+    monthly: number;
+    annual: number;
+  };
+}
+
+export interface MonthlyPlanResponse {
+  monthly_plan: {
+    generated_at: string;
+    text: string;
+    context?: Record<string, unknown>;
+  };
+}
+
 // ─── Mock Data ────────────────────────────────────────────────────────────────
 const MOCK_USER: User = {
   id: "1",
@@ -419,6 +471,24 @@ export async function getMe(): Promise<User> {
   return res.data.user;
 }
 
+export async function updateProfile(payload: {
+  income?: number;
+  monthly_budget?: number;
+}): Promise<User> {
+  if (USE_MOCK) {
+    if (payload.income != null) {
+      MOCK_USER.income = Number(payload.income);
+    }
+    if (payload.monthly_budget != null) {
+      MOCK_USER.monthly_budget = Number(payload.monthly_budget);
+    }
+    return mockDelay(MOCK_USER, 300);
+  }
+
+  const res = await api.patch<{ user: User }>("/api/auth/me", payload);
+  return res.data.user;
+}
+
 export async function getTransactions(params?: {
   limit?: number;
   skip?: number;
@@ -466,12 +536,16 @@ export async function getInsights(): Promise<{ insight: Insight }> {
   return res.data;
 }
 
-export async function refreshInsights(): Promise<{ insight: Insight }> {
+export async function refreshInsights(options?: {
+  force?: boolean;
+}): Promise<{ insight: Insight }> {
   if (USE_MOCK) {
     // simulate slower refresh
     return mockDelay({ insight: MOCK_INSIGHT }, 1800);
   }
-  const res = await api.post<{ insight: Insight }>("/api/insights/refresh");
+  const res = await api.post<{ insight: Insight }>("/api/insights/refresh", null, {
+    params: options?.force ? { force: true } : undefined,
+  });
   return res.data;
 }
 
@@ -543,6 +617,203 @@ export async function getChatHistory(): Promise<
 export async function clearChatHistory(): Promise<void> {
   if (USE_MOCK) return mockDelay(undefined as unknown as void, 200);
   await api.delete("/api/chat/history");
+}
+
+export async function getGoals(): Promise<{ goals: Goal[] }> {
+  if (USE_MOCK) {
+    return mockDelay({
+      goals: [
+        {
+          _id: "g-1",
+          name: "Emergency Fund",
+          target_amount: 200000,
+          current_amount: 65000,
+          deadline: new Date(Date.now() + 220 * 24 * 3600 * 1000).toISOString(),
+          category: "emergency",
+          monthly_contribution_needed: 19445,
+          feasibility_score: 58,
+          status: "active",
+          ai_plan: "Automate a fixed transfer right after salary and trim discretionary categories by 10%.",
+          progress_pct: 33,
+          remaining_amount: 135000,
+        },
+      ],
+    });
+  }
+
+  const res = await api.get<{ goals: Goal[] }>("/api/goals");
+  return res.data;
+}
+
+export async function createGoal(payload: {
+  name: string;
+  target_amount: number;
+  current_amount?: number;
+  deadline: string;
+  category?: "emergency" | "vacation" | "device" | "custom";
+}): Promise<{ goal: Goal }> {
+  if (USE_MOCK) {
+    const target = payload.target_amount;
+    const current = payload.current_amount ?? 0;
+    return mockDelay({
+      goal: {
+        _id: String(Date.now()),
+        name: payload.name,
+        target_amount: target,
+        current_amount: current,
+        deadline: payload.deadline,
+        category: payload.category ?? "custom",
+        monthly_contribution_needed: Math.max((target - current) / 6, 0),
+        feasibility_score: 55,
+        status: "active",
+        ai_plan: "Keep your goal transfer fixed and review category spend weekly.",
+        progress_pct: target > 0 ? Math.round((current / target) * 100) : 0,
+        remaining_amount: Math.max(target - current, 0),
+      },
+    });
+  }
+
+  const res = await api.post<{ goal: Goal }>("/api/goals", payload);
+  return res.data;
+}
+
+export async function updateGoal(
+  id: string,
+  payload: Partial<{
+    name: string;
+    target_amount: number;
+    current_amount: number;
+    deadline: string;
+    status: "active" | "achieved" | "at_risk" | "paused";
+    category: "emergency" | "vacation" | "device" | "custom";
+  }>
+): Promise<{ goal: Goal }> {
+  const res = await api.patch<{ goal: Goal }>(`/api/goals/${id}`, payload);
+  return res.data;
+}
+
+export async function deleteGoal(id: string): Promise<void> {
+  await api.delete(`/api/goals/${id}`);
+}
+
+export async function getGoalProjection(
+  id: string
+): Promise<{ goal: Goal; projection: GoalProjection; ai_plan: string | null }> {
+  const res = await api.get<{
+    goal: Goal;
+    projection: GoalProjection;
+    ai_plan: string | null;
+  }>(`/api/goals/${id}/projection`);
+  return res.data;
+}
+
+export async function contributeToGoal(
+  id: string,
+  amount: number
+): Promise<{ goal: Goal }> {
+  const res = await api.post<{ goal: Goal }>(`/api/goals/${id}/contribute`, {
+    amount,
+  });
+  return res.data;
+}
+
+export async function getSubscriptions(): Promise<SubscriptionSummaryResponse> {
+  if (USE_MOCK) {
+    return mockDelay({
+      subscriptions: [
+        {
+          _id: "s-1",
+          merchant: "Netflix",
+          amount: 649,
+          frequency: "monthly",
+          category: "Entertainment",
+          confidence_score: 0.92,
+          last_charge_date: new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString(),
+          next_predicted_date: new Date(Date.now() + 20 * 24 * 3600 * 1000).toISOString(),
+          annual_cost: 7788,
+          is_confirmed: true,
+          is_dismissed: false,
+        },
+      ],
+      detected: 1,
+      totals: {
+        monthly: 649,
+        annual: 7788,
+      },
+    });
+  }
+
+  const res = await api.get<SubscriptionSummaryResponse>("/api/subscriptions");
+  return res.data;
+}
+
+export async function createSubscription(payload: {
+  merchant: string;
+  amount: number;
+  frequency: "weekly" | "monthly" | "annual";
+  category?: string;
+  next_predicted_date?: string;
+  last_charge_date?: string;
+}): Promise<{ subscription: SubscriptionItem }> {
+  if (USE_MOCK) {
+    const annualCost = payload.frequency === "weekly"
+      ? payload.amount * 52
+      : payload.frequency === "annual"
+        ? payload.amount
+        : payload.amount * 12;
+
+    return mockDelay({
+      subscription: {
+        _id: String(Date.now()),
+        merchant: payload.merchant,
+        amount: payload.amount,
+        frequency: payload.frequency,
+        category: payload.category || "Other",
+        confidence_score: 1,
+        last_charge_date: payload.last_charge_date || new Date().toISOString(),
+        next_predicted_date:
+          payload.next_predicted_date ||
+          new Date(Date.now() + 30 * 24 * 3600 * 1000).toISOString(),
+        annual_cost: annualCost,
+        is_confirmed: true,
+        is_dismissed: false,
+      },
+    });
+  }
+
+  const res = await api.post<{ subscription: SubscriptionItem }>(
+    "/api/subscriptions",
+    payload
+  );
+  return res.data;
+}
+
+export async function confirmSubscription(id: string): Promise<void> {
+  await api.post(`/api/subscriptions/${id}/confirm`);
+}
+
+export async function dismissSubscription(id: string): Promise<void> {
+  await api.post(`/api/subscriptions/${id}/dismiss`);
+}
+
+export async function getSubscriptionTotals(): Promise<{
+  monthly: number;
+  annual: number;
+  count: number;
+}> {
+  if (USE_MOCK) {
+    return mockDelay({ monthly: 649, annual: 7788, count: 1 });
+  }
+
+  const res = await api.get<{ monthly: number; annual: number; count: number }>(
+    "/api/subscriptions/total"
+  );
+  return res.data;
+}
+
+export async function getMonthlyPlan(): Promise<MonthlyPlanResponse> {
+  const res = await api.get<MonthlyPlanResponse>("/api/insights/monthly-plan");
+  return res.data;
 }
 
 export default api;

@@ -8,7 +8,6 @@ const config = require('./config/env');
 const logger = require('./lib/logger');
 const requestLogger = require('./middleware/requestLogger');
 const {
-  authRateLimiter,
   generalApiRateLimiter,
 } = require('./middleware/rateLimiter');
 const { isRedisHealthy } = require('./lib/redis');
@@ -20,6 +19,8 @@ const transactionRoutes = require('./routes/transactions');
 const insightRoutes = require('./routes/insights');
 const alertRoutes = require('./routes/alerts');
 const chatRoutes = require('./routes/chat');
+const goalRoutes = require('./routes/goals');
+const subscriptionRoutes = require('./routes/subscriptions');
 const { initSocket } = require('./services/socketService');
 
 initTracing();
@@ -79,11 +80,13 @@ app.get('/health', async (req, res) => {
 
 app.use('/api', generalApiRateLimiter);
 
-app.use('/api/auth', authRateLimiter, authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/insights', insightRoutes);
 app.use('/api/alerts', alertRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/goals', goalRoutes);
+app.use('/api/subscriptions', subscriptionRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });

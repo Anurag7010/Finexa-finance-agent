@@ -5,10 +5,17 @@ const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 const Insight = require('../models/Insight');
 const ChatMessage = require('../models/ChatMessage');
+const Goal = require('../models/Goal');
+const Subscription = require('../models/Subscription');
 const aiService = require('../services/aiService');
 const authMiddleware = require('../middleware/auth');
 const config = require('../config/env');
 const { chatRateLimiter } = require('../middleware/rateLimiter');
+const {
+  retrieveRelevantMemory,
+  storeMemory,
+  extractMemoryCandidates,
+} = require('../services/memoryService');
 
 const router = express.Router();
 const openai = config.openAiApiKey
@@ -123,6 +130,30 @@ const tools = [
           limit: { type: 'number', description: 'Number of merchants to return (default 8)' },
         },
         required: [],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_goals_status',
+      description: 'Get progress and feasibility status for the user savings goals.',
+      parameters: {
+        type: 'object',
+        properties: {},
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_subscriptions_summary',
+      description: 'Get monthly and annual subscription spend along with likely wasteful subscriptions.',
+      parameters: {
+        type: 'object',
+        properties: {},
+        additionalProperties: false,
       },
     },
   },
@@ -248,6 +279,67 @@ function topRiskFactors(latestInsight, limit = 3) {
   return latestInsight.risk_factors
     .filter((factor) => typeof factor === 'string' && factor.trim())
     .slice(0, limit);
+}
+
+function shouldIncludeDataContext(message) {
+  return /spend|budget|balance|forecast|risk|score|anomal|suspicious|category|merchant|goal|subscription|waste|save|overspend/i.test(String(message || ''));
+}
+
+async function buildCfoFallbackReply(message, userId, user, latestInsight) {
+  const context = {
+    income: Number(user?.income || 0),
+    monthly_budget: Number(user?.monthly_budget || 0),
+    monthly_spend: Number(latestInsight?.monthly_spend || 0),
+    overspend_amount: Number(latestInsight?.overspend_amount || 0),
+    savings_rate: Number(latestInsight?.savings_rate || 0),
+    health_score: Number(latestInsight?.health_score || 0),
+    risk_level: latestInsight?.risk_level || 'unknown',
+    top_category: latestInsight?.top_category || 'Unknown',
+    risk_factors: Array.isArray(latestInsight?.risk_factors) ? latestInsight.risk_factors : [],
+  };
+
+  try {
+    if (shouldIncludeDataContext(message)) {
+      const lower = String(message || '').toLowerCase();
+
+      if (/goal|saving target|on track/.test(lower)) {
+        context.goals = await executeTool('get_goals_status', {}, userId);
+      }
+
+      if (/subscription|recurr|waste/.test(lower)) {
+        context.subscriptions = await executeTool('get_subscriptions_summary', {}, userId);
+      }
+
+      if (/forecast|balance|next\s+\d+\s*days?/.test(lower)) {
+        context.forecast = await executeTool('get_balance_forecast', { days: 7 }, userId);
+      }
+
+      if (/anomal|suspicious|fraud|unusual/.test(lower)) {
+        context.anomalies = await executeTool('get_anomalies', {}, userId);
+      }
+
+      if (/spend|budget|category|merchant|summary|risk|score|health/.test(lower)) {
+        context.spending_summary = await executeTool('get_spending_summary', { period: 'this_month' }, userId);
+        context.risk_snapshot = await executeTool('get_risk_score', {}, userId);
+      }
+    }
+
+    const cfoResponse = await aiService.cfoAnalysis({
+      message,
+      financial_context: context,
+    });
+
+    if (cfoResponse?.answer && typeof cfoResponse.answer === 'string') {
+      const trimmed = cfoResponse.answer.trim();
+      if (trimmed.length > 0) {
+        return trimmed;
+      }
+    }
+  } catch (error) {
+    // Fall back to deterministic response below.
+  }
+
+  return buildFallbackReply(message, userId, latestInsight);
 }
 
 async function buildFallbackReply(message, userId, latestInsight) {
@@ -414,7 +506,10 @@ async function executeTool(toolName, args, userId) {
 
     case 'get_balance_forecast': {
       const days = clamp(Number(args.days) || 30, 1, 30);
-      const insight = await Insight.findOne({ user_id: userId }).sort({ generated_at: -1 });
+      const insight = await Insight.findOne({
+        user_id: userId,
+        $or: [{ insight_type: 'analysis' }, { insight_type: { $exists: false } }],
+      }).sort({ generated_at: -1 });
 
       if (!insight) {
         return { forecast: [], currency: 'INR' };
@@ -428,7 +523,10 @@ async function executeTool(toolName, args, userId) {
     }
 
     case 'get_risk_score': {
-      const insight = await Insight.findOne({ user_id: userId }).sort({ generated_at: -1 });
+      const insight = await Insight.findOne({
+        user_id: userId,
+        $or: [{ insight_type: 'analysis' }, { insight_type: { $exists: false } }],
+      }).sort({ generated_at: -1 });
 
       if (!insight) {
         return { error: 'No insight available yet' };
@@ -465,7 +563,10 @@ async function executeTool(toolName, args, userId) {
     }
 
     case 'simulate_scenario': {
-      const insight = await Insight.findOne({ user_id: userId }).sort({ generated_at: -1 });
+      const insight = await Insight.findOne({
+        user_id: userId,
+        $or: [{ insight_type: 'analysis' }, { insight_type: { $exists: false } }],
+      }).sort({ generated_at: -1 });
       const user = await User.findById(userId);
 
       if (!insight || !user) {
@@ -575,6 +676,73 @@ async function executeTool(toolName, args, userId) {
       };
     }
 
+    case 'get_goals_status': {
+      const goals = await Goal.find({ user_id: userId, deleted_at: null })
+        .sort({ deadline: 1 })
+        .lean();
+
+      const items = goals.map((goal) => {
+        const target = Number(goal.target_amount || 0);
+        const current = Number(goal.current_amount || 0);
+        const progress_pct = target > 0
+          ? Math.round((Math.min(current, target) / target) * 100)
+          : 0;
+
+        return {
+          id: String(goal._id),
+          name: goal.name,
+          status: goal.status,
+          target_amount: target,
+          current_amount: current,
+          remaining_amount: Math.max(target - current, 0),
+          progress_pct,
+          feasibility_score: Number(goal.feasibility_score || 0),
+          monthly_contribution_needed: Number(goal.monthly_contribution_needed || 0),
+          deadline: goal.deadline,
+        };
+      });
+
+      return {
+        goal_count: items.length,
+        at_risk_count: items.filter((goal) => goal.status === 'at_risk').length,
+        goals: items,
+      };
+    }
+
+    case 'get_subscriptions_summary': {
+      const subscriptions = await Subscription.find({ user_id: userId, is_dismissed: false }).lean();
+
+      const monthly_total = subscriptions.reduce((acc, item) => {
+        if (item.frequency === 'weekly') {
+          return acc + (Number(item.amount || 0) * 52) / 12;
+        }
+
+        if (item.frequency === 'annual') {
+          return acc + (Number(item.amount || 0) / 12);
+        }
+
+        return acc + Number(item.amount || 0);
+      }, 0);
+
+      const annual_total = subscriptions.reduce((acc, item) => acc + Number(item.annual_cost || 0), 0);
+      const unconfirmed = subscriptions.filter((item) => !item.is_confirmed);
+
+      return {
+        monthly_total,
+        annual_total,
+        count: subscriptions.length,
+        likely_waste_count: unconfirmed.length,
+        subscriptions: subscriptions.map((item) => ({
+          merchant: item.merchant,
+          amount: Number(item.amount || 0),
+          frequency: item.frequency,
+          annual_cost: Number(item.annual_cost || 0),
+          next_predicted_date: item.next_predicted_date,
+          is_confirmed: Boolean(item.is_confirmed),
+        })),
+      };
+    }
+
     default:
       return { error: `Unknown tool ${toolName}` };
   }
@@ -600,7 +768,10 @@ router.post('/', async (req, res) => {
         .sort({ timestamp: -1 })
         .limit(12),
       User.findById(req.user.id).select('-password'),
-      Insight.findOne({ user_id: req.user.id }).sort({ generated_at: -1 }),
+      Insight.findOne({
+        user_id: req.user.id,
+        $or: [{ insight_type: 'analysis' }, { insight_type: { $exists: false } }],
+      }).sort({ generated_at: -1 }),
     ]);
 
     if (!user) {
@@ -618,6 +789,12 @@ router.post('/', async (req, res) => {
       }));
 
     let financialSummary = '';
+    const retrievedMemories = await retrieveRelevantMemory(req.user.id, message, 3);
+    const memoryBlock = retrievedMemories.length > 0
+      ? retrievedMemories
+        .map((item, idx) => `${idx + 1}. ${item.content}`)
+        .join('\n')
+      : 'None.';
     try {
       const summaryRes = await aiService.getFinancialSummary({
         user_name: user.name,
@@ -650,6 +827,9 @@ RAW DATA:
 - Top category: ${latestInsight?.top_category ?? 'Unknown'}
 - Savings rate: ${((latestInsight?.savings_rate ?? 0) * 100).toFixed(1)}%
 
+RELEVANT CONTEXT FROM PAST CONVERSATIONS:
+${memoryBlock}
+
 BEHAVIOR RULES:
 - Always call a tool before answering data questions. Never invent numbers.
 - Use ₹ for all amounts. Format large numbers with Indian comma notation (e.g. ₹1,23,456).
@@ -676,6 +856,7 @@ BEHAVIOR RULES:
         'risk', 'score', 'anomal', 'suspicious', 'unusual', 'category',
         'merchant', 'this month', 'last month', 'much', 'compare', 'trend',
         'saving', 'overspend', 'cut', 'reduce', 'simulate', 'what if', 'if i',
+        'goal', 'goals', 'subscription', 'subscriptions', 'track', 'waste',
       ];
 
       const messageLower = message.toLowerCase();
@@ -744,7 +925,16 @@ BEHAVIOR RULES:
 
       finalContent = assistantMessage.content || 'I was unable to generate a response.';
     } catch (openAiError) {
-      finalContent = await buildFallbackReply(message, req.user.id, latestInsight);
+      finalContent = await buildCfoFallbackReply(message, req.user.id, user, latestInsight);
+    }
+
+    try {
+      const memoryCandidates = extractMemoryCandidates(message);
+      for (const candidate of memoryCandidates) {
+        await storeMemory(req.user.id, candidate, 'chat', 0.8);
+      }
+    } catch (error) {
+      // Memory persistence should not block chat responses.
     }
 
     if (
