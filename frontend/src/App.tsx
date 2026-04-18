@@ -13,6 +13,7 @@ import AlertsPage from "./pages/AlertsPage";
 import ChatPage from "./pages/ChatPage";
 import GoalsPage from "./pages/GoalsPage";
 import SubscriptionsPage from "./pages/SubscriptionsPage";
+import DataSourcesPage from "./pages/DataSourcesPage";
 
 import Sidebar from "./components/layout/Sidebar";
 import TopBar from "./components/layout/TopBar";
@@ -168,6 +169,16 @@ export default function App() {
               <ProtectedRoute>
                 <AppShell>
                   <SubscriptionsPage />
+                </AppShell>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/accounts"
+            element={
+              <ProtectedRoute>
+                <AppShell>
+                  <DataSourcesPage />
                 </AppShell>
               </ProtectedRoute>
             }

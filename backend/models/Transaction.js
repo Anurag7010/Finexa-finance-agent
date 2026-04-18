@@ -57,6 +57,18 @@ const transactionSchema = new mongoose.Schema(
       default: null,
       index: true,
     },
+    /** Which connector imported this transaction (null for existing seed records) */
+    source: {
+      type: String,
+      enum: ['seed', 'account_aggregator', 'upi_gpay', 'upi_phonepe', 'manual', null],
+      default: null,
+    },
+    /** External ID from the source system — used for deduplication */
+    external_id: {
+      type: String,
+      default: null,
+      sparse: true,
+    },
   },
   {
     timestamps: true,
@@ -64,5 +76,7 @@ const transactionSchema = new mongoose.Schema(
 );
 
 transactionSchema.index({ user_id: 1, date: -1 });
+transactionSchema.index({ user_id: 1, category: 1, date: -1 });
+transactionSchema.index({ user_id: 1, external_id: 1 }, { sparse: true });
 
 module.exports = mongoose.model('Transaction', transactionSchema);

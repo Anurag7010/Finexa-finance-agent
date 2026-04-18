@@ -11,6 +11,7 @@ const { insightWorker } = require('./insightWorker');
 const { alertWorker } = require('./alertWorker');
 const { proactiveAlertWorker } = require('./proactiveAlertWorker');
 const { monthlyPlanWorker } = require('./monthlyPlanWorker');
+const syncWorker = require('./syncWorker');
 
 /**
  * Schedules recurring insight refresh jobs for all users every 6 hours.
@@ -87,7 +88,7 @@ async function startWorkers() {
   await scheduleProactiveAlertJobs();
   await scheduleMonthlyPlanJobs();
 
-  logger.info('Insight, alert, proactive, and monthly-plan workers are running');
+  logger.info('Insight, alert, proactive, monthly-plan, and sync workers are running');
 }
 
 /**
@@ -100,6 +101,7 @@ async function shutdown() {
     alertWorker.close(),
     proactiveAlertWorker.close(),
     monthlyPlanWorker.close(),
+    syncWorker.close(),
     insightQueue.close(),
     proactiveAlertQueue.close(),
     monthlyPlanQueue.close(),

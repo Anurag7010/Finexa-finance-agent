@@ -21,6 +21,8 @@ const alertRoutes = require('./routes/alerts');
 const chatRoutes = require('./routes/chat');
 const goalRoutes = require('./routes/goals');
 const subscriptionRoutes = require('./routes/subscriptions');
+const dataSourceRoutes = require('./routes/dataSources');
+const syncRoutes = require('./routes/sync');
 const { initSocket } = require('./services/socketService');
 
 initTracing();
@@ -87,6 +89,8 @@ app.use('/api/alerts', alertRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/goals', goalRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
+app.use('/api/datasources', dataSourceRoutes);
+app.use('/api/sync', syncRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });

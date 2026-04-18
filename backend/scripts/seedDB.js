@@ -8,6 +8,7 @@ const config = require('../config/env');
 const logger = require('../lib/logger');
 const User = require('../models/User');
 const Transaction = require('../models/Transaction');
+const DataSource = require('../models/DataSource');
 
 function resolveSeedPath() {
   const candidates = [
@@ -93,6 +94,23 @@ async function runSeed() {
           'Inserted transactions during seed'
         );
       }
+
+      // Auto-create a non-deletable seed DataSource for this user
+      await DataSource.findOneAndUpdate(
+        { user_id: user._id, type: 'seed' },
+        {
+          user_id: user._id,
+          type: 'seed',
+          status: 'connected',
+          account_name: 'Demo Data — Finexa Seed',
+          bank_name: 'Finexa Seed',
+          last_sync_at: new Date(),
+          transactions_count: userTransactions.length,
+          metadata: { non_deletable: true },
+        },
+        { upsert: true, returnDocument: 'after' }
+      );
+      logger.info({ email: user.email }, 'Seed DataSource upserted');
     }
 
     logger.info('Seed completed successfully');

@@ -8,6 +8,7 @@ import {
   MessageSquare,
   Target,
   Repeat2,
+  Database,
   LogOut,
   Circle,
 } from "lucide-react";
@@ -17,6 +18,7 @@ const NAV_ITEMS = [
   { to: "/transactions", icon: Receipt, label: "Transactions" },
   { to: "/goals", icon: Target, label: "Goals" },
   { to: "/subscriptions", icon: Repeat2, label: "Subscriptions" },
+  { to: "/accounts", icon: Database, label: "Accounts" },
   { to: "/alerts", icon: Bell, label: "Alerts" },
   { to: "/chat", icon: MessageSquare, label: "Fin Guardian" },
 ];

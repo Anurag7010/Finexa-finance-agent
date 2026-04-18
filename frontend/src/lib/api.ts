@@ -131,7 +131,44 @@ export interface MonthlyPlanResponse {
   };
 }
 
-// ─── Mock Data ────────────────────────────────────────────────────────────────
+export interface DataSource {
+  _id: string;
+  type: "seed" | "account_aggregator" | "upi_gpay" | "upi_phonepe" | "manual";
+  status: "connected" | "syncing" | "error" | "disconnected";
+  account_name: string;
+  masked_account_number?: string | null;
+  bank_name?: string | null;
+  last_sync_at?: string | null;
+  transactions_count: number;
+  consent_valid_until?: string | null;
+  metadata?: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface SyncJob {
+  _id: string;
+  status: "pending" | "running" | "completed" | "failed";
+  transactions_imported: number;
+  transactions_skipped: number;
+  current_step: string;
+  error_message?: string | null;
+  started_at?: string | null;
+  completed_at?: string | null;
+}
+
+export interface AaConsentResult {
+  consent_id: string;
+  consent_url: string;
+  expires_at: string;
+}
+
+export interface AaConsentStatus {
+  status: "pending" | "approved" | "not_found";
+  consent_id: string;
+  approved_at?: string | null;
+}
+
+
 const MOCK_USER: User = {
   id: "1",
   name: "Priya Sharma",
@@ -813,6 +850,97 @@ export async function getSubscriptionTotals(): Promise<{
 
 export async function getMonthlyPlan(): Promise<MonthlyPlanResponse> {
   const res = await api.get<MonthlyPlanResponse>("/api/insights/monthly-plan");
+  return res.data;
+}
+
+// ─── DataSources API ─────────────────────────────────────────────────────────
+
+export async function getDataSources(): Promise<{ sources: DataSource[] }> {
+  const res = await api.get<{ sources: DataSource[] }>("/api/datasources");
+  return res.data;
+}
+
+export async function connectDataSource(payload: {
+  type: DataSource["type"];
+  account_name?: string;
+  bank_name?: string;
+  metadata?: Record<string, unknown>;
+}): Promise<{ source: DataSource }> {
+  const res = await api.post<{ source: DataSource }>("/api/datasources/connect", payload);
+  return res.data;
+}
+
+export async function deleteDataSource(id: string): Promise<void> {
+  await api.delete(`/api/datasources/${id}`);
+}
+
+// ─── Account Aggregator API ──────────────────────────────────────────────────
+
+export async function aaInitiateConsent(): Promise<AaConsentResult> {
+  const res = await api.post<AaConsentResult>("/api/datasources/aa/initiate-consent");
+  return res.data;
+}
+
+export async function aaGetConsentStatus(consentId: string): Promise<AaConsentStatus> {
+  const res = await api.get<AaConsentStatus>(`/api/datasources/aa/consent-status/${consentId}`);
+  return res.data;
+}
+
+export async function aaFetchData(consentId: string, dataSourceId?: string): Promise<{
+  data_source_id: string;
+  sync_job_id: string;
+  bank_name: string;
+  account_number: string;
+  imported: number;
+  skipped: number;
+}> {
+  const res = await api.post("/api/datasources/aa/fetch-data", {
+    consent_id: consentId,
+    data_source_id: dataSourceId,
+  });
+  return res.data;
+}
+
+// ─── UPI API ─────────────────────────────────────────────────────────────────
+
+export async function upiConnect(provider: "gpay" | "phonepe"): Promise<{
+  source: DataSource;
+  connected: boolean;
+  vpa: string;
+}> {
+  const res = await api.get(`/api/datasources/upi/connect?provider=${provider}`);
+  return res.data;
+}
+
+export async function upiWebhook(payload: {
+  provider?: "gpay" | "phonepe";
+  payeeName: string;
+  payeeVpa: string;
+  amount: number;
+  transactionId?: string;
+  timestamp?: string;
+}): Promise<{ sync_job_id: string; imported: number; skipped: number }> {
+  const res = await api.post("/api/datasources/upi/webhook", payload);
+  return res.data;
+}
+
+// ─── Sync API ─────────────────────────────────────────────────────────────────
+
+export async function triggerSync(sourceId: string): Promise<{
+  sync_job_id: string;
+  status: string;
+}> {
+  const res = await api.post(`/api/sync/trigger/${sourceId}`);
+  return res.data;
+}
+
+export async function getSyncStatus(jobId: string): Promise<{ job: SyncJob }> {
+  const res = await api.get<{ job: SyncJob }>(`/api/sync/status/${jobId}`);
+  return res.data;
+}
+
+export async function getSyncHistory(): Promise<{ jobs: SyncJob[] }> {
+  const res = await api.get<{ jobs: SyncJob[] }>("/api/sync/history");
   return res.data;
 }
 

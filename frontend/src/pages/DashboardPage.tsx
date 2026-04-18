@@ -5,6 +5,7 @@ import {
   getInsights,
   refreshInsights,
   getSubscriptionTotals,
+  getDataSources,
   updateProfile,
   type Goal,
 } from "../lib/api";
@@ -50,6 +51,8 @@ export default function DashboardPage() {
     annual: 0,
     count: 0,
   });
+  const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
+  const [dataSourceCount, setDataSourceCount] = useState(0);
   const [showProfileForm, setShowProfileForm] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
   const [incomeInput, setIncomeInput] = useState(0);
@@ -69,7 +72,7 @@ export default function DashboardPage() {
     setLoading(true);
     setError("");
     try {
-      const [insightData, goalsData, subTotals] = await Promise.all([
+      const [insightData, goalsData, subTotals, sourcesData] = await Promise.all([
         getInsights(),
         getGoals().catch(() => ({ goals: [] })),
         getSubscriptionTotals().catch(() => ({
@@ -77,6 +80,7 @@ export default function DashboardPage() {
           annual: 0,
           count: 0,
         })),
+        getDataSources().catch(() => ({ sources: [] })),
       ]);
       setInsight(insightData.insight);
       const sortedGoals = [...(goalsData.goals || [])].sort(
@@ -84,6 +88,14 @@ export default function DashboardPage() {
       );
       setTopGoals(sortedGoals.slice(0, 2));
       setSubscriptionTotals(subTotals);
+      // Data sources summary for dashboard header
+      const allSources = sourcesData.sources || [];
+      setDataSourceCount(allSources.length);
+      const latestSync = allSources
+        .filter((s) => s.last_sync_at)
+        .sort((a, b) => new Date(b.last_sync_at!).getTime() - new Date(a.last_sync_at!).getTime())[0]
+        ?.last_sync_at ?? null;
+      setLastSyncedAt(latestSync);
     } catch (err: unknown) {
       // 404 means no insight exists yet; this should show the CTA state instead of an error card.
       const status =
@@ -196,6 +208,21 @@ export default function DashboardPage() {
             <p className="text-sm text-[var(--fingaurd-text)]">
               Keep salary and monthly budget updated for accurate analysis.
             </p>
+            {lastSyncedAt && (
+              <p className="text-[11px] text-[var(--fingaurd-text-muted)] mt-0.5">
+                Last synced:{" "}
+                <span className="text-[var(--fingaurd-brand)]">
+                  {new Date(lastSyncedAt).toLocaleString("en-IN", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}
+                </span>
+                {" "}&middot;{" "}
+                <span className="text-[var(--fingaurd-text-muted)]">
+                  {dataSourceCount} source{dataSourceCount !== 1 ? "s" : ""} connected
+                </span>
+              </p>
+            )}
           </div>
           <Button
             variant="outline"
